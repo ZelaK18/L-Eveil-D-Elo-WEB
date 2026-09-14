@@ -814,7 +814,7 @@ h1, h2, h3,
   .about__grid,
   .gifts__grid,
   .booking__grid { grid-template-columns: 1fr; }
-  .hero__grid { gap: 48px; }
+  .hero__grid { gap: 96px; }
   .about__intro { display: grid; justify-items: center; text-align: center; }
   .gifts__visual { order: -1; min-height: 260px; }
 
@@ -858,6 +858,7 @@ h1, h2, h3,
   .brand { --logo: 44px; --nom: 1.3rem; }
   .form__row { grid-template-columns: 1fr; }
   .hero__actions { flex-direction: column; align-items: stretch; }
+  .hero__values { justify-content: center; }
   .footer__legal { justify-content: center; }
   .to-top { --rond: 42px; }
 }
