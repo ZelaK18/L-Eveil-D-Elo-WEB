@@ -1,0 +1,128 @@
+CHARTE GRAPHIQUE — L’ÉVEIL D’ELO
+
+Ce fichier centralise l’identité visuelle du projet afin de retrouver
+facilement les couleurs, typographies et règles d’utilisation du site.
+
+1. COULEURS
+
+Couleurs principales
+
+-   Beige principal / fond : #F7EDDD
+-   Brun principal / logo et titres : #825A38
+
+Couleurs secondaires
+
+-   Brun secondaire : #A38465
+-   Brun texte : #6F523C
+-   Beige brun clair : #C4AB91
+-   Beige secondaire : #DFCEB7
+-   Blanc chaud : #FFF9F2
+
+2. UTILISATION DES COULEURS
+
+#F7EDDD — Beige principal Utilisation : fond général du site et sections
+principales.
+
+#825A38 — Brun principal Utilisation : logo, grands titres, boutons
+principaux, icônes et éléments décoratifs importants.
+
+#A38465 — Brun secondaire Utilisation : sous-titres, détails, éléments
+secondaires et états de survol.
+
+#6F523C — Brun texte Utilisation : paragraphes et textes courants.
+
+#C4AB91 — Beige brun clair Utilisation : bordures, séparateurs et
+détails discrets.
+
+#DFCEB7 — Beige secondaire Utilisation : fonds alternatifs, encadrés et
+zones secondaires.
+
+#FFF9F2 — Blanc chaud Utilisation : cartes, fonds clairs et texte sur
+boutons bruns.
+
+3. TYPOGRAPHIES
+
+Titres et identité
+
+Police recommandée : Cormorant Garamond Style : Serif Graisses
+recommandées : 400 à 500
+
+Utilisation : - H1 - H2 - H3 - grands titres - éléments élégants de
+l’identité visuelle
+
+Texte courant
+
+Police recommandée : Montserrat Alternative : Lato Style : Sans-serif
+Graisses recommandées : 400 à 500
+
+Utilisation : - paragraphes - menus - boutons - formulaires -
+informations pratiques
+
+4. VARIABLES CSS
+
+:root { –beige-principal: #F7EDDD; –beige-secondaire: #DFCEB7;
+–beige-brun-clair: #C4AB91;
+
+–brun-principal: #825A38; –brun-secondaire: #A38465; –brun-texte:
+#6F523C;
+
+–blanc-chaud: #FFF9F2; }
+
+5. TYPOGRAPHIE CSS
+
+h1, h2, h3 { font-family: “Cormorant Garamond”, serif; color: #825A38; }
+
+h1 { font-size: 64px; font-weight: 400; }
+
+h2 { font-size: 42px; font-weight: 500; }
+
+h3 { font-size: 30px; font-weight: 500; color: #A38465; }
+
+body { font-family: “Montserrat”, sans-serif; color: #6F523C;
+background: #F7EDDD; }
+
+p { font-size: 17px; line-height: 1.7; }
+
+6. BOUTONS
+
+Bouton principal
+
+.button-primary { background: #825A38; color: #FFF9F2; border: none;
+border-radius: 30px; padding: 14px 28px; font-family: “Montserrat”,
+sans-serif; transition: 0.3s; }
+
+.button-primary:hover { background: #A38465; }
+
+Bouton secondaire
+
+.button-secondary { background: transparent; color: #825A38; border: 1px
+solid #825A38; border-radius: 30px; padding: 14px 28px; }
+
+.button-secondary:hover { background: #825A38; color: #FFF9F2; }
+
+7. CARTES ET SECTIONS
+
+.card { background: #FFF9F2; border: 1px solid #DFCEB7; border-radius:
+18px; padding: 30px; }
+
+.section-main { background: #F7EDDD; }
+
+.section-alt { background: #FFF9F2; }
+
+8. DIRECTION VISUELLE
+
+Style général : - doux - élégant - chaleureux - spirituel - minimaliste
+
+Privilégier : - beaucoup d’espace autour des éléments - des séparateurs
+fins - des arrondis légers - très peu d’ombres - les motifs du soleil,
+de la lune et des étoiles avec parcimonie - une cohérence constante
+entre le beige et le brun
+
+9. RÉFÉRENCE RAPIDE
+
+Fond principal : #F7EDDD Logo / titres : #825A38 Texte courant : #6F523C
+Accent secondaire : #A38465 Bordures : #C4AB91 Fond secondaire : #DFCEB7
+Blanc chaud : #FFF9F2
+
+Titres : Cormorant Garamond Texte / interface : Montserrat Alternative
+texte : Lato

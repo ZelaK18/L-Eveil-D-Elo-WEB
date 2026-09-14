@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="fr-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- ════════ RÉFÉRENCEMENT (SEO) ════════
+     ⚠️ À METTRE À JOUR avant la mise en ligne :
+     - remplacer VILLE 
+       (c'est LE mot-clé qui fait remonter le site sur « tirage de cartes »)
+     - remplacer https://www.leveildelo.ch/ par le vrai nom de domaine
+     Il n'existe pas de « mots-clés cachés » : Google ignore la balise
+     meta keywords depuis 2009 et sanctionne le texte dissimulé. Ce qui
+     compte, ce sont le titre, la description, le contenu visible et la
+     fiche Google Business Profile. -->
+
+<title>L'éveil d'Elo - Tirage de cartes, pendule et coaching spirituel en Suisse romande</title>
+<meta name="description" content="Tirage de cartes, guidance au pendule et coaching spirituel à distance. Un accompagnement doux, intuitif et sans jugement. Prise de rendez-vous en ligne.">
+<meta name="author" content="L'éveil d'Elo">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#F7EDDD">
+<link rel="canonical" href="https://www.leveildelo.ch/">
+
+<!-- Aperçu affiché quand le lien est partagé (WhatsApp, Instagram, messageries…) -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_CH">
+<meta property="og:site_name" content="L'éveil d'Elo">
+<meta property="og:title" content="L'éveil d'Elo — Tirage de cartes, pendule et coaching spirituel">
+<meta property="og:description" content="Un accompagnement doux, intuitif et sans jugement. Tirage de cartes, pendule et coaching spirituel, à distance.">
+<meta property="og:url" content="https://www.leveildelo.ch/">
+<meta property="og:image" content="https://www.leveildelo.ch/images/logo.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="images/logo.png">
+<link rel="apple-touch-icon" href="images/logo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+
+<!-- Sans JavaScript, les blocs animés à l'apparition resteraient invisibles.
+     On les affiche alors directement : le site reste entièrement lisible. -->
+<noscript>
+  <style>.reveal { opacity: 1; transform: none; }</style>
+</noscript>
+
+<!-- Fiche d'établissement lue par Google (permet l'affichage enrichi :
+     horaires, téléphone, avis, prestations). Mêmes valeurs à mettre à jour. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "L'éveil d'Elo",
+  "description": "Tirage de cartes, guidance au pendule et coaching spirituel. Accompagnement doux, intuitif et sans jugement, à distance.",
+  "url": "https://www.leveildelo.ch/",
+  "image": "https://www.leveildelo.ch/images/logo.png",
+  "logo": "https://www.leveildelo.ch/images/logo.png",
+  "telephone": "+41791234567",
+  "email": "contact@leveildelo.ch",
+  "priceRange": "CHF 45.- - CHF 80.-",
+  "currenciesAccepted": "CHF",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "ADRESSE",
+    "addressLocality": "VILLE",
+    "postalCode": "0000",
+    "addressCountry": "CH"
+  },
+  "areaServed": [
+    { "@type": "City", "name": "Suisse romande" },
+    { "@type": "Country", "name": "Switzerland" }
+  ],
+  "availableLanguage": "fr",
+  "sameAs": [
+    "https://instagram.com/leveil.delo"
+  ],
+  "openingHoursSpecification": [{
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+    "opens": "09:00",
+    "closes": "19:00"
+  }],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Prestations",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": { "@type": "Service", "name": "Tirage de cartes", "description": "Guidance par les cartes autour d'une question ou d'une thématique." },
+        "price": "60", "priceCurrency": "CHF"
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": { "@type": "Service", "name": "Pendule", "description": "Guidance au pendule pour clarifier une hésitation." },
+        "price": "45", "priceCurrency": "CHF"
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": { "@type": "Service", "name": "Coaching spirituel", "description": "Accompagnement sur plusieurs séances pour avancer en profondeur." },
+        "price": "80", "priceCurrency": "CHF"
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": { "@type": "Service", "name": "Reiki", "description": "Soin énergétique par apposition des mains : détente profonde et réharmonisation." },
+        "availability": "https://schema.org/PreOrder"
+      }
+    ]
+  }
+}
+</script>
+</head>
+<body>
+
+<!-- ══════════════ MOTIFS DÉCORATIFS RÉUTILISABLES (SVG cachés) ══════════════ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Étoile à 5 branches reprise du logo. Relevé sur le fichier d'origine :
+         71 px de large pour 68 px de haut, soit une étoile régulière dont le
+         rayon intérieur vaut 0,382 fois le rayon extérieur (nombre d'or). -->
+    <symbol id="ico-star" viewBox="0 0 24 24">
+      <path d="M12 .79 14.78 9.35 23.79 9.35 16.51 14.65 19.29 23.22 12 17.92 4.71 23.22 7.5 14.65 .21 9.35 9.22 9.35Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="ico-cards" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2">
+      <rect x="6" y="12" width="20" height="30" rx="3" transform="rotate(-12 16 27)"/>
+      <rect x="17" y="9" width="20" height="30" rx="3"/>
+      <rect x="26" y="12" width="20" height="30" rx="3" transform="rotate(12 36 27)"/>
+      <circle cx="27" cy="24" r="4.5"/>
+      <path d="M27 15v3M27 30v3M18 24h3M33 24h3"/>
+    </symbol>
+    <symbol id="ico-pendule" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2">
+      <circle cx="24" cy="5.5" r="2.6"/>
+      <path d="M24 8.1v17.6"/>
+      <path d="M24 25.7l7 7.3-7 11-7-11z"/>
+      <path d="M17 33h14"/>
+      <path d="M11.5 30.5A14 14 0 0 1 11.5 16M36.5 16a14 14 0 0 1 0 14.5"/>
+    </symbol>
+    <symbol id="ico-coaching" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2">
+      <path d="M8 40c0-8 6.5-12 16-12s16 4 16 12"/>
+      <circle cx="24" cy="18" r="7.5"/>
+      <path d="M24 4.5v4M12.5 9l2.5 2.8M35.5 9L33 11.8"/>
+      <path d="M24 18l-2.2 2.6L24 23l2.2-2.4z"/>
+    </symbol>
+    <symbol id="ico-reiki" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 13a10 10 0 0 1 16 0"/>
+      <path d="M19 17a6.2 6.2 0 0 1 10 0"/>
+      <path d="M14 31v-8.5a2.3 2.3 0 0 1 4.6 0V21a2.3 2.3 0 0 1 4.6 0v1a2.3 2.3 0 0 1 4.6 0v3a2.3 2.3 0 0 1 4.6 0v9.3A9.2 9.2 0 0 1 23.2 43h-1.4a9.2 9.2 0 0 1-6.5-2.7l-5.6-5.6a2.3 2.3 0 0 1 3.3-3.3z"/>
+    </symbol>
+    <symbol id="ico-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+      <rect x="2.5" y="5" width="19" height="14" rx="2.5"/>
+      <path d="M3.5 7l8.5 6 8.5-6"/>
+    </symbol>
+    <symbol id="ico-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+      <path d="M7 3.5h3l1.5 4L9.7 9.2a11 11 0 0 0 5.1 5.1l1.7-1.8 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 3.7 5.7 2 2 0 0 1 5.7 3.5z"/>
+    </symbol>
+    <symbol id="ico-insta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+      <rect x="3" y="3" width="18" height="18" rx="5.2"/>
+      <circle cx="12" cy="12" r="4.2"/>
+      <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/>
+    </symbol>
+    <symbol id="ico-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+      <path d="M12 21.5s7-6.3 7-11.4a7 7 0 1 0-14 0c0 5.1 7 11.4 7 11.4z"/>
+      <circle cx="12" cy="10" r="2.6"/>
+    </symbol>
+    <symbol id="ico-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+      <path d="M3.5 11h17v9.5a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1z"/>
+      <rect x="2.5" y="7" width="19" height="4" rx="1"/>
+      <path d="M12 7v14.5"/>
+      <path d="M12 7S10.6 2.5 8 2.5a2.3 2.3 0 0 0 0 4.5zM12 7s1.4-4.5 4-4.5a2.3 2.3 0 0 1 0 4.5z"/>
+    </symbol>
+  </defs>
+</svg>
+
+
+<!-- ══════════════════════════ EN-TÊTE ══════════════════════════ -->
+<header class="header" id="header">
+  <div class="header__inner">
+    <a href="#accueil" class="brand" aria-label="L'éveil d'Elo — retour en haut">
+      <span class="mark brand__mark" role="img" aria-label="Logo L'éveil d'Elo"></span>
+      <span class="brand__name">L'éveil d'Elo</span>
+    </a>
+
+    <nav class="nav" id="nav" aria-label="Navigation principale">
+      <ul class="nav__list">
+        <li><a href="#accueil"      class="nav__link is-active">Accueil</a></li>
+        <li><a href="#prestations"  class="nav__link">Prestations</a></li>
+        <li><a href="#bons-cadeaux" class="nav__link">Bons cadeaux</a></li>
+        <li><a href="#contact"      class="nav__link">Contact</a></li>
+        <li><a href="#rendez-vous"  class="nav__link nav__link--cta">Rendez-vous</a></li>
+      </ul>
+    </nav>
+
+    <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+
+<main>
+
+<!-- ══════════════════════════ ACCUEIL ══════════════════════════ -->
+<section class="hero section-main" id="accueil">
+  <div class="sky" aria-hidden="true">
+    <svg class="sky__star sky__star--1" width="18" height="18"><use href="#ico-star"/></svg>
+    <svg class="sky__star sky__star--2" width="11" height="11"><use href="#ico-star"/></svg>
+    <svg class="sky__star sky__star--3" width="14" height="14"><use href="#ico-star"/></svg>
+    <svg class="sky__star sky__star--4" width="9"  height="9"><use href="#ico-star"/></svg>
+    <svg class="sky__star sky__star--5" width="13" height="13"><use href="#ico-star"/></svg>
+  </div>
+
+  <div class="container hero__grid stagger">
+
+    <div class="hero__text reveal">
+      <p class="eyebrow">Tirage de cartes &middot; Pendule &middot; Coaching spirituel</p>
+      <h1>Écoutez ce qui<br><em>s'éveille</em> en vous</h1>
+      <p class="lead">
+        <!-- TEXTE À PERSONNALISER -->
+        Je vous accueille à distance, dans un espace doux
+        et sans jugement, où l'on prend le temps de déposer les questions qui pèsent
+        et d'écouter les réponses qui, souvent, sont déjà là.
+      </p>
+      <div class="hero__actions">
+        <a href="#rendez-vous" class="button-primary">Prendre rendez-vous</a>
+        <a href="#prestations" class="button-secondary">Découvrir les prestations</a>
+      </div>
+
+      <ul class="hero__values">
+        <li><span></span>À l'écoute</li>
+        <li><span></span>Guidée par l'intuition</li>
+        <li><span></span>En toute confidentialité</li>
+      </ul>
+    </div>
+
+    <div class="hero__media reveal">
+      <figure class="portrait">
+        <!-- REMPLACER par la photo d'Elo : images/photo-elo.jpg -->
+        <img src="images/photo-elo.jpg" alt="Portrait d'Elodie, L'éveil d'Elo" class="portrait__img" data-fallback>
+        <div class="portrait__placeholder" aria-hidden="true">
+          <svg width="70" height="70"><use href="#ico-star"/></svg>
+          <p>Votre photo ici<br><span>images/photo-elo.jpg</span></p>
+        </div>
+      </figure>
+      <div class="portrait__badge">
+        <svg width="16" height="16" aria-hidden="true"><use href="#ico-pin"/></svg>
+        <span>À distance & en visio</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════ QUI SUIS-JE ══════════════════════════ -->
+<section class="section-alt about">
+  <div class="container about__grid stagger">
+
+    <div class="about__intro reveal">
+      <p class="eyebrow">Qui suis-je</p>
+      <h2>Elodie</h2>
+      <p class="about__role">Coach en spiritualité</p>
+      <span class="divider-star" aria-hidden="true">
+        <i></i><svg width="12" height="12"><use href="#ico-star"/></svg><i></i>
+      </span>
+    </div>
+
+    <div class="about__body reveal">
+      <!-- TEXTE À PERSONNALISER -->
+      <p>
+        Depuis toujours, je ressens ce qui ne se dit pas. Pendant longtemps j'ai mis
+        cette sensibilité de côté, jusqu'au jour où elle s'est imposée à moi comme une
+        évidence : elle n'était pas un poids, mais un outil.
+      </p>
+      <p>
+        Je me suis alors formée au tirage de cartes et au travail au pendule, et j'ai
+        appris, séance après séance, à mettre cette écoute au service des autres.
+        <strong>L'éveil d'Elo</strong> est né de ce cheminement.
+      </p>
+      <p>
+        Mon rôle n'est pas de décider à votre place ni de prédire un avenir figé. Il est
+        de vous offrir un miroir bienveillant, d'éclairer ce qui est encore flou et de
+        vous rendre votre pouvoir de choisir.
+      </p>
+      <p class="about__signature">Au plaisir de vous rencontrer, Elodie</p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════ PRESTATIONS ══════════════════════════ -->
+<section class="section-main prestations" id="prestations">
+  <div class="container">
+
+    <header class="section-head reveal">
+      <p class="eyebrow">Ce que je propose</p>
+      <h2>Prestations</h2>
+      <p class="section-head__text">
+        Chaque accompagnement est unique et s'adapte à ce que vous traversez.
+        Si vous hésitez entre deux formules, écrivez-moi : nous choisirons ensemble.
+      </p>
+    </header>
+
+    <div class="cards stagger">
+
+      <!-- 1 -->
+      <article class="card lift presta reveal">
+        <div class="presta__icon"><svg width="52" height="52"><use href="#ico-cards"/></svg></div>
+        <h3>Tirage de cartes</h3>
+        <p>
+          <!-- TEXTE À PERSONNALISER -->
+          Un temps de guidance autour d'une question qui vous occupe : une relation, un
+          choix professionnel, une période de transition. Les cartes sont tirées puis
+          interprétées avec sensibilité, comme une conversation plutôt qu'un verdict.
+        </p>
+        <ul class="presta__points">
+          <li>Question libre ou thématique</li>
+          <li>Lecture commentée et échange</li>
+          <li>Récapitulatif écrit sur demande</li>
+        </ul>
+        <div class="presta__meta">
+          <span class="tag">1 h 00</span>
+          <span class="tag">CHF 60</span>
+          <span class="tag tag--format">Par téléphone</span>
+        </div>
+        <a href="#rendez-vous" class="presta__link" data-prestation="Tirage de cartes">Réserver <span aria-hidden="true">→</span></a>
+      </article>
+
+      <!-- 2 -->
+      <article class="card lift presta reveal">
+        <div class="presta__icon"><svg width="52" height="52"><use href="#ico-pendule"/></svg></div>
+        <h3>Pendule</h3>
+        <p>
+          <!-- TEXTE À PERSONNALISER -->
+          Le pendule répond là où le mental tourne en rond. Utile pour clarifier une
+          hésitation, faire le tri dans vos ressentis ou vérifier ce que votre intuition
+          vous souffle déjà tout bas.
+        </p>
+        <ul class="presta__points">
+          <li>Réponses claires et ciblées</li>
+          <li>Idéal en complément d'un tirage</li>
+          <li>Compte rendu à la fin de la séance</li>
+        </ul>
+        <div class="presta__meta">
+          <span class="tag">45 min</span>
+          <span class="tag">CHF 45</span>
+          <span class="tag tag--format">Par téléphone</span>
+        </div>
+        <a href="#rendez-vous" class="presta__link" data-prestation="Pendule">Réserver <span aria-hidden="true">→</span></a>
+      </article>
+
+      <!-- 3 -->
+      <article class="card lift presta reveal">
+        <div class="presta__icon"><svg width="52" height="52"><use href="#ico-coaching"/></svg></div>
+        <h3>Coaching spirituel</h3>
+        <p>
+          <!-- TEXTE À PERSONNALISER -->
+          Un accompagnement sur plusieurs séances pour avancer en profondeur : reprendre
+          confiance, poser des limites, écouter votre intuition au quotidien et remettre
+          du sens là où il s'est perdu.
+        </p>
+        <ul class="presta__points">
+          <li>Séance découverte sans engagement</li>
+          <li>Suivi personnalisé, à votre rythme</li>
+          <li>Exercices doux entre les rendez-vous</li>
+        </ul>
+        <div class="presta__meta">
+          <span class="tag">1 h 15</span>
+          <span class="tag">CHF 80 / séance</span>
+          <span class="tag tag--format">En visio</span>
+        </div>
+        <a href="#rendez-vous" class="presta__link" data-prestation="Coaching spirituel">Réserver <span aria-hidden="true">→</span></a>
+      </article>
+
+      <!-- 4 -->
+      <article class="card lift presta reveal">
+        <div class="presta__icon"><svg width="52" height="52"><use href="#ico-reiki"/></svg></div>
+        <h3>Reiki</h3>
+        <p>
+          <!-- TEXTE À PERSONNALISER -->
+          Un soin énergétique par apposition des mains, habillé et allongé confortablement.
+          Le Reiki apaise le système nerveux, relâche les tensions accumulées et
+          réharmonise la circulation de l'énergie dans le corps.
+        </p>
+        <ul class="presta__points">
+          <li>Séance en silence, sans manipulation</li>
+          <li>Détente profonde et regain d'énergie</li>
+          <li>Idéal en période de fatigue ou de stress</li>
+        </ul>
+        <div class="presta__meta">
+          <span class="tag tag--soon">À venir</span>
+        </div>
+        <p class="presta__soon">Cette prestation sera bientôt disponible.</p>
+      </article>
+
+    </div>
+
+    <p class="prestations__note reveal">
+      Séances à distance (visio ou téléphone)
+    </p>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════ BONS CADEAUX ══════════════════════════ -->
+<section class="section-soft gifts" id="bons-cadeaux">
+  <div class="container gifts__grid stagger">
+
+    <div class="gifts__intro reveal">
+      <p class="eyebrow">Faire plaisir</p>
+      <h2>Bons cadeaux</h2>
+      <p>
+        <!-- TEXTE À PERSONNALISER -->
+        Offrir un bon cadeau, c'est offrir une parenthèse : un moment rien qu'à soi,
+        pour souffler et y voir plus clair. Valable sur toutes les prestations, pendant
+        12 mois.
+      </p>
+
+      <ol class="steps">
+        <li><span>1</span><div><strong>Vous choisissez</strong><p>Une prestation précise ou un montant libre.</p></div></li>
+        <li><span>2</span><div><strong>Je crée le bon</strong><p>Personnalisé avec le prénom et votre petit mot.</p></div></li>
+        <li><span>3</span><div><strong>Vous l'offrez</strong><p>Reçu par e-mail en PDF, ou imprimé sur beau papier.</p></div></li>
+      </ol>
+
+      <a href="#rendez-vous" class="button-primary" data-prefill="bon-cadeau">
+        <svg width="17" height="17" aria-hidden="true"><use href="#ico-gift"/></svg>
+        Commander un bon cadeau
+      </a>
+    </div>
+
+    <div class="gifts__visual reveal" aria-hidden="true">
+      <div class="voucher">
+        <div class="voucher__frame">
+          <p class="voucher__brand">L'éveil d'Elo</p>
+          <span class="divider-star voucher__div">
+            <i></i><svg width="10" height="10"><use href="#ico-star"/></svg><i></i>
+          </span>
+          <p class="voucher__label">Bon cadeau</p>
+          <p class="voucher__value">Une séance au choix</p>
+          <div class="voucher__foot">
+            <span>Pour&nbsp;: ............................</span>
+            <span>Valable 12 mois</span>
+          </div>
+        </div>
+      </div>
+      <div class="voucher voucher--back"></div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════ CONTACT ══════════════════════════ -->
+<section class="section-alt contact" id="contact">
+  <div class="container">
+
+    <header class="section-head reveal">
+      <p class="eyebrow">Parlons-en</p>
+      <h2>Contact</h2>
+      <p class="section-head__text">
+        Une question avant de réserver&nbsp;? Un doute sur la prestation qui vous
+        correspond&nbsp;? Écrivez-moi, je réponds sous 48&nbsp;h.
+      </p>
+    </header>
+
+    <div class="contact__cards stagger">
+      <!-- COORDONNÉES À REMPLACER -->
+      <a class="card lift contact__card reveal" href="mailto:contact@leveildelo.ch">
+        <svg width="26" height="26" aria-hidden="true"><use href="#ico-mail"/></svg>
+        <h3>E-mail</h3>
+        <p>contact@leveildelo.ch</p>
+        <span class="contact__cta">Écrire un message</span>
+      </a>
+
+      <a class="card lift contact__card reveal" href="tel:+41791234567">
+        <svg width="26" height="26" aria-hidden="true"><use href="#ico-phone"/></svg>
+        <h3>Téléphone</h3>
+        <p>079 123 45 67</p>
+        <span class="contact__cta">Du lundi au samedi, 9h à 19h</span>
+      </a>
+
+      <a class="card lift contact__card reveal" href="https://instagram.com/leveil.delo" target="_blank" rel="noopener">
+        <svg width="26" height="26" aria-hidden="true"><use href="#ico-insta"/></svg>
+        <h3>Instagram</h3>
+        <p>@leveil.delo</p>
+        <span class="contact__cta">Tirages du mois &amp; guidances</span>
+      </a>
+    </div>
+
+    <p class="contact__place reveal">
+      <svg width="16" height="16" aria-hidden="true"><use href="#ico-pin"/></svg>
+      Séances à distance
+    </p>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════ RENDEZ-VOUS ══════════════════════════ -->
+<section class="section-main booking" id="rendez-vous">
+  <div class="container">
+
+    <header class="section-head reveal">
+      <p class="eyebrow">Réserver</p>
+      <h2>Prendre rendez-vous</h2>
+      <p class="section-head__text">
+        Deux façons de convenir d'un moment ensemble : choisissez celle qui vous
+        ressemble le plus.
+      </p>
+    </header>
+
+    <div class="booking__grid stagger">
+
+      <!-- Voie 1 : agenda en ligne -->
+      <div class="card booking__online reveal">
+        <h3>Réserver en ligne</h3>
+        <p>
+          Choisissez directement un créneau dans mon agenda : vous voyez mes
+          disponibilités en temps réel et recevez la confirmation immédiatement.
+        </p>
+        <ul class="booking__list">
+          <li>Disponibilités à jour, en temps réel</li>
+          <li>Confirmation et rappel automatiques par e-mail</li>
+          <li>Lien de visioconférence créé automatiquement</li>
+          <li>Annulation ou report depuis l'e-mail de confirmation</li>
+        </ul>
+        <!-- Le lien de la page de rendez-vous Google Agenda se règle dans
+             js/script.js → CONFIG.bookingUrl (et non ici). -->
+        <a href="#rendez-vous" class="button-primary" id="bookingLink">
+          Voir les disponibilités
+        </a>
+        <p class="booking__hint" id="bookingHint">
+          Agenda en ligne bientôt disponible &mdash; en attendant, le formulaire
+          ci-contre fonctionne.
+        </p>
+      </div>
+
+      <div class="booking__or" aria-hidden="true"><span>ou</span></div>
+
+      <!-- Voie 2 : formulaire -->
+      <div class="card booking__form-wrap reveal">
+        <h3>Faire une demande</h3>
+        <p>Dites-moi ce qui vous amène, je vous propose un créneau par retour de message.</p>
+
+        <form class="form" id="rdvForm" novalidate>
+          <div class="form__row">
+            <label class="field">
+              <span>Nom</span>
+              <input type="text" name="nom" required autocomplete="family-name">
+            </label>
+            <label class="field">
+              <span>Prénom</span>
+              <input type="text" name="prenom" required autocomplete="given-name">
+            </label>
+          </div>
+
+          <div class="form__row">
+            <label class="field">
+              <span>E-mail</span>
+              <input type="email" name="email" required autocomplete="email">
+            </label>
+            <label class="field">
+              <span>Téléphone</span>
+              <input type="tel" name="telephone" autocomplete="tel" required>
+            </label>
+          </div>
+
+          <fieldset class="field field--choices">
+            <legend>Votre demande</legend>
+            <div class="choices">
+              <label><input type="checkbox" name="prestation" value="Tirage de cartes"><span>Tirage de cartes</span></label>
+              <label><input type="checkbox" name="prestation" value="Pendule"><span>Pendule</span></label>
+              <label><input type="checkbox" name="prestation" value="Coaching spirituel"><span>Coaching spirituel</span></label>
+              <label><input type="checkbox" name="prestation" value="Reiki" disabled><span>Reiki</span></label>
+              <label><input type="checkbox" name="prestation" value="Bon cadeau" id="chk-bon-cadeau"><span>Bon cadeau</span></label>
+            </div>
+          </fieldset>
+
+          <!-- Rempli automatiquement d'après la prestation cochée (voir script.js,
+               table CONFIG.formats). Non modifiable : le format dépend de la prestation. -->
+          <label class="field">
+            <span>Format</span>
+            <input type="text" name="format" id="formatAuto" readonly tabindex="-1"
+                   value="Selon la prestation choisie">
+          </label>
+
+          <label class="field">
+            <span>Votre message</span>
+            <textarea name="message" rows="5" placeholder="Ce qui vous amène, une question…"></textarea>
+          </label>
+
+          <label class="consent">
+            <input type="checkbox" name="consent" required>
+            <span>J'accepte que ces informations soient utilisées pour me recontacter.</span>
+          </label>
+
+          <button type="submit" class="button-primary form__submit">Envoyer ma demande</button>
+          <p class="form__status" id="formStatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+
+<!-- ══════════════════════════ PIED DE PAGE ══════════════════════════ -->
+<footer class="footer">
+  <div class="container footer__top">
+    <div class="footer__brand">
+      <span class="footer__medallion">
+        <span class="mark footer__mark" role="img" aria-label="Logo L'éveil d'Elo"></span>
+      </span>
+      <p class="footer__name">L'éveil d'Elo</p>
+    </div>
+
+    <nav class="footer__nav" aria-label="Navigation de pied de page">
+      <a href="#accueil">Accueil</a>
+      <a href="#prestations">Prestations</a>
+      <a href="#bons-cadeaux">Bons cadeaux</a>
+      <a href="#contact">Contact</a>
+      <a href="#rendez-vous">Rendez-vous</a>
+    </nav>
+
+    <div class="footer__social">
+      <a href="https://instagram.com/leveil.delo" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="20" height="20"><use href="#ico-insta"/></svg>
+      </a>
+      <a href="mailto:contact@leveildelo.ch" aria-label="E-mail">
+        <svg width="20" height="20"><use href="#ico-mail"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
+    <p>&copy; <span id="year">2026</span> L'éveil d'Elo - Tous droits réservés</p>
+    <p class="footer__legal">
+      <a href="#">Mentions légales</a>
+      <span aria-hidden="true">&middot;</span>
+      <a href="#">Politique de confidentialité</a>
+    </p>
+    <p class="footer__disclaimer">
+      Les séances proposées relèvent du bien-être et ne remplacent en aucun cas un avis
+      ou un suivi médical.
+    </p>
+  </div>
+</footer>
+
+<a href="#accueil" class="to-top" id="toTop" aria-label="Remonter en haut">
+  <span aria-hidden="true">↑</span>
+</a>
+
+<script src="js/script.js"></script>
+</body>
+</html>
