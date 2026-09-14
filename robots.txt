@@ -1,6 +1,0 @@
-# L'éveil d'Elo — autorise tous les moteurs de recherche
-User-agent: *
-Allow: /
-
-# ⚠️ Remplacer par le vrai nom de domaine avant la mise en ligne
-Sitemap: https://www.leveildelo.ch/sitemap.xml
