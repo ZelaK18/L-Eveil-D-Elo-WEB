@@ -4,50 +4,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- ════════ RÉFÉRENCEMENT (SEO) ════════
-     ⚠️ À METTRE À JOUR avant la mise en ligne :
-     - remplacer VILLE 
-       (c'est LE mot-clé qui fait remonter le site sur « tirage de cartes »)
-     - remplacer https://www.leveildelo.ch/ par le vrai nom de domaine
-     Il n'existe pas de « mots-clés cachés » : Google ignore la balise
-     meta keywords depuis 2009 et sanctionne le texte dissimulé. Ce qui
-     compte, ce sont le titre, la description, le contenu visible et la
-     fiche Google Business Profile. -->
-
 <title>L'éveil d'Elo - Tirage de cartes, pendule et coaching spirituel en Suisse romande</title>
 <meta name="description" content="Tirage de cartes, guidance au pendule et coaching spirituel à distance. Un accompagnement doux, intuitif et sans jugement. Prise de rendez-vous en ligne.">
 <meta name="author" content="L'éveil d'Elo">
-<meta name="robots" content="index, follow">
 <meta name="theme-color" content="#F7EDDD">
 <link rel="canonical" href="https://www.leveildelo.ch/">
 
-<!-- Aperçu affiché quand le lien est partagé (WhatsApp, Instagram, messageries…) -->
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_CH">
 <meta property="og:site_name" content="L'éveil d'Elo">
-<meta property="og:title" content="L'éveil d'Elo — Tirage de cartes, pendule et coaching spirituel">
+<meta property="og:title" content="L'éveil d'Elo, Tirage de cartes, pendule et coaching spirituel">
 <meta property="og:description" content="Un accompagnement doux, intuitif et sans jugement. Tirage de cartes, pendule et coaching spirituel, à distance.">
 <meta property="og:url" content="https://www.leveildelo.ch/">
 <meta property="og:image" content="https://www.leveildelo.ch/images/logo.png">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" href="images/logo.png">
-<link rel="apple-touch-icon" href="images/logo.png">
+<link rel="icon" href="images/favicon.png">
+<link rel="apple-touch-icon" href="images/favicon.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="css/style.css">
 
-<!-- Sans JavaScript, les blocs animés à l'apparition resteraient invisibles.
-     On les affiche alors directement : le site reste entièrement lisible. -->
-<noscript>
-  <style>.reveal { opacity: 1; transform: none; }</style>
-</noscript>
+<noscript><style>.reveal { opacity: 1; }</style></noscript>
 
-<!-- Fiche d'établissement lue par Google (permet l'affichage enrichi :
-     horaires, téléphone, avis, prestations). Mêmes valeurs à mettre à jour. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -69,7 +51,7 @@
     "addressCountry": "CH"
   },
   "areaServed": [
-    { "@type": "City", "name": "Suisse romande" },
+    { "@type": "AdministrativeArea", "name": "Suisse romande" },
     { "@type": "Country", "name": "Switzerland" }
   ],
   "availableLanguage": "fr",
@@ -113,12 +95,8 @@
 </head>
 <body>
 
-<!-- ══════════════ MOTIFS DÉCORATIFS RÉUTILISABLES (SVG cachés) ══════════════ -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <!-- Étoile à 5 branches reprise du logo. Relevé sur le fichier d'origine :
-         71 px de large pour 68 px de haut, soit une étoile régulière dont le
-         rayon intérieur vaut 0,382 fois le rayon extérieur (nombre d'or). -->
     <symbol id="ico-star" viewBox="0 0 24 24">
       <path d="M12 .79 14.78 9.35 23.79 9.35 16.51 14.65 19.29 23.22 12 17.92 4.71 23.22 7.5 14.65 .21 9.35 9.22 9.35Z" fill="currentColor"/>
     </symbol>
@@ -169,14 +147,15 @@
       <path d="M12 7v14.5"/>
       <path d="M12 7S10.6 2.5 8 2.5a2.3 2.3 0 0 0 0 4.5zM12 7s1.4-4.5 4-4.5a2.3 2.3 0 0 1 0 4.5z"/>
     </symbol>
+    <symbol id="ico-arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/>
+    </symbol>
   </defs>
 </svg>
 
-
-<!-- ══════════════════════════ EN-TÊTE ══════════════════════════ -->
 <header class="header" id="header">
   <div class="header__inner">
-    <a href="#accueil" class="brand" aria-label="L'éveil d'Elo — retour en haut">
+    <a href="#accueil" class="brand" aria-label="L'éveil d'Elo, retour en haut">
       <span class="mark brand__mark" role="img" aria-label="Logo L'éveil d'Elo"></span>
       <span class="brand__name">L'éveil d'Elo</span>
     </a>
@@ -187,7 +166,7 @@
         <li><a href="#prestations"  class="nav__link">Prestations</a></li>
         <li><a href="#bons-cadeaux" class="nav__link">Bons cadeaux</a></li>
         <li><a href="#contact"      class="nav__link">Contact</a></li>
-        <li><a href="#rendez-vous"  class="nav__link nav__link--cta">Rendez-vous</a></li>
+        <li><a href="#rendez-vous"  class="nav__link nav__link--cta"><svg width="11" height="11" aria-hidden="true"><use href="#ico-star"/></svg>Rendez-vous</a></li>
       </ul>
     </nav>
 
@@ -197,17 +176,14 @@
   </div>
 </header>
 
-
 <main>
-
-<!-- ══════════════════════════ ACCUEIL ══════════════════════════ -->
-<section class="hero section-main" id="accueil">
+<section class="hero" id="accueil">
   <div class="sky" aria-hidden="true">
-    <svg class="sky__star sky__star--1" width="18" height="18"><use href="#ico-star"/></svg>
-    <svg class="sky__star sky__star--2" width="11" height="11"><use href="#ico-star"/></svg>
-    <svg class="sky__star sky__star--3" width="14" height="14"><use href="#ico-star"/></svg>
-    <svg class="sky__star sky__star--4" width="9"  height="9"><use href="#ico-star"/></svg>
-    <svg class="sky__star sky__star--5" width="13" height="13"><use href="#ico-star"/></svg>
+    <svg width="18" height="18" style="--x:7%;--y:12%"><use href="#ico-star"/></svg>
+    <svg width="11" height="11" style="--x:47%;--y:26%;--d:1.1s"><use href="#ico-star"/></svg>
+    <svg width="14" height="14" style="--x:3%;--y:62%;--d:2.2s"><use href="#ico-star"/></svg>
+    <svg width="9" height="9" style="--x:52%;--y:78%;--d:.6s"><use href="#ico-star"/></svg>
+    <svg width="13" height="13" style="--x:94%;--y:8%;--d:1.7s"><use href="#ico-star"/></svg>
   </div>
 
   <div class="container hero__grid stagger">
@@ -216,7 +192,6 @@
       <p class="eyebrow">Tirage de cartes &middot; Pendule &middot; Coaching spirituel</p>
       <h1>Écoutez ce qui<br><em>s'éveille</em> en vous</h1>
       <p class="lead">
-        <!-- TEXTE À PERSONNALISER -->
         Je vous accueille à distance, dans un espace doux
         et sans jugement, où l'on prend le temps de déposer les questions qui pèsent
         et d'écouter les réponses qui, souvent, sont déjà là.
@@ -227,21 +202,26 @@
       </div>
 
       <ul class="hero__values">
-        <li><span></span>À l'écoute</li>
-        <li><span></span>Guidée par l'intuition</li>
-        <li><span></span>En toute confidentialité</li>
+        <li>À l'écoute</li>
+        <li>Guidée par l'intuition</li>
+        <li>En toute confidentialité</li>
       </ul>
     </div>
 
     <div class="hero__media reveal">
       <figure class="portrait">
-        <!-- REMPLACER par la photo d'Elo : images/photo-elo.jpg -->
-        <img src="images/photo-elo.jpg" alt="Portrait d'Elodie, L'éveil d'Elo" class="portrait__img" data-fallback>
+        <img src="images/test-pp.jpg" alt="Portrait d'Elodie, L'éveil d'Elo" class="portrait__img">
         <div class="portrait__placeholder" aria-hidden="true">
           <svg width="70" height="70"><use href="#ico-star"/></svg>
-          <p>Votre photo ici<br><span>images/photo-elo.jpg</span></p>
         </div>
       </figure>
+      <svg class="portrait__stars" viewBox="0 0 100 100" aria-hidden="true">
+        <use href="#ico-star" x="14.53" y="13.23" width="1.54" height="1.54"/>
+        <use href="#ico-star" x="30.24" y="2.54" width="2.12" height="2.12"/>
+        <use href="#ico-star" x="48.46" y="-1.54" width="3.08" height="3.08"/>
+        <use href="#ico-star" x="67.64" y="2.54" width="2.12" height="2.12"/>
+        <use href="#ico-star" x="83.93" y="13.23" width="1.54" height="1.54"/>
+      </svg>
       <div class="portrait__badge">
         <svg width="16" height="16" aria-hidden="true"><use href="#ico-pin"/></svg>
         <span>À distance & en visio</span>
@@ -251,9 +231,7 @@
   </div>
 </section>
 
-
-<!-- ══════════════════════════ QUI SUIS-JE ══════════════════════════ -->
-<section class="section-alt about">
+<section class="section-alt">
   <div class="container about__grid stagger">
 
     <div class="about__intro reveal">
@@ -265,8 +243,7 @@
       </span>
     </div>
 
-    <div class="about__body reveal">
-      <!-- TEXTE À PERSONNALISER -->
+    <div class="reveal">
       <p>
         Depuis toujours, je ressens ce qui ne se dit pas. Pendant longtemps j'ai mis
         cette sensibilité de côté, jusqu'au jour où elle s'est imposée à moi comme une
@@ -288,9 +265,7 @@
   </div>
 </section>
 
-
-<!-- ══════════════════════════ PRESTATIONS ══════════════════════════ -->
-<section class="section-main prestations" id="prestations">
+<section id="prestations">
   <div class="container">
 
     <header class="section-head reveal">
@@ -304,12 +279,10 @@
 
     <div class="cards stagger">
 
-      <!-- 1 -->
       <article class="card lift presta reveal">
-        <div class="presta__icon"><svg width="52" height="52"><use href="#ico-cards"/></svg></div>
+        <svg class="presta__icon" width="52" height="52" aria-hidden="true"><use href="#ico-cards"/></svg>
         <h3>Tirage de cartes</h3>
         <p>
-          <!-- TEXTE À PERSONNALISER -->
           Un temps de guidance autour d'une question qui vous occupe : une relation, un
           choix professionnel, une période de transition. Les cartes sont tirées puis
           interprétées avec sensibilité, comme une conversation plutôt qu'un verdict.
@@ -324,15 +297,13 @@
           <span class="tag">CHF 60</span>
           <span class="tag tag--format">Par téléphone</span>
         </div>
-        <a href="#rendez-vous" class="presta__link" data-prestation="Tirage de cartes">Réserver <span aria-hidden="true">→</span></a>
+        <a href="#rendez-vous" class="presta__link">Réserver <span aria-hidden="true">→</span></a>
       </article>
 
-      <!-- 2 -->
       <article class="card lift presta reveal">
-        <div class="presta__icon"><svg width="52" height="52"><use href="#ico-pendule"/></svg></div>
+        <svg class="presta__icon" width="52" height="52" aria-hidden="true"><use href="#ico-pendule"/></svg>
         <h3>Pendule</h3>
         <p>
-          <!-- TEXTE À PERSONNALISER -->
           Le pendule répond là où le mental tourne en rond. Utile pour clarifier une
           hésitation, faire le tri dans vos ressentis ou vérifier ce que votre intuition
           vous souffle déjà tout bas.
@@ -347,15 +318,13 @@
           <span class="tag">CHF 45</span>
           <span class="tag tag--format">Par téléphone</span>
         </div>
-        <a href="#rendez-vous" class="presta__link" data-prestation="Pendule">Réserver <span aria-hidden="true">→</span></a>
+        <a href="#rendez-vous" class="presta__link">Réserver <span aria-hidden="true">→</span></a>
       </article>
 
-      <!-- 3 -->
       <article class="card lift presta reveal">
-        <div class="presta__icon"><svg width="52" height="52"><use href="#ico-coaching"/></svg></div>
+        <svg class="presta__icon" width="52" height="52" aria-hidden="true"><use href="#ico-coaching"/></svg>
         <h3>Coaching spirituel</h3>
         <p>
-          <!-- TEXTE À PERSONNALISER -->
           Un accompagnement sur plusieurs séances pour avancer en profondeur : reprendre
           confiance, poser des limites, écouter votre intuition au quotidien et remettre
           du sens là où il s'est perdu.
@@ -370,15 +339,13 @@
           <span class="tag">CHF 80 / séance</span>
           <span class="tag tag--format">En visio</span>
         </div>
-        <a href="#rendez-vous" class="presta__link" data-prestation="Coaching spirituel">Réserver <span aria-hidden="true">→</span></a>
+        <a href="#rendez-vous" class="presta__link">Réserver <span aria-hidden="true">→</span></a>
       </article>
 
-      <!-- 4 -->
       <article class="card lift presta reveal">
-        <div class="presta__icon"><svg width="52" height="52"><use href="#ico-reiki"/></svg></div>
+        <svg class="presta__icon" width="52" height="52" aria-hidden="true"><use href="#ico-reiki"/></svg>
         <h3>Reiki</h3>
         <p>
-          <!-- TEXTE À PERSONNALISER -->
           Un soin énergétique par apposition des mains, habillé et allongé confortablement.
           Le Reiki apaise le système nerveux, relâche les tensions accumulées et
           réharmonise la circulation de l'énergie dans le corps.
@@ -395,16 +362,9 @@
       </article>
 
     </div>
-
-    <p class="prestations__note reveal">
-      Séances à distance (visio ou téléphone)
-    </p>
-
   </div>
 </section>
 
-
-<!-- ══════════════════════════ BONS CADEAUX ══════════════════════════ -->
 <section class="section-soft gifts" id="bons-cadeaux">
   <div class="container gifts__grid stagger">
 
@@ -412,7 +372,6 @@
       <p class="eyebrow">Faire plaisir</p>
       <h2>Bons cadeaux</h2>
       <p>
-        <!-- TEXTE À PERSONNALISER -->
         Offrir un bon cadeau, c'est offrir une parenthèse : un moment rien qu'à soi,
         pour souffler et y voir plus clair. Valable sur toutes les prestations, pendant
         12 mois.
@@ -451,9 +410,7 @@
   </div>
 </section>
 
-
-<!-- ══════════════════════════ CONTACT ══════════════════════════ -->
-<section class="section-alt contact" id="contact">
+<section class="section-alt" id="contact">
   <div class="container">
 
     <header class="section-head reveal">
@@ -466,40 +423,28 @@
     </header>
 
     <div class="contact__cards stagger">
-      <!-- COORDONNÉES À REMPLACER -->
       <a class="card lift contact__card reveal" href="mailto:contact@leveildelo.ch">
         <svg width="26" height="26" aria-hidden="true"><use href="#ico-mail"/></svg>
-        <h3>E-mail</h3>
         <p>contact@leveildelo.ch</p>
         <span class="contact__cta">Écrire un message</span>
       </a>
 
       <a class="card lift contact__card reveal" href="tel:+41791234567">
         <svg width="26" height="26" aria-hidden="true"><use href="#ico-phone"/></svg>
-        <h3>Téléphone</h3>
         <p>079 123 45 67</p>
         <span class="contact__cta">Du lundi au samedi, 9h à 19h</span>
       </a>
 
       <a class="card lift contact__card reveal" href="https://instagram.com/leveil.delo" target="_blank" rel="noopener">
         <svg width="26" height="26" aria-hidden="true"><use href="#ico-insta"/></svg>
-        <h3>Instagram</h3>
-        <p>@leveil.delo</p>
+        <p>Instagram</p>
         <span class="contact__cta">Tirages du mois &amp; guidances</span>
       </a>
     </div>
-
-    <p class="contact__place reveal">
-      <svg width="16" height="16" aria-hidden="true"><use href="#ico-pin"/></svg>
-      Séances à distance
-    </p>
-
   </div>
 </section>
 
-
-<!-- ══════════════════════════ RENDEZ-VOUS ══════════════════════════ -->
-<section class="section-main booking" id="rendez-vous">
+<section class="booking" id="rendez-vous">
   <div class="container">
 
     <header class="section-head reveal">
@@ -513,7 +458,6 @@
 
     <div class="booking__grid stagger">
 
-      <!-- Voie 1 : agenda en ligne -->
       <div class="card booking__online reveal">
         <h3>Réserver en ligne</h3>
         <p>
@@ -526,20 +470,17 @@
           <li>Lien de visioconférence créé automatiquement</li>
           <li>Annulation ou report depuis l'e-mail de confirmation</li>
         </ul>
-        <!-- Le lien de la page de rendez-vous Google Agenda se règle dans
-             js/script.js → CONFIG.bookingUrl (et non ici). -->
         <a href="#rendez-vous" class="button-primary" id="bookingLink">
           Voir les disponibilités
         </a>
         <p class="booking__hint" id="bookingHint">
-          Agenda en ligne bientôt disponible &mdash; en attendant, le formulaire
-          ci-contre fonctionne.
+          Agenda en ligne bientôt disponible. En attendant, le formulaire
+          de demande fonctionne déjà.
         </p>
       </div>
 
       <div class="booking__or" aria-hidden="true"><span>ou</span></div>
 
-      <!-- Voie 2 : formulaire -->
       <div class="card booking__form-wrap reveal">
         <h3>Faire une demande</h3>
         <p>Dites-moi ce qui vous amène, je vous propose un créneau par retour de message.</p>
@@ -578,8 +519,6 @@
             </div>
           </fieldset>
 
-          <!-- Rempli automatiquement d'après la prestation cochée (voir script.js,
-               table CONFIG.formats). Non modifiable : le format dépend de la prestation. -->
           <label class="field">
             <span>Format</span>
             <input type="text" name="format" id="formatAuto" readonly tabindex="-1"
@@ -593,7 +532,7 @@
 
           <label class="consent">
             <input type="checkbox" name="consent" required>
-            <span>J'accepte que ces informations soient utilisées pour me recontacter.</span>
+            <span>J'accepte que ces informations soient utilisées pour me recontacter (<a href="mentions-legales.html#confidentialite" target="_blank" rel="noopener">politique de confidentialité</a>).</span>
           </label>
 
           <button type="submit" class="button-primary form__submit">Envoyer ma demande</button>
@@ -607,8 +546,6 @@
 
 </main>
 
-
-<!-- ══════════════════════════ PIED DE PAGE ══════════════════════════ -->
 <footer class="footer">
   <div class="container footer__top">
     <div class="footer__brand">
@@ -616,6 +553,9 @@
         <span class="mark footer__mark" role="img" aria-label="Logo L'éveil d'Elo"></span>
       </span>
       <p class="footer__name">L'éveil d'Elo</p>
+      <span class="divider-star footer__rule" aria-hidden="true">
+        <i></i><svg width="10" height="10"><use href="#ico-star"/></svg><i></i>
+      </span>
     </div>
 
     <nav class="footer__nav" aria-label="Navigation de pied de page">
@@ -628,10 +568,10 @@
 
     <div class="footer__social">
       <a href="https://instagram.com/leveil.delo" target="_blank" rel="noopener" aria-label="Instagram">
-        <svg width="20" height="20"><use href="#ico-insta"/></svg>
+        <svg width="20" height="20" aria-hidden="true"><use href="#ico-insta"/></svg>
       </a>
       <a href="mailto:contact@leveildelo.ch" aria-label="E-mail">
-        <svg width="20" height="20"><use href="#ico-mail"/></svg>
+        <svg width="20" height="20" aria-hidden="true"><use href="#ico-mail"/></svg>
       </a>
     </div>
   </div>
@@ -639,9 +579,9 @@
   <div class="container footer__bottom">
     <p>&copy; <span id="year">2026</span> L'éveil d'Elo - Tous droits réservés</p>
     <p class="footer__legal">
-      <a href="#">Mentions légales</a>
+      <a href="mentions-legales.html#impressum">Mentions légales</a>
       <span aria-hidden="true">&middot;</span>
-      <a href="#">Politique de confidentialité</a>
+      <a href="mentions-legales.html#confidentialite">Politique de confidentialité</a>
     </p>
     <p class="footer__disclaimer">
       Les séances proposées relèvent du bien-être et ne remplacent en aucun cas un avis
@@ -651,7 +591,7 @@
 </footer>
 
 <a href="#accueil" class="to-top" id="toTop" aria-label="Remonter en haut">
-  <span aria-hidden="true">↑</span>
+  <svg width="20" height="20" aria-hidden="true"><use href="#ico-arrow-up"/></svg>
 </a>
 
 <script src="js/script.js"></script>

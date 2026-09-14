@@ -1,4 +1,4 @@
-CHARTE GRAPHIQUE — L’ÉVEIL D’ELO
+CHARTE GRAPHIQUE L’ÉVEIL D’ELO
 
 Ce fichier centralise l’identité visuelle du projet afin de retrouver
 facilement les couleurs, typographies et règles d’utilisation du site.
@@ -20,24 +20,24 @@ Couleurs secondaires
 
 2. UTILISATION DES COULEURS
 
-#F7EDDD — Beige principal Utilisation : fond général du site et sections
+#F7EDDD : Beige principal Utilisation : fond général du site et sections
 principales.
 
-#825A38 — Brun principal Utilisation : logo, grands titres, boutons
+#825A38 : Brun principal Utilisation : logo, grands titres, boutons
 principaux, icônes et éléments décoratifs importants.
 
-#A38465 — Brun secondaire Utilisation : sous-titres, détails, éléments
+#A38465 : Brun secondaire Utilisation : sous-titres, détails, éléments
 secondaires et états de survol.
 
-#6F523C — Brun texte Utilisation : paragraphes et textes courants.
+#6F523C : Brun texte Utilisation : paragraphes et textes courants.
 
-#C4AB91 — Beige brun clair Utilisation : bordures, séparateurs et
+#C4AB91 : Beige brun clair Utilisation : bordures, séparateurs et
 détails discrets.
 
-#DFCEB7 — Beige secondaire Utilisation : fonds alternatifs, encadrés et
+#DFCEB7 : Beige secondaire Utilisation : fonds alternatifs, encadrés et
 zones secondaires.
 
-#FFF9F2 — Blanc chaud Utilisation : cartes, fonds clairs et texte sur
+#FFF9F2 : Blanc chaud Utilisation : cartes, fonds clairs et texte sur
 boutons bruns.
 
 3. TYPOGRAPHIES
