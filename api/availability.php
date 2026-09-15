@@ -14,10 +14,10 @@ try {
     $next = $month->modify('+1 month');
     $slots = slots_by_service(events_around($month, $next, 15), $month, $next);
 } catch (GoogleNotConnected) {
-    json_response(['ok' => false, 'message' => BOOKING_CLOSED], 503);
+    json_response(['ok' => false, 'message' => message('reservation_fermee')], 503);
 } catch (GoogleError $e) {
     error_log('Disponibilités : ' . $e->getMessage());
-    json_response(['ok' => false, 'message' => "L'agenda ne répond pas pour le moment. Réessayez plus tard ou utilisez le formulaire de demande."], 502);
+    json_response(['ok' => false, 'message' => message('agenda_indisponible')], 502);
 }
 
 json_response([

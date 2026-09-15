@@ -1,5 +1,5 @@
 <?php
-// Tests du calcul des créneaux et des textes de réservation : php tests/slots.php
+// Tests du calcul des créneaux et des textes du site : php tests/slots.php
 
 if (PHP_SAPI !== 'cli') {
     http_response_code(404);
@@ -88,28 +88,50 @@ $check('plage 16h-17h collée à un rendez-vous de 17h : elle finit à 16h45',
     [['update', 'd2', ['end' => $at('2026-09-16 16:45')]]]);
 $check('heures fixes : aucune plage « Dispo » modifiée', availability_changes($dispo, $at('2026-09-16 17:00'), $at('2026-09-16 18:00'), $rules), []);
 
-$check('libellés', [duration_label(45), duration_label(75), date_fr($day('2026-09-16 09:00')), opening_label()], ['45 min', '1 h 15', 'mercredi 16 septembre 2026 à 9h00', 'Du lundi au samedi, 9h à 19h']);
-$check('durées de config.php : tirage 45 min, pendule 45 min, coaching 1 h',
+$check('libellés', [duration_label(45), duration_label(75), date_fr($day('2026-09-16 09:00'))], ['45 min', '1 h 15', 'mercredi 16 septembre 2026 à 9h00']);
+
+$site = require dirname(__DIR__) . '/textes/site-text.php';
+$check('site-text.php : toutes les sections',
+    array_values(array_diff(['menu', 'accueil', 'qui_suis_je', 'prestations', 'bons_cadeaux', 'contact', 'rendez_vous', 'formulaire', 'pied_de_page', 'messages', 'google'], array_keys($site))), []);
+foreach (array_keys(config('services')) as $id) {
+    $card = $site['prestations']['cartes'][$id] ?? [];
+    $complete = !array_diff(['nom', 'texte', 'points', 'disponible'], array_keys($card))
+        && (empty($card['disponible']) || isset($card['duree'], $card['prix'], $card['format']));
+    $check("site-text.php : carte « $id » complète", $complete, true);
+}
+$usedMessages = ['champs_obligatoires', 'envoi_en_cours', 'demande_envoyee', 'envoi_echoue', 'recherche', 'aucun_creneau', 'agenda_indisponible',
+    'reservation_fermee', 'choisir_creneau', 'reservation_en_cours', 'reservation_echouee', 'creneau_pris', 'reservation_confirmee',
+    'reservation_confirmee_telephone', 'email_invalide', 'nom_invalide', 'telephone_invalide', 'trop_envois', 'page_expiree'];
+$check('site-text.php : tous les messages utilisés par le site', array_values(array_diff($usedMessages, array_keys($site['messages'] ?? []))), []);
+$check('site-text.php : choix « Bon cadeau » avec son format', request_choices()[$site['rendez_vous']['demande_bon_cadeau']] ?? null, $site['rendez_vous']['demande_bon_cadeau_format']);
+$check('durées de site-text.php : tirage 45 min, pendule 45 min, coaching 1 h',
     array_map(fn(string $id) => bookable_service($id)['duration'], ['tirage', 'pendule', 'coaching']), [45, 45, 60]);
+$check('mise en forme des textes : gras, italique, espace insécable, balises neutralisées',
+    format_text("**L'éveil** *s'éveille* ? <b>"), "<strong>L&#039;éveil</strong> <em>s&#039;éveille</em>\u{00A0}? &lt;b&gt;");
+
+$legal = require dirname(__DIR__) . '/textes/mentions-legales.php';
+$check('mentions-legales.php : les deux parties ont leurs rubriques',
+    [count($legal['mentions']['rubriques'] ?? []) > 0, count($legal['confidentialite']['rubriques'] ?? []) > 0], [true, true]);
 
 $mail = mail_template("Bonjour {prenom},\n\n{details}\n\nÀ bientôt,\nElodie", ['prenom' => 'Dylan'], ['Date' => 'jeudi']);
 $check('e-mail modifiable : mots remplacés et récapitulatif en gras',
     [$mail['text'], str_contains($mail['html'], '<strong>Date :</strong> jeudi')],
     ["Bonjour Dylan,\n\nDate : jeudi\n\nÀ bientôt,\nElodie\n", true]);
 
-$texts = require dirname(__DIR__) . '/app/appointment-text.php';
-$filled = array_fill_keys(['prenom', 'nom', 'prestation', 'date', 'tarif', 'telephone', 'telephone_elodie'], 'x');
+$texts = require dirname(__DIR__) . '/textes/appointment-text.php';
+$booked = array_fill_keys(['prenom', 'nom', 'prestation', 'date', 'tarif', 'telephone', 'telephone_elodie'], 'x');
+$request = array_fill_keys(['prenom', 'nom', 'prestation', 'telephone', 'telephone_elodie'], 'x');
+$emails = ['avis_reservation' => $booked, 'demande' => $request, 'avis_demande' => $request];
 foreach (array_keys(config('services')) as $id) {
     if (bookable_service($id)) {
-        $text = appointment_text($id);
-        $rendered = fill_placeholders($text['subject'], $filled) . mail_template($text['body'], $filled, ['Date' => 'x'])['text'];
-        $check("appointment-text.php : texte de « $id » présent, sans {mot} inconnu", [isset($texts[$id]), str_contains($rendered, '{')], [true, false]);
+        $emails[$id] = $booked;
     }
 }
-$request = array_fill_keys(['prenom', 'nom', 'prestation', 'telephone', 'telephone_elodie'], 'x');
-$rendered = fill_placeholders($texts['demande']['subject'] ?? '', $request) . mail_template($texts['demande']['body'] ?? '', $request, ['Prestation(s)' => 'x'])['text'];
-$check('appointment-text.php : accusé de réception « demande » présent, sans {mot} inconnu', [isset($texts['demande']), str_contains($rendered, '{')], [true, false]);
-$check('prestation sans texte : confirmation simple', str_contains(appointment_text('reiki')['body'], '{details}'), true);
+foreach ($emails as $key => $values) {
+    $rendered = fill_placeholders($texts[$key]['subject'] ?? '', $values) . mail_template($texts[$key]['body'] ?? '', $values, ['Date' => 'x'])['text'];
+    $check("appointment-text.php : e-mail « $key » présent, sans {mot} inconnu", [isset($texts[$key]), str_contains($rendered, '{')], [true, false]);
+}
+$check('prestation sans texte : confirmation simple', str_contains(appointment_text('inconnue')['body'], '{details}'), true);
 
 echo $failures ? "\n$failures test(s) en échec\n" : "\nTous les tests passent\n";
 exit($failures ? 1 : 0);

@@ -8,7 +8,7 @@ function e(mixed $value): string
 function config(string $path): mixed
 {
     static $config;
-    $config ??= require __DIR__ . '/config.php';
+    $config ??= with_site_texts(require __DIR__ . '/config.php');
     return array_reduce(explode('.', $path), fn($value, $key) => $value[$key] ?? null, $config);
 }
 
@@ -17,6 +17,66 @@ function secret(string $path): mixed
     static $secrets;
     $secrets ??= is_file(__DIR__ . '/secrets.php') ? require __DIR__ . '/secrets.php' : [];
     return array_reduce(explode('.', $path), fn($value, $key) => $value[$key] ?? null, $secrets);
+}
+
+// Fichier du dossier textes/. Si une faute de frappe le rend illisible, la dernière version valide sert à la place.
+function texts_file(string $name): array
+{
+    static $files = [];
+    if (isset($files[$name])) {
+        return $files[$name];
+    }
+
+    $file = ROOT_DIR . "/textes/$name.php";
+    try {
+        $texts = require $file;
+        if (!is_array($texts)) {
+            throw new UnexpectedValueException('le fichier ne renvoie aucun texte');
+        }
+        if (@filemtime($file) > @filemtime(storage_path("backup-$name.php"))) {
+            storage_write("backup-$name", $texts);
+        }
+    } catch (Throwable $e) {
+        error_log("textes/$name.php illisible, dernière version valide utilisée : " . $e->getMessage());
+        $texts = storage_read("backup-$name");
+    }
+    return $files[$name] = $texts;
+}
+
+function site_text(string $path): mixed
+{
+    return array_reduce(explode('.', $path), fn($value, $key) => $value[$key] ?? null, texts_file('site-text'));
+}
+
+// Texte prêt pour la page : **mot** en gras, *mot* en italique, espace insécable avant ? ! : ;
+function format_text(string $text): string
+{
+    return preg_replace(['/\*\*(.+?)\*\*/u', '/\*(.+?)\*/u', '/ ([?!:;])/u'], ['<strong>$1</strong>', '<em>$1</em>', "\u{00A0}$1"], e($text));
+}
+
+function t(string $path): string
+{
+    return format_text((string) site_text($path));
+}
+
+function message(string $key): string
+{
+    return (string) site_text("messages.$key");
+}
+
+// Les cartes de textes/site-text.php complètent les prestations de config.php : nom, texte, prix, durée…
+function with_site_texts(array $config): array
+{
+    $fields = ['nom' => 'name', 'texte' => 'text', 'points' => 'points', 'format' => 'format', 'duree' => 'duration', 'prix' => 'price', 'prix_par' => 'price_unit', 'disponible' => 'available'];
+    foreach (array_keys($config['services']) as $id) {
+        foreach ($fields as $from => $to) {
+            $value = site_text("prestations.cartes.$id.$from");
+            if ($value !== null) {
+                $config['services'][$id][$to] = $value;
+            }
+        }
+    }
+    return $config;
 }
 
 // ?v= oblige le navigateur à recharger le fichier dès qu'il change.
@@ -164,12 +224,12 @@ function guard_form(string $action, int $max, int $seconds): void
         form_response(true, 'Merci !');
     }
     if (!valid_form_token(input('jeton'))) {
-        form_response(false, 'La page a expiré. Rechargez-la puis réessayez.', 422);
+        form_response(false, message('page_expiree'), 422);
     }
     // Un envoi à la fois : des envois simultanés ne peuvent pas tous passer la limite avant d'être comptés.
     hold_lock("form-$action");
     if (too_many_attempts($action, $max, $seconds)) {
-        form_response(false, "Trop d'envois en peu de temps. Réessayez plus tard ou écrivez-moi directement.", 429);
+        form_response(false, message('trop_envois'), 429);
     }
 }
 
@@ -183,17 +243,17 @@ function read_person(): array
         'message'   => mb_substr(input('message'), 0, 5000),
     ];
     if (in_array('', [$person['nom'], $person['prenom'], $person['telephone'], input('consent')], true)) {
-        form_response(false, 'Merci de compléter les champs obligatoires.', 422);
+        form_response(false, message('champs_obligatoires'), 422);
     }
     if (!filter_var($person['email'], FILTER_VALIDATE_EMAIL)) {
-        form_response(false, "L'adresse e-mail ne semble pas valide.", 422);
+        form_response(false, message('email_invalide'), 422);
     }
     // Nom, prénom et téléphone sont repris dans l'e-mail envoyé à l'adresse saisie : pas de lien ni de balise.
     if (preg_match('#https?:|www\.|[<>/@]|\.(com|net|org|ch|fr|de|io|co|ru|xyz|info|biz|link|top)\b#i', "{$person['prenom']} {$person['nom']}")) {
-        form_response(false, "Merci d'indiquer un nom et un prénom valides.", 422);
+        form_response(false, message('nom_invalide'), 422);
     }
     if (!preg_match('/^\+?[0-9 ().-]{6,25}$/', $person['telephone'])) {
-        form_response(false, 'Le numéro de téléphone ne semble pas valide.', 422);
+        form_response(false, message('telephone_invalide'), 422);
     }
     return $person;
 }

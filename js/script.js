@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const $ = id => document.getElementById(id);
+  const messages = JSON.parse($("messages").textContent);
   const header = $("header");
   const nav = $("nav");
   const burger = $("burger");
@@ -81,16 +82,15 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async e => {
     e.preventDefault();
     if (!form.reportValidity()) {
-      setStatus(status, "Merci de compléter les champs obligatoires.", "is-error");
+      setStatus(status, messages.champs_obligatoires, "is-error");
       return;
     }
 
     const submit = form.querySelector(".form__submit");
     submit.disabled = true;
-    setStatus(status, "Envoi en cours…");
+    setStatus(status, messages.envoi_en_cours);
     try {
-      const result = await send(form.action, { method: "POST", body: new FormData(form) },
-        "L'envoi a échoué. Vous pouvez m'écrire directement par e-mail ou par téléphone.");
+      const result = await send(form.action, { method: "POST", body: new FormData(form) }, messages.envoi_echoue);
       form.reset();
       syncFormat();
       setStatus(status, result.message, "is-ok");
@@ -133,8 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const monthRequests = {};
   const fetchMonth = month => {
     if (!monthRequests[month] || Date.now() - monthRequests[month].at > 30000) {
-      const request = send(`api/availability.php?${new URLSearchParams({ month })}`, {},
-        "L'agenda ne répond pas pour le moment. Réessayez plus tard ou utilisez le formulaire de demande.");
+      const request = send(`api/availability.php?${new URLSearchParams({ month })}`, {}, messages.agenda_indisponible);
       monthRequests[month] = request.then(result => {
         monthRequests[result.month] = monthRequests[month];
         return result;
@@ -198,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const showMonth = async (month, notice = "") => {
     const view = ++agenda.view;
     calendar.setAttribute("aria-busy", "true");
-    setStatus(bookingStatus, notice || "Recherche des disponibilités…", notice && "is-error");
+    setStatus(bookingStatus, notice || messages.recherche, notice && "is-error");
     try {
       const result = await fetchMonth(month);
       if (view !== agenda.view) return;
@@ -206,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
       renderCalendar();
       if (agenda.date in agenda.days) selectDate(agenda.date);
       else clearSelection();
-      const empty = !Object.keys(agenda.days).length && "Plus aucun créneau libre ce mois-ci : essayez le mois suivant.";
+      const empty = !Object.keys(agenda.days).length && messages.aucun_creneau;
       setStatus(bookingStatus, notice || empty || "", notice && "is-error");
       if (result.month < result.max) fetchMonth(shiftMonth(result.month, 1));
     } catch (error) {
@@ -253,21 +252,21 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     if (!booking.elements.time.value) return;
     if (!booking.reportValidity()) {
-      setStatus(bookingStatus, "Merci de compléter les champs obligatoires.", "is-error");
+      setStatus(bookingStatus, messages.champs_obligatoires, "is-error");
       return;
     }
 
     const submit = booking.querySelector(".form__submit");
     submit.disabled = true;
-    setStatus(bookingStatus, "Réservation en cours…");
+    setStatus(bookingStatus, messages.reservation_en_cours);
     try {
-      const result = await send(booking.action, { method: "POST", body: new FormData(booking) },
-        "La réservation n'a pas pu aboutir. Réessayez ou utilisez le formulaire de demande.");
+      const result = await send(booking.action, { method: "POST", body: new FormData(booking) }, messages.reservation_echouee);
       forgetMonths();
-      $("bookingDoneText").textContent =
-        `Votre rendez-vous « ${result.service} » est confirmé pour le ${result.when}. ` +
-        `Une confirmation vient de partir à ${booking.elements.email.value}` +
-        (result.visio ? "." : ". Je vous appellerai au numéro indiqué.");
+      $("bookingDoneText").textContent = messages.reservation_confirmee
+        .replaceAll("{prestation}", result.service)
+        .replaceAll("{date}", result.when)
+        .replaceAll("{email}", booking.elements.email.value)
+        + (result.visio ? "" : " " + messages.reservation_confirmee_telephone);
       setStatus(bookingStatus, "");
       booking.hidden = true;
       done.hidden = false;

@@ -9,7 +9,7 @@ $tz = new DateTimeZone(config('booking.timezone'));
 $slot = input('date') . ' ' . input('time');
 $start = DateTimeImmutable::createFromFormat('!Y-m-d H:i', $slot, $tz);
 if (!$service || !$start || $start->format('Y-m-d H:i') !== $slot) {
-    form_response(false, 'Choisissez une prestation, un jour et une heure.', 422);
+    form_response(false, message('choisir_creneau'), 422);
 }
 
 $person = read_person();
@@ -58,22 +58,20 @@ try {
         return $created;
     });
 } catch (GoogleNotConnected) {
-    form_response(false, BOOKING_CLOSED, 503);
+    form_response(false, message('reservation_fermee'), 503);
 } catch (GoogleError $e) {
     error_log('Réservation : ' . $e->getMessage());
-    form_response(false, "La réservation n'a pas pu être enregistrée. Réessayez dans un instant ou utilisez le formulaire de demande.", 502);
+    form_response(false, message('reservation_echouee'), 502);
 }
 
 if (!$created) {
-    form_response(false, "Ce créneau vient d'être pris. Choisissez-en un autre.", 409, ['code' => 'slot_taken']);
+    form_response(false, message('creneau_pris'), 409, ['code' => 'slot_taken']);
 }
 
 record_attempt('booking');
 
 $when = date_fr($start);
 $period = day_fr($start) . ', de ' . time_fr($start) . ' à ' . time_fr($end);
-
-$confirmation = appointment_text($id);
 $values = [
     'prenom'           => $person['prenom'],
     'nom'              => $person['nom'],
@@ -84,40 +82,29 @@ $values = [
     'telephone_elodie' => $site['phone_display'],
 ];
 
+// Textes : textes/appointment-text.php (avis pour Elodie, confirmation propre à la prestation).
 $emails = [
-    [
-        config('mail_to'),
-        "Nouveau rendez-vous : {$service['name']}, $when",
-        mail_content(
-            "$name a réservé un rendez-vous depuis le site.",
-            [
-                'Prestation'    => "{$service['name']} ({$service['format']})",
-                'Date'          => $period,
-                'Nom'           => $person['nom'],
-                'Prénom'        => $person['prenom'],
-                'E-mail'        => $person['email'],
-                'Téléphone'     => $person['telephone'],
-            ],
-            ['Message' => $message],
-        ),
-        $person['email'],
-    ],
-    [
-        $person['email'],
-        fill_placeholders($confirmation['subject'], $values),
-        mail_template($confirmation['body'], $values, [
-            'Prestation' => $service['name'],
-            'Date'       => $period,
-            'Tarif'      => price_label($service),
-        ] + ($service['visio'] ? ['Format' => $service['format']] : ['Téléphone' => "je vous appelle au {$person['telephone']}"])),
-        null,
-    ],
+    [config('mail_to'), 'avis_reservation', $person['email'], [
+        'Prestation' => "{$service['name']} ({$service['format']})",
+        'Date'       => $period,
+        'Nom'        => $person['nom'],
+        'Prénom'     => $person['prenom'],
+        'E-mail'     => $person['email'],
+        'Téléphone'  => $person['telephone'],
+        'Message'    => $message,
+    ]],
+    [$person['email'], $id, null, [
+        'Prestation' => $service['name'],
+        'Date'       => $period,
+        'Tarif'      => price_label($service),
+    ] + ($service['visio'] ? ['Format' => $service['format']] : ['Téléphone' => "je vous appelle au {$person['telephone']}"])],
 ];
 
 // Le rendez-vous est déjà dans l'agenda : un e-mail qui échoue ne doit pas l'annuler.
-foreach ($emails as [$to, $subject, $content, $replyTo]) {
+foreach ($emails as [$to, $textKey, $replyTo, $details]) {
     try {
-        send_mail($to, $subject, $content, $replyTo);
+        $text = appointment_text($textKey);
+        send_mail($to, fill_placeholders($text['subject'], $values), mail_template($text['body'], $values, $details), $replyTo);
     } catch (Throwable $e) {
         error_log("E-mail de réservation à $to : " . $e->getMessage());
     }

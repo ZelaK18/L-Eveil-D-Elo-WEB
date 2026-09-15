@@ -75,4 +75,21 @@ return [
             TEXTE,
     ],
 
+    // E-mails reçus par Elodie. {details} y reprend toutes les informations, message compris.
+    'avis_reservation' => [
+        'subject' => 'Nouveau rendez-vous : {prestation}, {date}',
+        'body'    => <<<'TEXTE'
+            {prenom} {nom} a réservé un rendez-vous depuis le site.
+
+            {details}
+            TEXTE,
+    ],
+
+    'avis_demande' => [
+        'subject' => 'Formulaire de contact de {nom} {prenom}',
+        'body'    => <<<'TEXTE'
+            {details}
+            TEXTE,
+    ],
+
 ];

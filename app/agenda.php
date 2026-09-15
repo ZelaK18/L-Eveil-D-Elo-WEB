@@ -2,8 +2,6 @@
 
 const DAYS_FR = ['', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
 const MONTHS_FR = ['', 'janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
-const BOOKING_CLOSED = "La réservation en ligne n'est pas encore ouverte. En attendant, le formulaire de demande fonctionne.";
-const REQUEST_SENT = 'Merci ! Votre demande est bien partie, une confirmation vient de vous être envoyée par e-mail. Je vous réponds sous 48 h.';
 
 function bookable_service(string $id): ?array
 {
@@ -13,9 +11,7 @@ function bookable_service(string $id): ?array
 
 function appointment_text(string $id): array
 {
-    static $texts;
-    $texts ??= require __DIR__ . '/appointment-text.php';
-    return $texts[$id] ?? [
+    return texts_file('appointment-text')[$id] ?? [
         'subject' => 'Rendez-vous confirmé : {prestation}, {date}',
         'body'    => "Bonjour {prenom},\n\nVotre rendez-vous est confirmé.\n\n{details}\n\nÀ bientôt,\nElodie",
     ];
@@ -29,7 +25,7 @@ function request_choices(): array
             $choices[$service['name']] = $service['format'];
         }
     }
-    return $choices + ['Bon cadeau' => 'Format papier ou PDF'];
+    return $choices + [(string) site_text('rendez_vous.demande_bon_cadeau') => (string) site_text('rendez_vous.demande_bon_cadeau_format')];
 }
 
 function duration_label(int $minutes): string
@@ -73,16 +69,6 @@ function opening_groups(): array
         }
     }
     return $groups;
-}
-
-// « Du lundi au samedi, 9h à 19h »
-function opening_label(): string
-{
-    $hour = fn(string $time) => (int) $time . 'h' . (str_ends_with($time, ':00') ? '' : substr($time, 3));
-    return implode(' · ', array_map(fn(array $group) =>
-        ($group['from'] === $group['to'] ? ucfirst(DAYS_FR[$group['from']]) : 'Du ' . DAYS_FR[$group['from']] . ' au ' . DAYS_FR[$group['to']])
-        . ', ' . implode(' et ', array_map(fn(array $range) => $hour($range[0]) . ' à ' . $hour($range[1]), $group['ranges'])),
-        opening_groups()));
 }
 
 // Un jour de marge pour les journées entières et les pauses. $cache : secondes de réutilisation (0 pour réserver).

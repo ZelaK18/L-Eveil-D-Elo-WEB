@@ -954,6 +954,23 @@ h1, h2, h3,
   .to-top { --rond: 42px; }
 }
 
+/* Petit natel : textes centrés, texte des prestations justifié */
+@media (max-width: 500px) {
+  .hero__text,
+  .section-head,
+  .about__grid,
+  .gifts__intro,
+  .booking__online > h3,
+  .booking__online > p,
+  .booking__form-wrap > h3,
+  .booking__form-wrap > p { text-align: center; }
+  .lead,
+  .section-head,
+  .gifts__intro > p { margin-inline: auto; }
+  .steps li { text-align: left; }
+  .presta > p:not(.presta__soon) { text-align: justify; hyphens: auto; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {

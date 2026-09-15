@@ -14,7 +14,7 @@ DirectoryIndex index.php
   RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
   # Code interne, scripts en ligne de commande, jetons et fichiers de travail
-  RewriteRule ^(app|bin|storage|tests)(/|$) - [F,L]
+  RewriteRule ^(app|bin|storage|tests|textes)(/|$) - [F,L]
   RewriteRule ^(\.git|charte-graphique\.txt) - [F,L]
 </IfModule>
 
