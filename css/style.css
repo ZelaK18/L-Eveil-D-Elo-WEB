@@ -130,7 +130,6 @@ h1, h2, h3,
 .about__role { letter-spacing: .2em; }
 
 .hero__values,
-.portrait__placeholder p,
 .about__role,
 .divider-star,
 .tag,
@@ -443,21 +442,6 @@ h1, h2, h3,
   pointer-events: none;
   color: var(--brun-secondaire);
 }
-.portrait__placeholder {
-  position: absolute;
-  inset: 0;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  text-align: center;
-  color: var(--beige-brun-clair);
-}
-.portrait__placeholder p { font-size: .84rem; letter-spacing: .06em; }
-.portrait__placeholder span { font-size: .72rem; opacity: .7; }
-.portrait.is-empty .portrait__img { display: none; }
-.portrait.is-empty .portrait__placeholder { display: flex; }
 .portrait__badge {
   position: absolute;
   left: 50%;
@@ -624,7 +608,6 @@ h1, h2, h3,
 }
 .contact__card:hover { background: var(--beige-principal); }
 .contact__card svg { margin-bottom: 12px; color: var(--brun-principal); }
-.contact__card h3 { margin-bottom: .1em; font-size: 1.25rem; }
 .contact__card p { margin: 0; font-size: 1rem; }
 .contact__cta { margin-top: auto; padding-top: 12px; font-size: .76rem; }
 

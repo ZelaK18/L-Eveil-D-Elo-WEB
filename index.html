@@ -45,9 +45,7 @@
   "currenciesAccepted": "CHF",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "ADRESSE",
-    "addressLocality": "VILLE",
-    "postalCode": "0000",
+    "addressRegion": "Fribourg",
     "addressCountry": "CH"
   },
   "areaServed": [
@@ -211,9 +209,6 @@
     <div class="hero__media reveal">
       <figure class="portrait">
         <img src="images/test-pp.jpg" alt="Portrait d'Elodie, L'éveil d'Elo" class="portrait__img">
-        <div class="portrait__placeholder" aria-hidden="true">
-          <svg width="70" height="70"><use href="#ico-star"/></svg>
-        </div>
       </figure>
       <svg class="portrait__stars" viewBox="0 0 100 100" aria-hidden="true">
         <use href="#ico-star" x="14.53" y="13.23" width="1.54" height="1.54"/>
@@ -397,7 +392,7 @@
       <h2>Bons cadeaux</h2>
       <p>
         Offrir un bon cadeau, c'est offrir une parenthèse : un moment rien qu'à soi,
-        pour souffler et y voir plus clair. 
+        pour souffler et y voir plus clair.
       </p>
       <p>
         Valable sur toutes les prestations, pendant
@@ -510,10 +505,10 @@
           <li>Lien de visioconférence créé automatiquement</li>
           <li>Annulation ou report depuis l'e-mail de confirmation</li>
         </ul>
-        <a href="#rendez-vous" class="button-primary" id="bookingLink">
+        <a href="#rendez-vous" class="button-primary">
           Voir les disponibilités
         </a>
-        <p class="booking__hint" id="bookingHint">
+        <p class="booking__hint">
           Agenda en ligne bientôt disponible. En attendant, le formulaire
           de demande fonctionne déjà.
         </p>
@@ -525,7 +520,7 @@
         <h3>Faire une demande</h3>
         <p>Dites-moi ce qui vous amène, je vous propose un créneau par retour de message.</p>
 
-        <form class="form" id="rdvForm" novalidate>
+        <form class="form" id="rdvForm" action="mailto:contact@leveildelo.ch" novalidate>
           <div class="form__row">
             <label class="field">
               <span>Nom</span>
@@ -551,11 +546,11 @@
           <fieldset class="field field--choices">
             <legend>Votre demande</legend>
             <div class="choices">
-              <label><input type="checkbox" name="prestation" value="Tirage de cartes"><span>Tirage de cartes</span></label>
-              <label><input type="checkbox" name="prestation" value="Pendule"><span>Pendule</span></label>
-              <label><input type="checkbox" name="prestation" value="Coaching spirituel"><span>Coaching spirituel</span></label>
+              <label><input type="checkbox" name="prestation" value="Tirage de cartes" data-format="Par téléphone"><span>Tirage de cartes</span></label>
+              <label><input type="checkbox" name="prestation" value="Pendule" data-format="Par téléphone"><span>Pendule</span></label>
+              <label><input type="checkbox" name="prestation" value="Coaching spirituel" data-format="En visio"><span>Coaching spirituel</span></label>
               <label><input type="checkbox" name="prestation" value="Reiki" disabled><span>Reiki</span></label>
-              <label><input type="checkbox" name="prestation" value="Bon cadeau" id="chk-bon-cadeau"><span>Bon cadeau</span></label>
+              <label><input type="checkbox" name="prestation" value="Bon cadeau" data-format="Format papier ou PDF" id="chk-bon-cadeau"><span>Bon cadeau</span></label>
             </div>
           </fieldset>
 

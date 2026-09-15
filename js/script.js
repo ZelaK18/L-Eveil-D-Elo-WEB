@@ -1,24 +1,3 @@
-const CONFIG = {
-  // Adresse qui reçoit les demandes du formulaire
-  email: "contact@leveildelo.ch",
-
-  // Lien de la page de rendez-vous Google Agenda (vide : les boutons mènent au formulaire)
-  bookingUrl: "",
-
-  // Envoi direct du formulaire, par exemple Formspree ou Web3Forms (vide : ouvre la messagerie)
-  formEndpoint: "",
-  web3formsKey: "",
-
-  // Format de séance affiché selon la prestation cochée
-  formats: {
-    "Tirage de cartes": "Par téléphone",
-    "Pendule": "Par téléphone",
-    "Coaching spirituel": "En visio",
-    "Bon cadeau": "Format papier ou PDF"
-  },
-  formatParDefaut: "Selon la prestation choisie"
-};
-
 document.addEventListener("DOMContentLoaded", () => {
   const $ = id => document.getElementById(id);
   const header = $("header");
@@ -70,24 +49,11 @@ document.addEventListener("DOMContentLoaded", () => {
     io.unobserve(el);
   });
 
-  const photo = document.querySelector(".portrait__img");
-  const sansPhoto = () => photo.closest(".portrait").classList.add("is-empty");
-  photo.addEventListener("error", sansPhoto);
-  if (photo.complete && !photo.naturalWidth) sansPhoto();
-
-  if (CONFIG.bookingUrl) {
-    $("bookingHint").remove();
-    document.querySelectorAll("#bookingLink, .presta__link").forEach(lien =>
-      Object.assign(lien, { href: CONFIG.bookingUrl, target: "_blank", rel: "noopener" })
-    );
-  }
-
   const syncFormat = () => {
     const formats = new Set([...prestations]
-      .filter(box => box.checked)
-      .map(box => CONFIG.formats[box.value])
-      .filter(Boolean));
-    formatField.value = [...formats].join(" et ") || CONFIG.formatParDefaut;
+      .filter(box => box.checked && box.dataset.format)
+      .map(box => box.dataset.format));
+    formatField.value = [...formats].join(" et ") || formatField.defaultValue;
   };
   prestations.forEach(box => box.addEventListener("change", syncFormat));
   syncFormat();
@@ -102,21 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
     status.className = ("form__status " + state).trim();
   };
 
-  const collect = () => {
-    const data = new FormData(form);
-    const val = name => String(data.get(name) || "").trim();
-    const choix = data.getAll("prestation");
-    return {
-      nom: val("nom"),
-      prenom: val("prenom"),
-      email: val("email"),
-      telephone: val("telephone"),
-      format: val("format"),
-      message: val("message"),
-      prestations: choix.length ? choix.join(", ") : "Non précisé"
-    };
-  };
-
   form.addEventListener("submit", async e => {
     e.preventDefault();
     if (!form.reportValidity()) {
@@ -124,22 +75,24 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const v = collect();
-    const subject = `Demande de rendez-vous : ${v.nom} ${v.prenom}`;
+    const data = new FormData(form);
+    const val = name => data.getAll(name).join(", ").trim();
+    const subject = `Demande de rendez-vous : ${val("nom")} ${val("prenom")}`;
+    const destination = form.getAttribute("action");
 
-    if (!CONFIG.formEndpoint) {
+    if (destination.startsWith("mailto:")) {
       const body = [
-        `Nom : ${v.nom}`,
-        `Prénom : ${v.prenom}`,
-        `E-mail : ${v.email}`,
-        `Téléphone : ${v.telephone}`,
-        `Prestation(s) : ${v.prestations}`,
-        `Format : ${v.format}`,
+        `Nom : ${val("nom")}`,
+        `Prénom : ${val("prenom")}`,
+        `E-mail : ${val("email")}`,
+        `Téléphone : ${val("telephone")}`,
+        `Prestation(s) : ${val("prestation") || "Non précisé"}`,
+        `Format : ${val("format")}`,
         "",
         "Message :",
-        v.message || "Aucun message"
+        val("message") || "Aucun message"
       ].join("\n");
-      location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      location.href = `${destination}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       setStatus("Votre logiciel de messagerie s'ouvre avec le message pré-rempli, il ne reste qu'à l'envoyer.", "is-ok");
       return;
     }
@@ -147,17 +100,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const submit = form.querySelector(".form__submit");
     submit.disabled = true;
     setStatus("Envoi en cours…");
+    data.append("subject", subject);
     try {
-      const response = await fetch(CONFIG.formEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ ...v, _subject: subject, access_key: CONFIG.web3formsKey || undefined })
-      });
+      const response = await fetch(destination, { method: "POST", body: data, headers: { Accept: "application/json" } });
       if (!response.ok) throw new Error(response.status);
       form.reset();
       setStatus("Merci ! Votre demande est bien partie, je vous réponds sous 48 h.", "is-ok");
     } catch {
-      setStatus(`L'envoi a échoué. Vous pouvez m'écrire directement à ${CONFIG.email}.`, "is-error");
+      setStatus("L'envoi a échoué. Vous pouvez m'écrire directement par e-mail ou par téléphone.", "is-error");
     } finally {
       submit.disabled = false;
     }
