@@ -1,0 +1,34 @@
+Options -Indexes
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Une seule adresse pour l'accueil : /index.php et /index.html mènent à /
+  RewriteCond %{THE_REQUEST} \s/+index\.(php|html)[\s?] [NC]
+  RewriteRule ^ / [R=301,L]
+  RewriteRule ^mentions-legales\.html$ /mentions-legales.php [R=301,L]
+
+  # robots.txt et sitemap.xml sont générés en PHP à partir du domaine de config.php
+  RewriteRule ^robots\.txt$ robots.php [L]
+  RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+  # Code interne, scripts en ligne de commande, jetons et fichiers de travail
+  RewriteRule ^(app|bin|storage|tests)(/|$) - [F,L]
+  RewriteRule ^(\.git|charte-graphique\.txt) - [F,L]
+</IfModule>
+
+# CSS et JS gardés un an : leur adresse change à chaque modification (?v=).
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json application/xml image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 month"
+</IfModule>

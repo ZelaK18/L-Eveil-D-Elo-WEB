@@ -1,27 +1,25 @@
+<?php
+require __DIR__ . '/app/bootstrap.php';
+
+$site = config('site');
+$title = "Mentions légales et confidentialité - L'éveil d'Elo";
+$description = "Mentions légales et politique de confidentialité de L'éveil d'Elo.";
+?>
 <!DOCTYPE html>
 <html lang="fr-CH">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mentions légales et confidentialité - L'éveil d'Elo</title>
-<meta name="description" content="Mentions légales et politique de confidentialité de L'éveil d'Elo.">
-<link rel="icon" href="images/favicon.png">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="css/style.css">
+<?php require __DIR__ . '/app/partials/head.php' ?>
+<link rel="canonical" href="<?= e($site['url']) ?>mentions-legales.php">
 </head>
 <body>
 
 <header class="header">
   <div class="header__inner">
-    <a href="index.html" class="brand" aria-label="L'éveil d'Elo, retour à l'accueil">
+    <a href="./" class="brand" aria-label="L'éveil d'Elo, retour à l'accueil">
       <span class="mark brand__mark" role="img" aria-label="Logo L'éveil d'Elo"></span>
       <span class="brand__name">L'éveil d'Elo</span>
     </a>
-    <a href="index.html" class="legal__back">← Retour</a>
+    <a href="./" class="legal__back">← Retour</a>
   </div>
 </header>
 
@@ -45,8 +43,8 @@
         L'éveil d'Elo - Elodie Fauquex<br>
         <span class="legal__todo">Case postale …</span>
         <span class="legal__todo">NPA Localité</span>, Suisse<br>
-        E-mail : <a href="mailto:contact@leveildelo.ch">contact@leveildelo.ch</a><br>
-        Téléphone : <a href="tel:+41791234567">079 123 45 67</a>
+        E-mail : <a href="mailto:<?= e($site['email']) ?>"><?= e($site['email']) ?></a><br>
+        Téléphone : <a href="tel:<?= e($site['phone']) ?>"><?= e($site['phone_display']) ?></a>
       </p>
 
       <h3>Forme juridique</h3>
@@ -81,8 +79,7 @@
       <p>
         Les informations publiées sur ce site sont données à titre indicatif et peuvent
         être modifiées à tout moment. L'éveil d'Elo ne peut être tenue responsable du
-        contenu des sites externes vers lesquels renvoient certains liens (Instagram,
-        Google Agenda).
+        contenu des sites externes vers lesquels renvoient certains liens, comme Instagram.
       </p>
 
       <h3>Droit applicable</h3>
@@ -104,7 +101,7 @@
       <h3>Responsable du traitement</h3>
       <p>
         Elodie Fauquex, L'éveil d'Elo, canton de Fribourg.<br>
-        Contact : <a href="mailto:contact@leveildelo.ch">contact@leveildelo.ch</a>.
+        Contact : <a href="mailto:<?= e($site['email']) ?>"><?= e($site['email']) ?></a>.
         Adresse postale : voir les <a href="#impressum">mentions légales</a>.
       </p>
 
@@ -113,17 +110,19 @@
         <li>
           <strong>Formulaire de demande</strong> : nom, prénom, e-mail, téléphone,
           prestation souhaitée et message. Ces données servent uniquement à répondre à
-          votre demande et à organiser un rendez-vous. Le formulaire ouvre votre propre
-          logiciel de messagerie : le message part de votre adresse vers
-          contact@leveildelo.ch.
+          votre demande et à organiser un rendez-vous. Elles sont transmises par e-mail à
+          Elodie, et une confirmation de réception vous est envoyée à l'adresse indiquée.
+          Elles ne sont pas enregistrées sur le site lui-même.
         </li>
         <li>
-          <strong>Réservation en ligne</strong> : elle se fait sur une page Google Agenda.
-          Les informations que vous y saisissez sont traitées par Google, selon sa propre
-          politique de confidentialité.
+          <strong>Réservation en ligne</strong> : les mêmes coordonnées, la prestation, le
+          créneau choisi et votre éventuel message sont enregistrés dans l'agenda Google
+          d'Elodie, qui en est aussi avertie par e-mail. Une confirmation vous est envoyée à
+          l'adresse indiquée.
         </li>
         <li>
-          <strong>Séances en visio</strong> : elles ont lieu via Google Meet.
+          <strong>Séances en visio</strong> : les informations de connexion vous sont
+          transmises avant la séance.
         </li>
         <li>
           <strong>Bons cadeaux</strong> : les coordonnées de la personne qui offre et le
@@ -132,6 +131,16 @@
         <li>
           <strong>E-mail, téléphone et Instagram</strong> : les informations que vous
           transmettez servent uniquement à vous répondre.
+        </li>
+        <li>
+          <strong>Protection contre les abus</strong> : lors de l'envoi d'un formulaire, une
+          empreinte non réversible de votre adresse IP est conservée 24 heures au plus, afin
+          de limiter les envois automatisés.
+        </li>
+        <li>
+          <strong>Hébergement</strong> : comme tout hébergeur, Infomaniak enregistre des
+          journaux techniques (dont l'adresse IP) nécessaires à la sécurité et au bon
+          fonctionnement du site.
         </li>
       </ul>
 
@@ -143,11 +152,19 @@
         avec une discrétion particulière, uniquement dans le cadre de l'accompagnement.
       </p>
 
+      <h3>Destinataires</h3>
+      <p>
+        Vos données ne sont ni vendues ni cédées. Seuls les prestataires nécessaires au
+        fonctionnement du site y ont accès : Infomaniak (hébergement, en Suisse) et Google
+        (Gmail pour l'envoi des e-mails, Google Agenda pour les rendez-vous et Google Fonts
+        pour les polices de caractères).
+      </p>
+
       <h3>Cookies et mesure d'audience</h3>
       <p>
-        Ce site n'utilise ni cookies publicitaires, ni outil de mesure d'audience. Les
-        polices de caractères sont chargées depuis les serveurs de Google (Google Fonts),
-        ce qui transmet votre adresse IP à Google lors de votre visite.
+        Ce site n'utilise ni cookies, ni outil de mesure d'audience. Les polices de
+        caractères sont chargées depuis les serveurs de Google (Google Fonts), ce qui
+        transmet votre adresse IP à Google lors de votre visite.
       </p>
 
       <h3>Transfert de données à l'étranger</h3>
@@ -158,17 +175,16 @@
 
       <h3>Durée de conservation</h3>
       <p>
-        Les demandes restées sans suite sont supprimées après
-        12 mois. Les données liées aux prestations
-        réalisées sont conservées le temps nécessaire au suivi ; les pièces comptables,
-        pendant 10 ans comme l'exige la loi.
+        Les demandes restées sans suite sont supprimées après 12 mois. Les données liées
+        aux prestations réalisées sont conservées le temps nécessaire au suivi ; les pièces
+        comptables, pendant 10 ans comme l'exige la loi.
       </p>
 
       <h3>Vos droits</h3>
       <p>
         Vous pouvez à tout moment demander l'accès à vos données, leur rectification ou leur
         suppression, ou vous opposer à leur traitement, en écrivant à
-        <a href="mailto:contact@leveildelo.ch">contact@leveildelo.ch</a>.
+        <a href="mailto:<?= e($site['email']) ?>"><?= e($site['email']) ?></a>.
       </p>
       <p>
         Vous pouvez également vous adresser au Préposé fédéral à la protection des données
@@ -188,11 +204,10 @@
 
 <footer class="footer">
   <div class="container footer__bottom">
-    <p>&copy; <span id="year">2026</span> L'éveil d'Elo - Tous droits réservés</p>
-    <p class="footer__legal"><a href="index.html">Retour à l'accueil</a></p>
+    <p>&copy; <?= date('Y') ?> L'éveil d'Elo - Tous droits réservés</p>
+    <p class="footer__legal"><a href="./">Retour à l'accueil</a></p>
   </div>
 </footer>
 
-<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
 </html>
