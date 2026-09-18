@@ -42,9 +42,9 @@ return [
         'nom'         => "Elodie",
         'role'        => "Coach en spiritualité",
         'paragraphes' => [
-            "Moi, c’est Élodie. Solaire, intuitive et à l’écoute, la spiritualité fait partie de mon chemin depuis plusieurs années.",
+            "Moi, c’est Elodie. Solaire, intuitive et à l’écoute, la spiritualité fait partie de mon chemin depuis plusieurs années.",
             "Coach spirituelle certifiée et actuellement en apprentissage du Reiki, je vous accompagne avec douceur et sans jugement.",
-            "Aujourd’hui, j’ai choisi d’écouter cette petite voix qui m’accompagne depuis quelque temps et de donner vie à **L'éveil d'Elo**,un projet qui me ressemble, porté par l’écoute, le partage et la reconnexion à soi.",
+            "Aujourd’hui, j’ai choisi d’écouter cette petite voix qui m’accompagne depuis quelque temps et de donner vie à **L'éveil d'Elo**, un projet qui me ressemble, porté par l’écoute, le partage et la reconnexion à soi.",
         ],
         'signature'   => "Au plaisir de vous rencontrer, Elodie",
     ],
@@ -53,45 +53,85 @@ return [
     'prestations' => [
         'surtitre'      => "Ce que je propose",
         'titre'         => "Prestations",
-        'texte'         => "Chaque accompagnement est unique et s'adapte à ce que vous traversez. Si vous hésitez entre deux formules, écrivez-moi : nous choisirons ensemble.",
+        'texte'         => "Chaque accompagnement est unique et s’adapte à vos besoins du moment. Écoutez simplement ce qui vous appelle, je suis là pour vous guider.",
         'lien_reserver' => "Réserver",
         'a_venir'       => "À venir",
         'bientot'       => "Cette prestation sera bientôt disponible.",
+        'offre_fermer'  => "Revenir à la prestation",
 
-        // Une carte par prestation.
-        // duree : en minutes (sert aussi au calendrier de réservation). prix : en francs, sans « CHF ».
-        // disponible : true = réservable, false = affichée « À venir ».
+        // Une carte par prestation. Chaque valeur modifiée ici se met à jour partout, rien d'autre à changer :
+        // - duree : en minutes. Carte, liste de réservation, heures proposées par le calendrier, fin du rendez-vous dans l'agenda.
+        // - prix : en francs, sans « CHF ». Carte, liste de réservation, e-mails, agenda, fiche Google.
+        // - disponible : true = réservable, false = affichée « À venir ».
+        // - offres : facultatif. Une prestation à formules n'a ni duree ni prix : chaque formule a les siens.
+        //   Ses formules remplacent les étiquettes en bas de la carte ; cliquer sur un nom ouvre son détail.
+        //   duree : texte affiché sur la carte de la formule et dans la liste de réservation (ex. "3 × 60 min").
+        //   duree_reservation : en minutes, heures proposées par le calendrier et fin du rendez-vous dans l'agenda
+        //   (pour un pack, la durée de la première séance).
+        //   tarif : texte affiché tel quel (ex. "Offert", "330 CHF"). Carte, liste de réservation, e-mails, agenda,
+        //   et fiche Google (le premier nombre du tarif).
         'cartes' => [
             'tirage' => [
                 'nom'        => "Tirage de cartes",
-                'texte'      => "Un temps de guidance autour d'une question qui vous occupe : une relation, un choix professionnel, une période de transition. Les cartes sont tirées puis interprétées avec sensibilité, comme une conversation plutôt qu'un verdict.",
-                'points'     => ["Question libre ou thématique", "Lecture commentée et échange", "Récapitulatif écrit sur demande"],
-                'duree'      => 45,
-                'prix'       => 60,
-                'format'     => "Par téléphone",
+                'texte'      => "À travers les cartes, je vous accompagne dans vos questionnements pour vous aider à prendre du recul, découvrir de nouvelles perspectives et écouter davantage ce que votre intuition vous souffle.",
+                'points'     => ["Question libre ou thématique", "Lecture intuitive", "Récapitulatif par écrit"],
+                'duree'      => 30,
+                'prix'       => 20,
+                'format'     => "Par message",
                 'disponible' => true,
             ],
             'pendule' => [
                 'nom'        => "Pendule",
-                'texte'      => "Le pendule répond là où le mental tourne en rond. Utile pour clarifier une hésitation, faire le tri dans vos ressentis ou vérifier ce que votre intuition vous souffle déjà tout bas.",
-                'points'     => ["Réponses claires et ciblées", "Idéal en complément d'un tirage", "Compte rendu à la fin de la séance"],
-                'duree'      => 45,
-                'prix'       => 45,
-                'format'     => "Par téléphone",
+                'texte'      => "Le pendule est pour moi un outil d’écoute et de guidance. Il nous permet d’explorer ensemble une question précise et de clarifier vos ressentis.",
+                'points'     => ["Réponse claire et ciblée", "Idéal en complément d'un tirage",],
+                'duree'      => 10,
+                'prix'       => 5,
+                'format'     => "Par message",
                 'disponible' => true,
             ],
             'coaching' => [
                 'nom'        => "Coaching spirituel",
-                'texte'      => "Un accompagnement sur plusieurs séances pour avancer en profondeur : reprendre confiance, poser des limites, écouter votre intuition au quotidien et remettre du sens là où il s'est perdu.",
-                'points'     => ["Séance découverte sans engagement", "Suivi personnalisé, à votre rythme", "Exercices doux entre les rendez-vous"],
-                'duree'      => 60,
-                'prix'       => 80,
-                'prix_par'   => "séance",
+                'texte'      => "Besoin de faire le point, de retrouver confiance ou simplement de vous reconnecter à vous-même ? Je vous accompagne pour poser un regard différent sur ce que vous traversez et retrouver vos propres repères.",
+                'points'     => ["Séance découverte sans engagement", "Suivi personnalisé, à votre rythme", "Exercices entre les rendez-vous"],
                 'format'     => "En visio",
                 'disponible' => true,
+                'offres' => [
+                    [
+                        'nom'               => "Premier pas vers Soi",
+                        'duree'             => "30 min",
+                        'duree_reservation' => 30,
+                        'finalite'          => "Faire connaissance, clarifier la demande et vérifier si le coaching est adapté.",
+                        'tarif'             => "Offert",
+                        'format'            => "En visio",
+                    ],
+                    [
+                        'nom'               => "Séance individuelle",
+                        'duree'             => "60 min",
+                        'duree_reservation' => 60,
+                        'finalite'          => "Travailler une problématique ciblée et repartir avec une action concrète.",
+                        'tarif'             => "100 CHF",
+                        'format'            => "En visio",
+                    ],
+                    [
+                        'nom'               => "Pack Clarté",
+                        'duree'             => "3 × 60 min",
+                        'duree_reservation' => 60,
+                        'finalite'          => "Comprendre les blocages, retrouver une direction et amorcer le changement.",
+                        'tarif'             => "330 CHF",
+                        'format'            => "En visio",
+                    ],
+                    [
+                        'nom'               => "Revenir à Soi",
+                        'duree'             => "6 × 60 min sur 12 semaines",
+                        'duree_reservation' => 60,
+                        'finalite'          => "Vivre un parcours complet d’alignement, de transformation et d’ancrage.",
+                        'tarif'             => "650 CHF",
+                        'format'            => "En visio",
+                    ],
+                ],
             ],
             'reiki' => [
-                'nom'        => "Reiki",
+                'nom'        => "Soin énergétique (Reiki)",
                 'texte'      => "Un soin énergétique par apposition des mains, habillé et allongé confortablement. Le Reiki apaise le système nerveux, relâche les tensions accumulées et réharmonise la circulation de l'énergie dans le corps.",
                 'points'     => ["Séance en silence, sans manipulation", "Détente profonde et regain d'énergie", "Idéal en période de fatigue ou de stress"],
                 'disponible' => false,
@@ -123,7 +163,7 @@ return [
     'contact' => [
         'surtitre'        => "Parlons-en",
         'titre'           => "Contact",
-        'texte'           => "Une question avant de réserver ? Un doute sur la prestation qui vous correspond ? Écrivez-moi, je réponds sous 48 h.",
+        'texte'           => "Une question ? Un doute sur la prestation qui vous correspond ? N'hésitez pas à m'écrire.",
         'email_texte'     => "Écrire un message",
         'telephone_texte' => "Du lundi au samedi, 9h à 19h",
         'instagram_titre' => "Instagram",
@@ -150,13 +190,10 @@ return [
 
         'demande_titre'             => "Faire une demande",
         'demande_texte'             => "Dites-moi ce qui vous amène, je vous propose un créneau par retour de message.",
-        'demande_choix'             => "Votre demande",
-        'demande_bon_cadeau'        => "Bon cadeau",
-        'demande_bon_cadeau_format' => "Format papier ou PDF",
-        'demande_format'            => "Format",
-        'demande_format_vide'       => "Selon la prestation choisie",
         'demande_message'           => "Votre message",
         'demande_message_exemple'   => "Ce qui vous amène, une question…",
+        // Écrit dans le message quand on clique sur « Commander un bon cadeau ».
+        'demande_message_bon_cadeau' => "Bonjour, je souhaite commander un bon cadeau.",
         'demande_accord'            => "J'accepte que ces informations soient utilisées pour me recontacter",
         'demande_bouton'            => "Envoyer ma demande",
     ],
@@ -178,6 +215,26 @@ return [
         'confidentialite'  => "Politique de confidentialité",
     ],
 
+    // PAGE D'ANNULATION (ouverte par le lien de l'e-mail de confirmation)
+    // {prestation}, {date}, {delai} (« 24 h ») et {telephone} sont remplacés automatiquement.
+    'annulation' => [
+        'google_titre'  => "Annuler un rendez-vous | L'éveil d'Elo",
+        'surtitre'      => "Rendez-vous",
+        'titre'         => "Annuler un rendez-vous",
+        'confirmer'     => "Vous êtes sur le point d'annuler votre rendez-vous **{prestation}** du **{date}**.",
+        'bouton'        => "Annuler ce rendez-vous",
+        'garder'        => "Garder mon rendez-vous",
+        'annule_titre'  => "Rendez-vous annulé",
+        'annule'        => "Votre rendez-vous **{prestation}** du **{date}** est bien annulé. Une confirmation vient de vous être envoyée par e-mail.",
+        'bouton_autre'  => "Réserver un autre moment",
+        'trop_tard'     => "Votre rendez-vous du **{date}** a lieu dans moins de {delai} : il ne s'annule plus en ligne. Pour l'annuler ou le déplacer, envoyez-moi un message au {telephone}.",
+        'passe'         => "Ce rendez-vous est déjà passé.",
+        'deja_annule'   => "Ce rendez-vous est déjà annulé.",
+        'invalide'      => "Ce lien d'annulation n'est pas valide. Vérifiez qu'il est complet, ou envoyez-moi un message au {telephone}.",
+        'erreur'        => "L'annulation n'a pas pu aboutir. Réessayez dans un instant ou envoyez-moi un message au {telephone}.",
+        'retour'        => "Retour à l'accueil",
+    ],
+
     // MESSAGES affichés pendant l'utilisation des formulaires (sans gras ni italique).
     // Dans reservation_confirmee, {prestation}, {date} et {email} sont remplacés automatiquement.
     'messages' => [
@@ -194,7 +251,7 @@ return [
         'reservation_echouee'             => "La réservation n'a pas pu aboutir. Réessayez dans un instant ou utilisez le formulaire de demande.",
         'creneau_pris'                    => "Ce créneau vient d'être pris. Choisissez-en un autre.",
         'reservation_confirmee'           => "Votre rendez-vous « {prestation} » est confirmé pour le {date}. Une confirmation vient de partir à {email}.",
-        'reservation_confirmee_telephone' => "Je vous appellerai au numéro indiqué.",
+        'reservation_confirmee_telephone' => "Je vous écrirai au numéro indiqué à l'heure prévue.",
         'email_invalide'                  => "L'adresse e-mail ne semble pas valide.",
         'nom_invalide'                    => "Merci d'indiquer un nom et un prénom valides.",
         'telephone_invalide'              => "Le numéro de téléphone ne semble pas valide.",
@@ -205,7 +262,7 @@ return [
     // GOOGLE ET PARTAGE (onglet du navigateur, résultats de recherche, aperçu WhatsApp ou Facebook)
     'google' => [
         'titre'         => "Tirage de cartes, pendule et coaching spirituel | L'éveil d'Elo", // 60 caractères au plus, sinon Google coupe
-        'description'   => "Tirage de cartes et pendule par téléphone, coaching spirituel en visio. Un accompagnement doux et sans jugement en Suisse romande. Réservation en ligne.", // 155 caractères au plus
+        'description'   => "Tirage de cartes et pendule par message, coaching spirituel en visio. Un accompagnement doux et sans jugement en Suisse romande. Réservation en ligne.", // 155 caractères au plus
         'titre_partage' => "L'éveil d'Elo · Tirage de cartes, pendule et coaching spirituel",
     ],
 

@@ -15,7 +15,8 @@ DirectoryIndex index.php
 
   # Code interne, scripts en ligne de commande, jetons et fichiers de travail
   RewriteRule ^(app|bin|storage|tests|textes)(/|$) - [F,L]
-  RewriteRule ^(\.git|charte-graphique\.txt) - [F,L]
+  RewriteRule ^\.git - [F,L]
+  RewriteRule (^|/)charte-graphique\.txt$ - [F,L]
 </IfModule>
 
 # CSS et JS gardés un an : leur adresse change à chaque modification (?v=).

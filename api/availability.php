@@ -12,7 +12,7 @@ $month = min(max($month, $first), $last);
 try {
     // Lecture de l'agenda gardée 15 secondes : les visites rapprochées n'appellent Google qu'une fois.
     $next = $month->modify('+1 month');
-    $slots = slots_by_service(events_around($month, $next, 15), $month, $next);
+    $slots = slots_by_option(events_around($month, $next, 15), $month, $next);
 } catch (GoogleNotConnected) {
     json_response(['ok' => false, 'message' => message('reservation_fermee')], 503);
 } catch (GoogleError $e) {

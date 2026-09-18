@@ -3,8 +3,9 @@ require dirname(__DIR__) . '/app/bootstrap.php';
 
 guard_form('booking', 5, 3600);
 
+// Une prestation (« tirage ») ou l'une de ses formules (« coaching.1 »).
 $id = input('service');
-$service = bookable_service($id);
+$service = booking_options()[$id] ?? null;
 $tz = new DateTimeZone(config('booking.timezone'));
 $slot = input('date') . ' ' . input('time');
 $start = DateTimeImmutable::createFromFormat('!Y-m-d H:i', $slot, $tz);
@@ -15,25 +16,34 @@ if (!$service || !$start || $start->format('Y-m-d H:i') !== $slot) {
 $person = read_person();
 $site = config('site');
 $name = "{$person['prenom']} {$person['nom']}";
-$message = $person['message'] !== '' ? $person['message'] : 'Aucun message';
+$contact = person_details($person);
 $end = $start->modify("+{$service['duration']} minutes");
 
 $event = [
     'summary'     => "{$service['name']} · $name",
     'description' => implode("\n", [
         "Réservé sur le site de {$site['name']}.",
+        'Tarif : ' . price_label($service),
         "Téléphone : {$person['telephone']}",
         "E-mail : {$person['email']}",
         '',
         'Message :',
-        $message,
+        $contact['Message'],
     ]),
     'start'       => ['dateTime' => $start->format(DATE_RFC3339), 'timeZone' => $tz->getName()],
     'end'         => ['dateTime' => $end->format(DATE_RFC3339), 'timeZone' => $tz->getName()],
     // Aucun invité : Google Agenda n'écrit jamais à la personne, seul le site lui envoie sa confirmation.
     // « source » repère les rendez-vous du site : ils restent occupés quel que soit le nom saisi.
-    'extendedProperties' => ['private' => ['source' => 'site']],
-] + ($service['visio'] ? [] : ['location' => "Par téléphone : {$person['telephone']}"]);
+    // Le reste sert au lien d'annulation : ce que la page montre et qui prévenir.
+    'extendedProperties' => ['private' => [
+        'source'     => 'site',
+        'prestation' => $service['name'],
+        'prenom'     => $person['prenom'],
+        'nom'        => $person['nom'],
+        'email'      => $person['email'],
+        'telephone'  => $person['telephone'],
+    ]],
+] + ($service['visio'] ? [] : ['location' => "Par message : {$person['telephone']}"]);
 
 try {
     // Verrou : deux personnes ne peuvent pas prendre le même créneau au même instant.
@@ -42,9 +52,13 @@ try {
         $day = $start->setTime(0, 0);
         $until = $day->modify('+2 days');
         $events = events_around($day, $until);
-        $free = slots_by_service($events, $day, $until)[$id][$start->format('Y-m-d')] ?? [];
+        $free = slots_by_option($events, $day, $until)[$id][$start->format('Y-m-d')] ?? [];
         $created = null;
         if (in_array($start->format('H:i'), $free, true)) {
+            // Morceaux de plages « Dispo » retirés, rendus si le rendez-vous est annulé en ligne.
+            // Google refuse une valeur de plus de 1024 caractères : au-delà, la plage se remettra à la main.
+            $carved = json_encode(carved_availability($events, $start->getTimestamp(), $end->getTimestamp(), config('booking')));
+            $event['extendedProperties']['private']['dispo'] = strlen($carved) <= 1024 ? $carved : '[]';
             $created = calendar_create_event($event);
             try {
                 apply_availability_changes(availability_changes($events, $start->getTimestamp(), $end->getTimestamp(), config('booking')));
@@ -71,15 +85,13 @@ if (!$created) {
 record_attempt('booking');
 
 $when = date_fr($start);
-$period = day_fr($start) . ', de ' . time_fr($start) . ' à ' . time_fr($end);
-$values = [
-    'prenom'           => $person['prenom'],
-    'nom'              => $person['nom'],
+$period = period_fr($start, $end);
+$values = person_values($person) + [
     'prestation'       => $service['name'],
     'date'             => $when,
     'tarif'            => price_label($service),
-    'telephone'        => $person['telephone'],
-    'telephone_elodie' => $site['phone_display'],
+    'lien_annulation'  => cancel_url($created['id']),
+    'delai_annulation' => cancel_notice_label(),
 ];
 
 // Textes : textes/appointment-text.php (avis pour Elodie, confirmation propre à la prestation).
@@ -87,27 +99,18 @@ $emails = [
     [config('mail_to'), 'avis_reservation', $person['email'], [
         'Prestation' => "{$service['name']} ({$service['format']})",
         'Date'       => $period,
-        'Nom'        => $person['nom'],
-        'Prénom'     => $person['prenom'],
-        'E-mail'     => $person['email'],
-        'Téléphone'  => $person['telephone'],
-        'Message'    => $message,
-    ]],
-    [$person['email'], $id, null, [
+        'Tarif'      => price_label($service),
+    ] + $contact],
+    [$person['email'], $service['service'], null, [
         'Prestation' => $service['name'],
         'Date'       => $period,
         'Tarif'      => price_label($service),
-    ] + ($service['visio'] ? ['Format' => $service['format']] : ['Téléphone' => "je vous appelle au {$person['telephone']}"])],
+        // « Par message, au 079… » : la personne voit sur quel numéro Elodie la contactera.
+        'Format'     => $service['visio'] ? $service['format'] : "{$service['format']}, au {$person['telephone']}",
+    ]],
 ];
 
 // Le rendez-vous est déjà dans l'agenda : un e-mail qui échoue ne doit pas l'annuler.
-foreach ($emails as [$to, $textKey, $replyTo, $details]) {
-    try {
-        $text = appointment_text($textKey);
-        send_mail($to, fill_placeholders($text['subject'], $values), mail_template($text['body'], $values, $details), $replyTo);
-    } catch (Throwable $e) {
-        error_log("E-mail de réservation à $to : " . $e->getMessage());
-    }
-}
+send_text_mails($emails, $values, 'Réservation');
 
 form_response(true, 'Rendez-vous confirmé.', 200, ['service' => $service['name'], 'when' => $when, 'visio' => $service['visio']]);

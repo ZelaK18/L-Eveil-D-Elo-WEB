@@ -129,6 +129,20 @@ function calendar_events(DateTimeImmutable $from, DateTimeImmutable $to): array
     return $events;
 }
 
+// null : événement supprimé ou annulé.
+function calendar_get_event(string $id): ?array
+{
+    try {
+        $event = google_api('GET', calendar_url('/' . rawurlencode($id)));
+    } catch (GoogleError $e) {
+        if (in_array($e->getCode(), [404, 410], true)) {
+            return null;
+        }
+        throw $e;
+    }
+    return ($event['status'] ?? '') === 'cancelled' ? null : $event;
+}
+
 function calendar_create_event(array $event): array
 {
     return google_api('POST', calendar_url(), $event);

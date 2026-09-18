@@ -24,10 +24,7 @@ $paragraph = fn(string $text) => strtr(nl2br(format_text(trim(preg_replace('/\n[
 
 <header class="header">
   <div class="header__inner">
-    <a href="./" class="brand" aria-label="L'éveil d'Elo, retour à l'accueil">
-      <span class="mark brand__mark" role="img" aria-label="Logo L'éveil d'Elo"></span>
-      <span class="brand__name">L'éveil d'Elo</span>
-    </a>
+    <?php [$brandHref, $brandLabel] = ['./', "retour à l'accueil"]; require __DIR__ . '/app/partials/brand.php' ?>
     <a href="./" class="legal__back"><?= format_text($legal['retour'] ?? '') ?></a>
   </div>
 </header>
@@ -73,7 +70,7 @@ $paragraph = fn(string $text) => strtr(nl2br(format_text(trim(preg_replace('/\n[
 
 <footer class="footer">
   <div class="container footer__bottom">
-    <p>&copy; <?= date('Y') ?> L'éveil d'Elo - <?= t('pied_de_page.droits') ?></p>
+    <?php require __DIR__ . '/app/partials/copyright.php' ?>
     <p class="footer__legal"><a href="./"><?= format_text($legal['retour_accueil'] ?? '') ?></a></p>
   </div>
 </footer>

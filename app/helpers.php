@@ -5,18 +5,24 @@ function e(mixed $value): string
     return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+// Valeur d'un tableau imbriqué : dig($config, 'site.name') vaut $config['site']['name'], ou null.
+function dig(array $data, string $path): mixed
+{
+    return array_reduce(explode('.', $path), fn($value, $key) => $value[$key] ?? null, $data);
+}
+
 function config(string $path): mixed
 {
     static $config;
     $config ??= with_site_texts(require __DIR__ . '/config.php');
-    return array_reduce(explode('.', $path), fn($value, $key) => $value[$key] ?? null, $config);
+    return dig($config, $path);
 }
 
 function secret(string $path): mixed
 {
     static $secrets;
     $secrets ??= is_file(__DIR__ . '/secrets.php') ? require __DIR__ . '/secrets.php' : [];
-    return array_reduce(explode('.', $path), fn($value, $key) => $value[$key] ?? null, $secrets);
+    return dig($secrets, $path);
 }
 
 // Fichier du dossier textes/. Si une faute de frappe le rend illisible, la dernière version valide sert à la place.
@@ -45,7 +51,7 @@ function texts_file(string $name): array
 
 function site_text(string $path): mixed
 {
-    return array_reduce(explode('.', $path), fn($value, $key) => $value[$key] ?? null, texts_file('site-text'));
+    return dig(texts_file('site-text'), $path);
 }
 
 // Texte prêt pour la page : **mot** en gras, *mot* en italique, espace insécable avant ? ! : ;
@@ -67,7 +73,7 @@ function message(string $key): string
 // Les cartes de textes/site-text.php complètent les prestations de config.php : nom, texte, prix, durée…
 function with_site_texts(array $config): array
 {
-    $fields = ['nom' => 'name', 'texte' => 'text', 'points' => 'points', 'format' => 'format', 'duree' => 'duration', 'prix' => 'price', 'prix_par' => 'price_unit', 'disponible' => 'available'];
+    $fields = ['nom' => 'name', 'texte' => 'text', 'points' => 'points', 'format' => 'format', 'duree' => 'duration', 'prix' => 'price', 'prix_par' => 'price_unit', 'disponible' => 'available', 'offres' => 'offers'];
     foreach (array_keys($config['services']) as $id) {
         foreach ($fields as $from => $to) {
             $value = site_text("prestations.cartes.$id.$from");
@@ -115,10 +121,17 @@ function storage_write(string $name, array $data): void
     rename($temp, storage_path("$name.php"));
 }
 
-function with_lock(string $name, callable $callback): mixed
+/** @return resource */
+function lock(string $name)
 {
     $handle = fopen(storage_path("$name.lock"), 'c');
     flock($handle, LOCK_EX);
+    return $handle;
+}
+
+function with_lock(string $name, callable $callback): mixed
+{
+    $handle = lock($name);
     try {
         return $callback();
     } finally {
@@ -131,8 +144,7 @@ function with_lock(string $name, callable $callback): mixed
 function hold_lock(string $name): void
 {
     static $handles = [];
-    $handles[$name] = fopen(storage_path("$name.lock"), 'c');
-    flock($handles[$name], LOCK_EX);
+    $handles[$name] = lock($name);
 }
 
 function input(string $key): string

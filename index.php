@@ -3,10 +3,11 @@ require __DIR__ . '/app/bootstrap.php';
 
 $site = config('site');
 $services = config('services');
-$prices = array_column(array_filter($services, fn(array $service) => $service['available']), 'price');
+$bookingOptions = booking_options();
+// Tout ce qui se réserve, formules comprises : la fourchette de prix de Google suit chaque prix et chaque tarif.
+$prices = array_filter(array_map('price_amount', $bookingOptions), fn(?int $amount) => $amount !== null);
 $title = (string) site_text('google.titre');
 $description = (string) site_text('google.description');
-$gift = (string) site_text('rendez_vous.demande_bon_cadeau');
 
 $antispam = '<input type="hidden" name="jeton" value="' . e(form_token()) . '">'
     . '<label class="honeypot" aria-hidden="true">Site web <input type="text" name="site_web" tabindex="-1" autocomplete="off"></label>';
@@ -18,7 +19,10 @@ $antispam = '<input type="hidden" name="jeton" value="' . e(form_token()) . '">'
     default  => ['', ''],
 };
 
-$weekdays = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+// Menu de l'en-tête et du pied de page : ancre de la section => texte de site-text.php.
+$menu = ['accueil' => 'accueil', 'prestations' => 'prestations', 'bons-cadeaux' => 'bons_cadeaux', 'contact' => 'contact', 'rendez-vous' => 'rendez_vous'];
+
+$weekdays = ['','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 $schema = [
     '@context'           => 'https://schema.org',
     '@type'              => 'ProfessionalService',
@@ -28,7 +32,7 @@ $schema = [
     'url'                => $site['url'],
     'image'              => $site['url'] . 'images/og-image.jpg',
     'logo'               => $site['url'] . 'images/logo-embleme.png',
-    'founder'            => ['@type' => 'Person', 'name' => 'Elodie Fauquex', 'jobTitle' => 'Coach en spiritualité'],
+    'founder'            => ['@type' => 'Person', 'name' => $site['owner'], 'jobTitle' => (string) site_text('qui_suis_je.role')],
     'telephone'          => $site['phone'],
     'email'              => $site['email'],
     'priceRange'         => $prices ? 'CHF ' . min($prices) . '.- - CHF ' . max($prices) . '.-' : 'Sur demande',
@@ -49,12 +53,17 @@ $schema = [
     'hasOfferCatalog' => [
         '@type'           => 'OfferCatalog',
         'name'            => 'Prestations',
-        'itemListElement' => array_values(array_map(fn(array $service) => [
-            '@type'       => 'Offer',
-            'itemOffered' => ['@type' => 'Service', 'name' => $service['name'], 'description' => $service['summary']],
-        ] + ($service['available']
-            ? ['price' => (string) $service['price'], 'priceCurrency' => 'CHF']
-            : ['availability' => 'https://schema.org/PreOrder']), $services)),
+        'itemListElement' => [
+            ...array_values(array_map(fn(array $option) => [
+                '@type'       => 'Offer',
+                'itemOffered' => ['@type' => 'Service', 'name' => $option['name'], 'description' => $option['summary']],
+            ] + (price_amount($option) === null ? [] : ['price' => (string) price_amount($option), 'priceCurrency' => 'CHF']), $bookingOptions)),
+            ...array_values(array_map(fn(array $service) => [
+                '@type'        => 'Offer',
+                'itemOffered'  => ['@type' => 'Service', 'name' => $service['name'], 'description' => $service['summary']],
+                'availability' => 'https://schema.org/PreOrder',
+            ], array_filter($services, fn(array $service) => !$service['available']))),
+        ],
     ],
 ];
 ?>
@@ -62,7 +71,7 @@ $schema = [
 <html lang="fr-CH">
 <head>
 <?php require __DIR__ . '/app/partials/head.php' ?>
-<meta name="author" content="Elodie Fauquex">
+<meta name="author" content="<?= e($site['owner']) ?>">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#F7EDDD">
 <link rel="canonical" href="<?= e($site['url']) ?>">
@@ -76,7 +85,7 @@ $schema = [
 <meta property="og:image" content="<?= e($site['url']) ?>images/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Logo de L'éveil d'Elo">
+<meta property="og:image:alt" content="Logo de <?= e($site['name']) ?>">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="apple-touch-icon" href="images/favicon.png">
@@ -94,18 +103,17 @@ $schema = [
 
 <header class="header" id="header">
   <div class="header__inner">
-    <a href="#accueil" class="brand" aria-label="L'éveil d'Elo, retour en haut">
-      <span class="mark brand__mark" role="img" aria-label="Logo L'éveil d'Elo"></span>
-      <span class="brand__name">L'éveil d'Elo</span>
-    </a>
+    <?php [$brandHref, $brandLabel] = ['#accueil', 'retour en haut']; require __DIR__ . '/app/partials/brand.php' ?>
 
     <nav class="nav" id="nav" aria-label="Navigation principale">
       <ul class="nav__list">
-        <li><a href="#accueil"      class="nav__link is-active"><?= t('menu.accueil') ?></a></li>
-        <li><a href="#prestations"  class="nav__link"><?= t('menu.prestations') ?></a></li>
-        <li><a href="#bons-cadeaux" class="nav__link"><?= t('menu.bons_cadeaux') ?></a></li>
-        <li><a href="#contact"      class="nav__link"><?= t('menu.contact') ?></a></li>
-        <li><a href="#rendez-vous"  class="nav__link nav__link--cta"><svg width="11" height="11" aria-hidden="true"><use href="#ico-star"/></svg><?= t('menu.rendez_vous') ?></a></li>
+        <?php foreach ($menu as $anchor => $key): ?>
+        <?php if ($anchor === 'rendez-vous'): ?>
+        <li><a href="#<?= $anchor ?>" class="nav__link nav__link--cta"><svg width="11" height="11" aria-hidden="true"><use href="#ico-star"/></svg><?= t("menu.$key") ?></a></li>
+        <?php else: ?>
+        <li><a href="#<?= $anchor ?>" class="nav__link<?= $anchor === 'accueil' ? ' is-active' : '' ?>"><?= t("menu.$key") ?></a></li>
+        <?php endif ?>
+        <?php endforeach ?>
       </ul>
     </nav>
 
@@ -212,6 +220,7 @@ $schema = [
 
     <div class="cards stagger">
 <?php foreach ($services as $id => $service): ?>
+<?php $offers = $service['available'] ? ($service['offers'] ?? []) : [] ?>
 
       <article class="card lift presta reveal">
         <svg class="presta__icon" width="52" height="52" aria-hidden="true"><use href="#<?= e($service['icon']) ?>"/></svg>
@@ -223,7 +232,11 @@ $schema = [
           <?php endforeach ?>
         </ul>
         <div class="presta__meta">
-          <?php if ($service['available']): ?>
+          <?php if ($offers): ?>
+          <?php foreach ($offers as $index => $offer): ?>
+          <button type="button" class="tag tag--offre" aria-expanded="false" aria-controls="offre-<?= e($id) ?>-<?= $index ?>"><?= e($offer['nom']) ?></button>
+          <?php endforeach ?>
+          <?php elseif ($service['available']): ?>
           <span class="tag"><?= e(duration_label($service['duration'])) ?></span>
           <span class="tag"><?= e(price_label($service)) ?></span>
           <span class="tag tag--format"><?= e($service['format']) ?></span>
@@ -236,6 +249,22 @@ $schema = [
         <?php else: ?>
         <p class="presta__soon"><?= t('prestations.bientot') ?></p>
         <?php endif ?>
+        <?php foreach ($offers as $index => $offer): ?>
+        <div class="presta__offre" id="offre-<?= e($id) ?>-<?= $index ?>" role="group" aria-label="<?= e($offer['nom']) ?>" hidden>
+          <button type="button" class="presta__offre-fermer" data-close aria-label="<?= e(site_text('prestations.offre_fermer')) ?>">
+            <svg width="18" height="18" aria-hidden="true"><use href="#ico-close"/></svg>
+          </button>
+          <svg class="presta__icon" width="52" height="52" aria-hidden="true"><use href="#<?= e($service['icon']) ?>"/></svg>
+          <h4><?= format_text($offer['nom']) ?></h4>
+          <p><?= format_text($offer['finalite']) ?></p>
+          <div class="presta__meta">
+            <span class="tag"><?= e($offer['duree']) ?></span>
+            <span class="tag"><?= e($offer['tarif']) ?></span>
+            <span class="tag tag--format"><?= e($offer['format']) ?></span>
+          </div>
+          <a href="#rendez-vous" class="presta__link" data-service="<?= e("$id.$index") ?>"><?= t('prestations.lien_reserver') ?> <span aria-hidden="true">→</span></a>
+        </div>
+        <?php endforeach ?>
       </article>
 <?php endforeach ?>
 
@@ -267,7 +296,7 @@ $schema = [
         <?php endforeach ?>
       </ol>
 
-      <a href="#demande" class="button-primary" data-prefill="bon-cadeau">
+      <a href="#demande" class="button-primary" data-prefill="<?= e(site_text('rendez_vous.demande_message_bon_cadeau')) ?>">
         <svg width="17" height="17" aria-hidden="true"><use href="#ico-gift"/></svg>
         <?= t('bons_cadeaux.bouton') ?>
       </a>
@@ -276,7 +305,7 @@ $schema = [
     <div class="gifts__visual reveal" aria-hidden="true">
       <div class="voucher">
         <div class="voucher__frame">
-          <p class="voucher__brand">L'éveil d'Elo</p>
+          <p class="voucher__brand"><?= e($site['name']) ?></p>
           <span class="divider-star voucher__div">
             <i></i><svg width="10" height="10"><use href="#ico-star"/></svg><i></i>
           </span>
@@ -362,8 +391,19 @@ $schema = [
           <fieldset class="field field--choices">
             <legend><span class="booking__step">1</span><?= t('rendez_vous.etape_prestation') ?></legend>
             <div class="choices">
-              <?php foreach ($services as $id => $service): if (!bookable_service($id)) continue ?>
-              <label><input type="radio" name="service" value="<?= e($id) ?>" data-label="<?= e($service['name']) ?>" data-duration="<?= e($service['duration']) ?>" required><span><?= e($service['name']) ?> &middot; <?= e(duration_label($service['duration'])) ?></span></label>
+              <?php foreach ($services as $id => $service): ?>
+              <?php if (!$service['available']): ?>
+              <label><input type="radio" disabled><span><?= e($service['name']) ?> &middot; <?= t('prestations.a_venir') ?></span></label>
+              <?php elseif (!empty($service['offers'])): ?>
+              <button type="button" class="choices__groupe" aria-expanded="false" aria-controls="formules-<?= e($id) ?>"><?= e($service['name']) ?><svg width="12" height="12" aria-hidden="true"><use href="#ico-chevron"/></svg></button>
+              <div class="choices choices--formules" id="formules-<?= e($id) ?>" hidden>
+                <?php foreach ($bookingOptions as $key => $option): if ($option['service'] !== $id) continue ?>
+                <label><input type="radio" name="service" value="<?= e($key) ?>" data-label="<?= e($option['name']) ?>" data-duration="<?= e($option['duration']) ?>"><span><?= e($option['offer']) ?><small class="choices__duree"><?= e($option['offer_duration']) ?></small><small class="choices__tarif"><?= e(price_label($option)) ?></small></span></label>
+                <?php endforeach ?>
+              </div>
+              <?php elseif (isset($bookingOptions[$id])): ?>
+              <label><input type="radio" name="service" value="<?= e($id) ?>" data-label="<?= e($service['name']) ?>" data-duration="<?= e($service['duration']) ?>" required><span><?= e($service['name']) ?> &middot; <?= e(duration_label($service['duration'])) ?> &middot; <?= e(price_label($service)) ?></span></label>
+              <?php endif ?>
               <?php endforeach ?>
             </div>
           </fieldset>
@@ -391,10 +431,7 @@ $schema = [
               <textarea name="message" rows="3" placeholder="<?= e(site_text('rendez_vous.champ_message_exemple')) ?>"></textarea>
             </label>
 
-            <label class="consent">
-              <input type="checkbox" name="consent" required>
-              <span><?= t('rendez_vous.accord') ?> (<a href="mentions-legales.php#confidentialite" target="_blank" rel="noopener"><?= t('formulaire.lien_confidentialite') ?></a>).</span>
-            </label>
+            <?php $consent = 'rendez_vous.accord'; require __DIR__ . '/app/partials/consent.php' ?>
 
             <button type="submit" class="button-primary form__submit"><?= t('rendez_vous.bouton') ?></button>
           </div>
@@ -423,31 +460,12 @@ $schema = [
 
           <?php require __DIR__ . '/app/partials/person-fields.php' ?>
 
-          <fieldset class="field field--choices">
-            <legend><?= t('rendez_vous.demande_choix') ?></legend>
-            <div class="choices">
-              <?php foreach ($services as $service): ?>
-              <label><input type="checkbox" name="prestation[]" value="<?= e($service['name']) ?>"<?= $service['available'] ? ' data-format="' . e($service['format']) . '"' : ' disabled' ?>><span><?= e($service['name']) ?></span></label>
-              <?php endforeach ?>
-              <label><input type="checkbox" name="prestation[]" value="<?= e($gift) ?>" data-format="<?= e(request_choices()[$gift] ?? '') ?>" id="chk-bon-cadeau"><span><?= e($gift) ?></span></label>
-            </div>
-          </fieldset>
-
-          <label class="field">
-            <span><?= t('rendez_vous.demande_format') ?></span>
-            <input type="text" name="format" id="formatAuto" readonly tabindex="-1"
-                   value="<?= e(site_text('rendez_vous.demande_format_vide')) ?>">
-          </label>
-
           <label class="field">
             <span><?= t('rendez_vous.demande_message') ?></span>
-            <textarea name="message" rows="5" placeholder="<?= e(site_text('rendez_vous.demande_message_exemple')) ?>"></textarea>
+            <textarea name="message" id="demandeMessage" rows="5" placeholder="<?= e(site_text('rendez_vous.demande_message_exemple')) ?>"></textarea>
           </label>
 
-          <label class="consent">
-            <input type="checkbox" name="consent" required>
-            <span><?= t('rendez_vous.demande_accord') ?> (<a href="mentions-legales.php#confidentialite" target="_blank" rel="noopener"><?= t('formulaire.lien_confidentialite') ?></a>).</span>
-          </label>
+          <?php $consent = 'rendez_vous.demande_accord'; require __DIR__ . '/app/partials/consent.php' ?>
 
           <button type="submit" class="button-primary form__submit"><?= t('rendez_vous.demande_bouton') ?></button>
           <p class="form__status <?= $requestState ?>" id="formStatus" role="status" aria-live="polite"><?= e($requestMessage) ?></p>
@@ -464,20 +482,18 @@ $schema = [
   <div class="container footer__top">
     <div class="footer__brand">
       <span class="footer__medallion">
-        <span class="mark footer__mark" role="img" aria-label="Logo L'éveil d'Elo"></span>
+        <span class="mark footer__mark" role="img" aria-label="Logo <?= e($site['name']) ?>"></span>
       </span>
-      <p class="footer__name">L'éveil d'Elo</p>
+      <p class="footer__name"><?= e($site['name']) ?></p>
       <span class="divider-star footer__rule" aria-hidden="true">
         <i></i><svg width="10" height="10"><use href="#ico-star"/></svg><i></i>
       </span>
     </div>
 
     <nav class="footer__nav" aria-label="Navigation de pied de page">
-      <a href="#accueil"><?= t('menu.accueil') ?></a>
-      <a href="#prestations"><?= t('menu.prestations') ?></a>
-      <a href="#bons-cadeaux"><?= t('menu.bons_cadeaux') ?></a>
-      <a href="#contact"><?= t('menu.contact') ?></a>
-      <a href="#rendez-vous"><?= t('menu.rendez_vous') ?></a>
+      <?php foreach ($menu as $anchor => $key): ?>
+      <a href="#<?= $anchor ?>"><?= t("menu.$key") ?></a>
+      <?php endforeach ?>
     </nav>
 
     <div class="footer__social">
@@ -491,7 +507,7 @@ $schema = [
   </div>
 
   <div class="container footer__bottom">
-    <p>&copy; <?= date('Y') ?> L'éveil d'Elo - <?= t('pied_de_page.droits') ?></p>
+    <?php require __DIR__ . '/app/partials/copyright.php' ?>
     <p class="footer__legal">
       <a href="mentions-legales.php#impressum"><?= t('pied_de_page.mentions_legales') ?></a>
       <span aria-hidden="true">&middot;</span>

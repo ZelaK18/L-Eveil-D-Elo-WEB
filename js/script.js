@@ -7,8 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const toTop = $("toTop");
   const form = $("rdvForm");
   const status = $("formStatus");
-  const formatField = $("formatAuto");
-  const prestations = form.querySelectorAll("input[name='prestation[]']");
 
   const setMenu = open => {
     nav.classList.toggle("is-open", open);
@@ -48,18 +46,41 @@ document.addEventListener("DOMContentLoaded", () => {
     io.unobserve(el);
   });
 
-  const syncFormat = () => {
-    const formats = new Set([...prestations]
-      .filter(box => box.checked && box.dataset.format)
-      .map(box => box.dataset.format));
-    formatField.value = [...formats].join(" et ") || formatField.defaultValue;
+  // Prestations : le nom d'une formule ouvre son détail par-dessus la carte, la croix (ou Échap) referme.
+  const offers = document.querySelectorAll(".tag--offre");
+  // preventScroll : le focus seul ferait remonter la page trop haut.
+  const closeOffer = (button, focus = true) => {
+    button.setAttribute("aria-expanded", "false");
+    $(button.getAttribute("aria-controls")).hidden = true;
+    if (focus) button.focus({ preventScroll: true });
   };
-  prestations.forEach(box => box.addEventListener("change", syncFormat));
-  syncFormat();
+  // Remonte juste assez pour voir la croix sous l'en-tête. On mesure la carte : le détail, lui, glisse en apparaissant.
+  const showClose = card => {
+    const hidden = header.offsetHeight + 16 - card.getBoundingClientRect().top;
+    if (hidden > 0) scrollBy({ top: -hidden });
+  };
+  offers.forEach(button => {
+    const panel = $(button.getAttribute("aria-controls"));
+    const close = panel.querySelector("[data-close]");
+    button.addEventListener("click", () => {
+      offers.forEach(other => {
+        if (other !== button && other.getAttribute("aria-expanded") === "true") closeOffer(other, false);
+      });
+      button.setAttribute("aria-expanded", "true");
+      panel.hidden = false;
+      close.focus({ preventScroll: true });
+      showClose(button.closest(".presta"));
+    });
+    close.addEventListener("click", () => closeOffer(button));
+    panel.addEventListener("keydown", e => {
+      if (e.key === "Escape") closeOffer(button);
+    });
+  });
 
-  document.querySelector("[data-prefill='bon-cadeau']").addEventListener("click", () => {
-    $("chk-bon-cadeau").checked = true;
-    syncFormat();
+  // « Commander un bon cadeau » écrit la demande dans le message, sans effacer ce qui y est déjà.
+  const requestMessage = $("demandeMessage");
+  document.querySelector("[data-prefill]").addEventListener("click", e => {
+    if (!requestMessage.value.trim()) requestMessage.value = e.currentTarget.dataset.prefill;
   });
 
   const setStatus = (element, text, state = "") => {
@@ -92,7 +113,6 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const result = await send(form.action, { method: "POST", body: new FormData(form) }, messages.envoi_echoue);
       form.reset();
-      syncFormat();
       setStatus(status, result.message, "is-ok");
     } catch (error) {
       setStatus(status, error.message, "is-error");
@@ -126,7 +146,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const total = hours * 60 + rest + minutes;
     return `${pad(Math.floor(total / 60))}:${pad(total % 60)}`;
   };
-  const hour = time => time.replace(":", "h");
+  // « 9h00 », comme dans l'e-mail de confirmation.
+  const hour = time => time.replace(/^0/, "").replace(":", "h");
   const agenda = { service: "", month: "", min: "", max: "", days: {}, date: "", view: 0 };
 
   // Une requête par mois pour toutes les prestations, relue après 30 secondes pour suivre les changements de l'agenda.
@@ -215,14 +236,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // L'agenda est lu dès que la section approche : au clic sur une prestation, il est déjà là.
+  // L'agenda est lu dès l'arrivée sur le site : au clic sur une prestation, il est déjà là.
+  // Relu à l'approche de la section si cette première lecture a plus de 30 secondes.
+  fetchMonth("");
   observe([$("rendez-vous")], { rootMargin: "600px 0px" }, (section, io) => {
     io.unobserve(section);
     fetchMonth("");
   });
 
+  // Prestation à formules : son nom ouvre la liste des formules, et reste marqué quand l'une d'elles est choisie.
+  const groups = booking.querySelectorAll(".choices__groupe");
+  const groupOf = value => booking.querySelector(`.choices__groupe[aria-controls='formules-${value.split(".")[0]}']`);
+  const setGroup = (button, open) => {
+    button.setAttribute("aria-expanded", open);
+    $(button.getAttribute("aria-controls")).hidden = !open;
+  };
+  groups.forEach(button => button.addEventListener("click", () => setGroup(button, button.getAttribute("aria-expanded") !== "true")));
+
   booking.querySelectorAll("input[name='service']").forEach(radio => radio.addEventListener("change", () => {
     agenda.service = radio.value;
+    groups.forEach(button => button.classList.toggle("is-chosen", button === groupOf(radio.value)));
     clearSelection();
     when.hidden = false;
     showMonth(agenda.month);
@@ -240,9 +273,27 @@ document.addEventListener("DOMContentLoaded", () => {
     if (slot) selectTime(slot.dataset.time);
   });
 
+  // Formulaire vierge, formules refermées : pour un nouveau rendez-vous après une réservation.
+  const resetBooking = () => {
+    booking.reset();
+    clearSelection();
+    agenda.service = "";
+    groups.forEach(button => {
+      button.classList.remove("is-chosen");
+      setGroup(button, false);
+    });
+    when.hidden = true;
+    done.hidden = true;
+    booking.hidden = false;
+  };
+
+  // « Réserver » sur une carte : coche la prestation ou la formule. Pour une prestation à formules, ouvre leur liste.
   document.querySelectorAll("[data-service]").forEach(link => link.addEventListener("click", () => {
+    if (booking.hidden) resetBooking();
+    const group = groupOf(link.dataset.service);
+    if (group) setGroup(group, true);
     const radio = booking.querySelector(`input[name='service'][value='${link.dataset.service}']`);
-    if (!radio.checked) {
+    if (radio && !radio.checked) {
       radio.checked = true;
       radio.dispatchEvent(new Event("change"));
     }
@@ -283,12 +334,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  $("bookingAgain").addEventListener("click", () => {
-    booking.reset();
-    clearSelection();
-    agenda.service = "";
-    when.hidden = true;
-    done.hidden = true;
-    booking.hidden = false;
-  });
+  $("bookingAgain").addEventListener("click", resetBooking);
 });
