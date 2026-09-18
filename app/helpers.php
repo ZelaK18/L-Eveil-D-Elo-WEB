@@ -91,6 +91,19 @@ function asset(string $path): string
     return $path . '?v=' . @filemtime(ROOT_DIR . '/' . $path);
 }
 
+// Adresse du site pour les liens des e-mails : celle de config.php, sauf sur un site de test local
+// (Laragon « .test », localhost), pour que les liens y mènent. Toute autre adresse demandée est ignorée :
+// un nom de domaine inventé ne peut pas se retrouver dans un e-mail.
+function site_url(): string
+{
+    $host = strtolower($_SERVER['HTTP_HOST'] ?? '');
+    if (!preg_match('/^(localhost|127\.0\.0\.1|[a-z0-9.-]+\.test)(:\d+)?$/', $host)) {
+        return config('site.url');
+    }
+    $root = substr(str_replace('\\', '/', ROOT_DIR), strlen(str_replace('\\', '/', (string) realpath($_SERVER['DOCUMENT_ROOT'] ?? ''))));
+    return (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off' ? 'http' : 'https') . "://$host" . rtrim($root, '/') . '/';
+}
+
 function base64url_encode(string $data): string
 {
     return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');

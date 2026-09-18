@@ -227,7 +227,7 @@ return [
         'annule_titre'  => "Rendez-vous annulé",
         'annule'        => "Votre rendez-vous **{prestation}** du **{date}** est bien annulé. Une confirmation vient de vous être envoyée par e-mail.",
         'bouton_autre'  => "Réserver un autre moment",
-        'trop_tard'     => "Votre rendez-vous du **{date}** a lieu dans moins de {delai} : il ne s'annule plus en ligne. Pour l'annuler ou le déplacer, envoyez-moi un message au {telephone}.",
+        'trop_tard'     => "Votre rendez-vous du **{date}** a lieu dans moins de {delai}, il ne s'annule plus en ligne. Pour l'annuler ou le déplacer, envoyez-moi un message au {telephone}.",
         'passe'         => "Ce rendez-vous est déjà passé.",
         'deja_annule'   => "Ce rendez-vous est déjà annulé.",
         'invalide'      => "Ce lien d'annulation n'est pas valide. Vérifiez qu'il est complet, ou envoyez-moi un message au {telephone}.",

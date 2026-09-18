@@ -148,6 +148,15 @@ $check('rendez-vous hors de toute plage : rien à rendre', carved_availability($
 $check('lien d\'annulation : signature de 16 caractères, propre à chaque rendez-vous',
     [strlen(cancel_signature('abc123')), cancel_signature('abc123') === cancel_signature('abc123'), cancel_signature('abc123') === cancel_signature('abc124')],
     [16, true, false]);
+$urls = [];
+foreach (['L-Eveil-D-Elo-WEB.test', 'www.leveildelo.ch', 'site-piege.com'] as $host) {
+    $_SERVER['HTTP_HOST'] = $host;
+    $_SERVER['DOCUMENT_ROOT'] = dirname(ROOT_DIR);
+    $urls[] = site_url();
+}
+unset($_SERVER['HTTP_HOST'], $_SERVER['DOCUMENT_ROOT']);
+$check('lien des e-mails : site local de Laragon, sinon toujours le domaine de config.php',
+    $urls, ['http://l-eveil-d-elo-web.test/' . basename(ROOT_DIR) . '/', config('site.url'), config('site.url')]);
 $check('lien d\'annulation : adresse courte', strlen(cancel_url('k3v9q2m1f8a7d6c5b4e3n2p1o0')) < 100, true);
 $appointment = site_appointment(['start' => ['dateTime' => '2026-09-16T17:00:00+02:00'], 'end' => ['dateTime' => '2026-09-16T18:00:00+02:00'],
     'extendedProperties' => ['private' => ['source' => 'site', 'prestation' => 'Tirage', 'prenom' => 'Léa', 'nom' => 'M', 'email' => 'lea@x.ch', 'telephone' => '079', 'dispo' => json_encode($carved)]]]);

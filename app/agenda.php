@@ -343,7 +343,7 @@ function cancel_signature(string $eventId): string
 
 function cancel_url(string $eventId): string
 {
-    return config('site.url') . 'annuler.php?' . http_build_query(['r' => $eventId, 's' => cancel_signature($eventId)]);
+    return site_url() . 'annuler.php?' . http_build_query(['r' => $eventId, 's' => cancel_signature($eventId)]);
 }
 
 // « 24 h »
