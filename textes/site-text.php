@@ -26,9 +26,9 @@ return [
     // ACCUEIL (le haut de la page)
     'accueil' => [
         'surtitre'           => "Tirage de cartes · Pendule · Coaching spirituel",
-        'titre_ligne_1'      => "Écoutez ce qui",
-        'titre_ligne_2'      => "*s'éveille* en vous",
-        'texte'              => "Je vous accueille à distance, dans un espace doux et sans jugement, où l'on prend le temps de déposer les questions qui pèsent et d'écouter les réponses qui, souvent, sont déjà là.",
+        'titre_ligne_1'      => "Un temps pour vous",
+        'titre_ligne_2'      => "*un éclairage* pour avancer",
+        'texte'              => "Un accompagnement bienveillant pour accueillir vos questionnements, écouter vos ressentis et vous reconnecter à votre intuition",
         'bouton_rendez_vous' => "Prendre rendez-vous",
         'bouton_prestations' => "Découvrir les prestations",
         'valeurs'            => ["À l'écoute", "Guidée par l'intuition", "En toute confidentialité"],
@@ -42,9 +42,9 @@ return [
         'nom'         => "Elodie",
         'role'        => "Coach en spiritualité",
         'paragraphes' => [
-            "Depuis toujours, je ressens ce qui ne se dit pas. Pendant longtemps j'ai mis cette sensibilité de côté, jusqu'au jour où elle s'est imposée à moi comme une évidence : elle n'était pas un poids, mais un outil.",
-            "Je me suis alors formée au tirage de cartes et au travail au pendule, et j'ai appris, séance après séance, à mettre cette écoute au service des autres. **L'éveil d'Elo** est né de ce cheminement.",
-            "Mon rôle n'est pas de décider à votre place ni de prédire un avenir figé. Il est de vous offrir un miroir bienveillant, d'éclairer ce qui est encore flou et de vous rendre votre pouvoir de choisir.",
+            "Moi, c’est Élodie. Solaire, intuitive et à l’écoute, la spiritualité fait partie de mon chemin depuis plusieurs années.",
+            "Coach spirituelle certifiée et actuellement en apprentissage du Reiki, je vous accompagne avec douceur et sans jugement.",
+            "Aujourd’hui, j’ai choisi d’écouter cette petite voix qui m’accompagne depuis quelque temps et de donner vie à **L'éveil d'Elo**,un projet qui me ressemble, porté par l’écoute, le partage et la reconnexion à soi.",
         ],
         'signature'   => "Au plaisir de vous rencontrer, Elodie",
     ],
