@@ -18,8 +18,7 @@ $description = site_text('bientot.description');
 
 <main class="soon__main">
   <div class="soon__identity">
-    <img class="soon__logo" src="<?= e(asset('images/logo-embleme.png')) ?>" width="399" height="440" alt="">
-    <p class="soon__name"><?= e($site['name']) ?></p>
+    <img class="soon__logo" src="<?= e(asset('images/og-image.jpg')) ?>" width="1200" height="630" alt="<?= e($site['name']) ?>">
   </div>
 
   <p class="soon__status"><?= t('bientot.statut') ?></p>
@@ -45,7 +44,6 @@ $description = site_text('bientot.description');
 
 <footer class="soon__footer">
   <?php require __DIR__ . '/app/partials/copyright.php' ?>
-  <a href="mentions-legales.php"><?= t('pied_de_page.mentions_legales') ?></a>
 </footer>
 </body>
 </html>
