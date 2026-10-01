@@ -1,2 +1,4 @@
 User-agent: *
 Disallow: /site/
+
+Sitemap: https://www.leveildelo.ch/sitemap.xml

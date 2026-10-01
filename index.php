@@ -2,14 +2,15 @@
 require __DIR__ . '/app/bootstrap.php';
 
 $site = config('site');
-$title = site_text('bientot.titre_page') . ' | ' . $site['name'];
-$description = site_text('bientot.description');
+$title = $site['name'] . ' | ' . site_text('bientot.titre_page');
+$description = $site['name'] . '. ' . site_text('bientot.description');
 ?>
 <!DOCTYPE html>
 <html lang="fr-CH">
 <head>
 <?php require __DIR__ . '/app/partials/head.php' ?>
-<meta name="robots" content="noindex, follow">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="<?= e($site['url']) ?>">
 </head>
 <body class="soon">
 <?php require __DIR__ . '/app/partials/icons.php' ?>
