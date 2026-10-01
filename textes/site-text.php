@@ -214,6 +214,19 @@ return [
         'confidentialite'  => "Politique de confidentialité",
     ],
 
+    // PAGE D'ATTENTE (bientot.php)
+    'bientot' => [
+        'titre_page'        => "Le site arrive bientôt",
+        'statut'            => "En cours de création",
+        'titre_ligne_1'     => "Le site arrive",
+        'titre_ligne_2'     => "bientôt.",
+        'description'      => "Un espace tout en douceur se prépare pour vous accompagner, vous inspirer et vous reconnecter à vous-même.",
+        'contact'          => "En attendant, je reste à votre écoute par e-mail et sur Instagram.",
+        'bouton_email'     => "Écrivez-moi",
+        'bouton_instagram' => "Suivre sur Instagram",
+        'signature'        => "À très bientôt, Elodie",
+    ],
+
     // PAGE D'ANNULATION (ouverte par le lien de l'e-mail de confirmation)
     // {prestation}, {date}, {delai} (« 24 h ») et {telephone} sont remplacés automatiquement.
     'annulation' => [

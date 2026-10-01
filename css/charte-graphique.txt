@@ -260,3 +260,19 @@ de app/mail.php. Leurs textes se modifient dans textes/appointment-text.php.
 
 tests/mail.php vérifie les rendus ; l’option --preview produit des exemples
 fictifs pour chaque prestation, le contact et l’annulation dans storage/mail-preview/.
+
+11. PAGE D’ATTENTE
+
+bientot.php présente « Le site arrive bientôt » avec l’emblème et le nom du site.
+Ses textes se modifient dans la rubrique bientot de textes/site-text.php ; les
+coordonnées e-mail et Instagram restent celles de app/config.php.
+
+- Composition centrée, fond beige éclairci au centre et cercles décoratifs fins.
+- Logo aux proportions conservées, titre en Cormorant Garamond et seconde ligne en italique.
+- Mention « En cours de création », message d’accueil et signature d’Elodie.
+- Boutons e-mail et Instagram partagés avec le site, empilés jusqu’à 500px.
+- Hauteur minimale de l’écran, avec défilement naturel sur les petits écrans.
+- Aucun JavaScript requis ; focus clavier et préférence de mouvement réduit respectés.
+
+Les styles sont limités aux classes soon. Cette page autonome ne remplace pas
+l’accueil existant et porte une directive noindex tant qu’elle sert de page d’attente.

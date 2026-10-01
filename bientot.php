@@ -1,0 +1,55 @@
+<?php
+require __DIR__ . '/app/bootstrap.php';
+
+$site = config('site');
+$title = site_text('bientot.titre_page') . ' | ' . $site['name'];
+$description = site_text('bientot.description');
+?>
+<!DOCTYPE html>
+<html lang="fr-CH">
+<head>
+<?php require __DIR__ . '/app/partials/head.php' ?>
+<meta name="robots" content="noindex, follow">
+</head>
+<body class="soon">
+<?php require __DIR__ . '/app/partials/icons.php' ?>
+
+<div class="soon__decor" aria-hidden="true"></div>
+
+<main class="soon__main">
+  <div class="soon__identity">
+    <img class="soon__logo" src="<?= e(asset('images/logo-embleme.png')) ?>" width="399" height="440" alt="">
+    <p class="soon__name"><?= e($site['name']) ?></p>
+  </div>
+
+  <p class="soon__status"><?= t('bientot.statut') ?></p>
+  <h1 class="soon__title">
+    <?= t('bientot.titre_ligne_1') ?>
+    <em><?= t('bientot.titre_ligne_2') ?></em>
+  </h1>
+  <p class="soon__intro"><?= t('bientot.description') ?></p>
+
+  <div class="divider-star soon__divider" aria-hidden="true">
+    <i></i><svg width="12" height="12"><use href="#ico-star"/></svg><i></i>
+  </div>
+
+  <p class="soon__contact"><?= t('bientot.contact') ?></p>
+  <div class="soon__actions">
+    <a class="button-primary" href="mailto:<?= e($site['email']) ?>">
+      <svg width="20" height="20" aria-hidden="true"><use href="#ico-mail"/></svg>
+      <?= t('bientot.bouton_email') ?>
+    </a>
+    <a class="button-secondary" href="<?= e($site['instagram']) ?>" target="_blank" rel="noopener noreferrer">
+      <svg width="20" height="20" aria-hidden="true"><use href="#ico-insta"/></svg>
+      <?= t('bientot.bouton_instagram') ?>
+    </a>
+  </div>
+  <p class="soon__signature"><?= t('bientot.signature') ?></p>
+</main>
+
+<footer class="soon__footer">
+  <?php require __DIR__ . '/app/partials/copyright.php' ?>
+  <a href="mentions-legales.php"><?= t('pied_de_page.mentions_legales') ?></a>
+</footer>
+</body>
+</html>
