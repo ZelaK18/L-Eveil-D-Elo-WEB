@@ -19,7 +19,7 @@ $description = $site['name'] . '. ' . site_text('bientot.description');
 
 <main class="soon__main">
   <div class="soon__identity">
-    <img class="soon__logo" src="<?= e(asset('images/og-image.jpg')) ?>" width="1200" height="630" alt="<?= e($site['name']) ?>">
+    <img class="soon__logo" src="<?= e(asset('images/logo-transparent.png')) ?>" width="1254" height="1254" alt="<?= e($site['name']) ?>">
   </div>
 
   <p class="soon__status"><?= t('bientot.statut') ?></p>
