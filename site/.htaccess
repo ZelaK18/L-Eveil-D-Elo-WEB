@@ -1,3 +1,17 @@
+# DEBUT BLOCAGE AVANT CPANEL
+# Retirer ce bloc seulement apres avoir configure le mot de passe dans cPanel.
+# Voir INSTALLATION-CPANEL.txt a la racine du dossier FTP.
+<RequireAll>
+  Require all denied
+</RequireAll>
+# FIN BLOCAGE AVANT CPANEL
+
+# DEBUT PREPRODUCTION NOINDEX - retirer ce bloc lors du lancement public.
+<IfModule mod_headers.c>
+  Header always set X-Robots-Tag "noindex, nofollow"
+</IfModule>
+# FIN PREPRODUCTION NOINDEX
+
 Options -Indexes
 DirectoryIndex index.php
 
@@ -10,6 +24,9 @@ DirectoryIndex index.php
   RewriteCond %{THE_REQUEST} \s/+([^?\s]*)mentions-legales\.html[\s?] [NC]
   RewriteRule ^mentions-legales\.html$ /%1mentions-legales.php [R=301,L]
 
+  # robots.txt et sitemap.xml sont générés en PHP à partir du domaine de config.php
+  RewriteRule ^robots\.txt$ robots.php [L]
+  RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
   # Code interne, scripts en ligne de commande, jetons et fichiers de travail
   RewriteRule ^(app|bin|storage|tests|textes|php)(/|$) - [F,L,NC]
@@ -31,7 +48,3 @@ DirectoryIndex index.php
   ExpiresByType image/jpeg "access plus 1 month"
   ExpiresByType image/webp "access plus 1 month"
 </IfModule>
-
-<Files "INSTALLATION-CPANEL.txt">
-  Require all denied
-</Files>
