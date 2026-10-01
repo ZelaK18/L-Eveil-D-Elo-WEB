@@ -4,6 +4,12 @@ DirectoryIndex index.php
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # HTTPS sur le domaine public, en tenant compte du proxy o2switch.
+  RewriteCond %{HTTP_HOST} ^(www\.)?leveildelo\.ch$ [NC]
+  RewriteCond %{HTTP:X-Forwarded-Proto} !^https$ [NC]
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
   # Une seule adresse pour l'accueil : /index.php et /index.html mènent à /
   RewriteCond %{THE_REQUEST} \s/+([^?\s]*)index\.(php|html)[\s?] [NC]
   RewriteRule ^index\.(php|html)$ /%1 [R=301,L]
