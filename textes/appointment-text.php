@@ -11,11 +11,11 @@ return [
         'body'    => <<<'TEXTE'
             Bonjour {prenom},
 
-            Votre tirage de cartes est confirmé, je me réjouis de ce moment avec vous.
+            Votre tirage de cartes est confirmé, Je me réjouis de vous retrouver prochainement pour votre tirage.
 
             {details}
 
-            Je vous écrirai à l'heure prévue, au numéro que vous m'avez indiqué. Si vous le souhaitez, notez d'ici là la question ou la thématique que vous aimeriez explorer.
+            Je vous contacterai à l’heure prévue, au numéro que vous m’avez indiqué. D’ici notre rendez-vous, vous pouvez prendre un moment pour réfléchir à la question ou à la thématique que vous souhaitez aborder lors de votre tirage.
 
             Pour annuler, utilisez ce lien jusqu'à {delai_annulation} avant le rendez-vous : [annuler mon rendez-vous]({lien_annulation})
             Pour le déplacer, ou à moins de {delai_annulation}, répondez simplement à cet e-mail ou envoyez-moi un message au {telephone_elodie}.
@@ -34,7 +34,7 @@ return [
 
             {details}
 
-            Je vous écrirai à l'heure prévue, au numéro que vous m'avez indiqué. Le pendule répond au mieux à des questions claires : notez celles que vous aimeriez éclaircir.
+             Je vous contacterai à l’heure prévue, au numéro que vous m’avez indiqué. Le pendule répond au mieux à des questions claires : notez celles que vous aimeriez éclaircir.
 
             Pour annuler, utilisez ce lien jusqu'à {delai_annulation} avant le rendez-vous : [annuler mon rendez-vous]({lien_annulation})
             Pour le déplacer, ou à moins de {delai_annulation}, répondez simplement à cet e-mail ou envoyez-moi un message au {telephone_elodie}.
@@ -49,11 +49,11 @@ return [
         'body'    => <<<'TEXTE'
             Bonjour {prenom},
 
-            Votre séance de coaching spirituel est confirmée, je me réjouis de ce moment avec vous.
+            Merci pour votre confiance. Votre séance de coaching spirituel est bien réservée et je me réjouis de vous retrouver pour ce moment d’échange et d’accompagnement.
 
             {details}
 
-            La séance a lieu en visio : je vous transmets les informations de connexion avant le rendez-vous. Prévoyez un endroit calme où vous vous sentez bien.
+            Notre séance se déroulera en visioconférence. Je vous transmettrai les informations de connexion avant notre rendez-vous. Je vous invite simplement à prévoir un endroit calme et confortable, où vous pourrez profiter pleinement de ce moment.
 
             Pour annuler, utilisez ce lien jusqu'à {delai_annulation} avant le rendez-vous : [annuler mon rendez-vous]({lien_annulation})
             Pour le déplacer, ou à moins de {delai_annulation}, répondez simplement à cet e-mail ou envoyez-moi un message au {telephone_elodie}.
@@ -68,11 +68,11 @@ return [
         'body'    => <<<'TEXTE'
             Bonjour {prenom},
 
-            Merci pour votre message, il est bien arrivé. Je vous réponds sous 48 h pour convenir ensemble d'un moment.
+            Merci pour votre message et pour votre intérêt. J’ai bien reçu votre demande et je vous répondrai dans un délai de 48 heures.
 
             {details}
 
-            Si c'est urgent, vous pouvez aussi m'envoyer un message au {telephone_elodie}.
+           Si besoin, vous pouvez également me contacter directement par message au {telephone_elodie}.
 
             À bientôt,
             Elodie
