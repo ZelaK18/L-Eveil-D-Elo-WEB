@@ -8,7 +8,7 @@ if (PHP_SAPI !== 'cli') {
 }
 require dirname(__DIR__) . '/app/bootstrap.php';
 
-$redirectUri = $argv[1] ?? 'https://leveildelo.app/admin/';
+$redirectUri = $argv[1] ?? 'https://leveildelo.app';
 $state = bin2hex(random_bytes(16));
 $calendarScope = 'https://www.googleapis.com/auth/calendar.events';
 $gmailScope = 'https://www.googleapis.com/auth/gmail.send';

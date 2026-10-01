@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const details = $("bookingDetails");
   const done = $("bookingDone");
   const monthName = new Intl.DateTimeFormat("fr-CH", { month: "long", year: "numeric" });
-  const dayName = new Intl.DateTimeFormat("fr-CH", { weekday: "long", day: "numeric", month: "long" });
+  const dayName = new Intl.DateTimeFormat("fr-CH", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
   const pad = number => String(number).padStart(2, "0");
   const toDate = key => {
     const [year, month, day = 1] = key.split("-").map(Number);
@@ -149,6 +149,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // « 9h00 », comme dans l'e-mail de confirmation.
   const hour = time => time.replace(/^0/, "").replace(":", "h");
   const agenda = { service: "", month: "", min: "", max: "", days: {}, date: "", view: 0 };
+  let bookingBusy = false;
+  const resetAgreements = () => details.querySelectorAll(".consent input").forEach(input => { input.checked = false; });
+  const hideDetails = () => {
+    details.hidden = details.disabled = true;
+    booking.elements.conditions_version.value = "";
+    resetAgreements();
+  };
+  const showIntake = service => {
+    details.querySelectorAll("[data-intake]").forEach(fieldset => {
+      fieldset.hidden = fieldset.disabled = fieldset.dataset.intake !== service.split(".")[0];
+    });
+    details.querySelectorAll("[data-terms]").forEach(section => {
+      section.hidden = section.dataset.terms !== service;
+      if (!section.hidden) booking.elements.conditions_version.value = section.dataset.version;
+    });
+  };
 
   // Une requête par mois pour toutes les prestations, relue après 30 secondes pour suivre les changements de l'agenda.
   const monthRequests = {};
@@ -173,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
     agenda.date = "";
     booking.elements.date.value = booking.elements.time.value = "";
     slots.innerHTML = "";
-    details.hidden = true;
+    hideDetails();
   };
 
   const renderCalendar = () => {
@@ -200,23 +216,32 @@ document.addEventListener("DOMContentLoaded", () => {
     press(calendarGrid, date, "date");
     booking.elements.date.value = date;
     booking.elements.time.value = "";
-    details.hidden = true;
+    hideDetails();
     slots.innerHTML = `<p class="slots__day">${dayName.format(toDate(date))}</p>` + agenda.days[date]
       .map(time => `<button type="button" class="slot" data-time="${time}" aria-pressed="false">${hour(time)}</button>`)
       .join("");
   };
 
   const selectTime = time => {
+    resetAgreements();
     press(slots, time, "time");
     booking.elements.time.value = time;
     const service = booking.querySelector("input[name='service']:checked");
     const end = addMinutes(time, Number(service.dataset.duration));
-    $("bookingRecap").textContent = `${service.dataset.label} · ${dayName.format(toDate(agenda.date))}, de ${hour(time)} à ${hour(end)}`;
-    details.hidden = false;
+    showIntake(service.value);
+    const terms = details.querySelector("[data-terms]:not([hidden])");
+    const recap = `${service.dataset.label} · ${dayName.format(toDate(agenda.date))}, de ${hour(time)} à ${hour(end)} (heure suisse, Europe/Zurich) · ${terms.dataset.price} · ${terms.dataset.format}`;
+    $("bookingRecap").textContent = $("bookingFinalRecap").textContent = recap;
+    details.hidden = details.disabled = false;
+    $("bookingIntakeTitle").focus({ preventScroll: true });
+    $("bookingRecap").scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
   };
 
   const showMonth = async (month, notice = "") => {
     const view = ++agenda.view;
+    // L'ancien créneau ne doit pas rester réservable pendant le chargement d'un autre mois.
+    clearSelection();
+    calendar.querySelectorAll("button").forEach(button => { button.disabled = true; });
     calendar.setAttribute("aria-busy", "true");
     setStatus(bookingStatus, notice || messages.recherche, notice && "is-error");
     try {
@@ -276,6 +301,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Formulaire vierge, formules refermées : pour un nouveau rendez-vous après une réservation.
   const resetBooking = () => {
     booking.reset();
+    booking.elements.request_id.value = Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, "0")).join("");
     clearSelection();
     agenda.service = "";
     groups.forEach(button => {
@@ -285,6 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
     when.hidden = true;
     done.hidden = true;
     booking.hidden = false;
+    setStatus(bookingStatus, "");
   };
 
   // « Réserver » sur une carte : coche la prestation ou la formule. Pour une prestation à formules, ouvre leur liste.
@@ -301,6 +328,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   booking.addEventListener("submit", async e => {
     e.preventDefault();
+    if (bookingBusy) return;
     if (!booking.elements.time.value) return;
     if (!booking.reportValidity()) {
       setStatus(bookingStatus, messages.champs_obligatoires, "is-error");
@@ -308,12 +336,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const submit = booking.querySelector(".form__submit");
+    const body = new FormData(booking);
+    bookingBusy = true;
+    booking.inert = true;
+    booking.setAttribute("aria-busy", "true");
     submit.disabled = true;
     setStatus(bookingStatus, messages.reservation_en_cours);
     try {
-      const result = await send(booking.action, { method: "POST", body: new FormData(booking) }, messages.reservation_echouee);
+      const result = await send(booking.action, { method: "POST", body }, messages.reservation_echouee);
       forgetMonths();
-      $("bookingDoneText").textContent = messages.reservation_confirmee
+      $("bookingDoneText").textContent = (result.email_sent === false ? messages.reservation_sans_email : messages.reservation_confirmee)
         .replaceAll("{prestation}", result.service)
         .replaceAll("{date}", result.when)
         .replaceAll("{email}", booking.elements.email.value)
@@ -330,6 +362,9 @@ document.addEventListener("DOMContentLoaded", () => {
         setStatus(bookingStatus, error.message, "is-error");
       }
     } finally {
+      bookingBusy = false;
+      booking.inert = false;
+      booking.removeAttribute("aria-busy");
       submit.disabled = false;
     }
   });

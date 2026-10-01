@@ -130,8 +130,13 @@ function storage_read(string $name): array
 function storage_write(string $name, array $data): void
 {
     $temp = storage_path($name . '.' . bin2hex(random_bytes(6)) . '.php');
-    file_put_contents($temp, STORAGE_GUARD . json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
-    rename($temp, storage_path("$name.php"));
+    $content = STORAGE_GUARD . json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+    if (file_put_contents($temp, $content, LOCK_EX) !== strlen($content) || !rename($temp, storage_path("$name.php"))) {
+        if (is_file($temp)) {
+            unlink($temp);
+        }
+        throw new RuntimeException('Impossible de conserver les données du formulaire.');
+    }
 }
 
 /** @return resource */

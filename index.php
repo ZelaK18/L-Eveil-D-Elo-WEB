@@ -387,6 +387,8 @@ $schema = [
           <?= $antispam ?>
           <input type="hidden" name="date">
           <input type="hidden" name="time">
+          <input type="hidden" name="conditions_version">
+          <input type="hidden" name="request_id" value="<?= e(bin2hex(random_bytes(16))) ?>">
 
           <fieldset class="field field--choices">
             <legend><span class="booking__step">1</span><?= t('rendez_vous.etape_prestation') ?></legend>
@@ -421,20 +423,13 @@ $schema = [
             <div class="slots" id="slots" role="group" aria-label="Heures disponibles"></div>
           </div>
 
-          <div class="booking__details" id="bookingDetails" hidden>
+          <fieldset class="booking__details" id="bookingDetails" hidden disabled>
             <p class="booking__recap" id="bookingRecap"></p>
 
-            <?php require __DIR__ . '/app/partials/person-fields.php' ?>
-
-            <label class="field">
-              <span><?= t('rendez_vous.champ_message') ?></span>
-              <textarea name="message" rows="3" placeholder="<?= e(site_text('rendez_vous.champ_message_exemple')) ?>"></textarea>
-            </label>
-
-            <?php $consent = 'rendez_vous.accord'; require __DIR__ . '/app/partials/consent.php' ?>
+            <?php require __DIR__ . '/app/partials/booking-intake.php' ?>
 
             <button type="submit" class="button-primary form__submit"><?= t('rendez_vous.bouton') ?></button>
-          </div>
+          </fieldset>
 
           <p class="form__status" id="bookingStatus" role="status" aria-live="polite"></p>
         </form>

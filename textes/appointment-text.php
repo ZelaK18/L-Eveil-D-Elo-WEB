@@ -72,7 +72,7 @@ return [
 
             {details}
 
-           Si besoin, vous pouvez également me contacter directement par message au {telephone_elodie}.
+            Si besoin, vous pouvez également me contacter directement par message au {telephone_elodie}.
 
             À bientôt,
             Elodie
@@ -96,11 +96,13 @@ return [
             TEXTE,
     ],
 
-    // E-mails reçus par Elodie. {details} y reprend toutes les informations, message compris.
+    // E-mails reçus par Elodie. {details} reprend les réponses au questionnaire et les accords datés.
     'avis_reservation' => [
         'subject' => 'Nouveau rendez-vous : {prestation}, {date}',
         'body'    => <<<'TEXTE'
             {prenom} {nom} a réservé un rendez-vous depuis le site.
+
+            Le formulaire de la prestation a été validé. Vous trouverez ses réponses et les conditions acceptées ci-dessous. Vous pouvez répondre directement à cet e-mail pour joindre cette personne.
 
             {details}
             TEXTE,

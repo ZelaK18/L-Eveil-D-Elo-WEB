@@ -178,13 +178,13 @@ return [
         'ou'       => "ou",
 
         'en_ligne_titre'        => "Réserver en ligne",
-        'en_ligne_texte'        => "Choisissez directement un créneau libre dans mon agenda. La confirmation vous parvient aussitôt par e-mail.",
+        'en_ligne_texte'        => "Choisissez votre prestation et un créneau libre, puis complétez son formulaire ici même. Votre rendez-vous est réservé uniquement après votre validation finale. Le règlement sera convenu avec Elodie.",
         'etape_prestation'      => "La prestation",
         'etape_date'            => "Le jour et l'heure",
         'champ_message'         => "Un mot avant la séance",
         'champ_message_exemple' => "Facultatif",
         'accord'                => "J'accepte que ces informations soient enregistrées dans l'agenda pour organiser le rendez-vous",
-        'bouton'                => "Confirmer le rendez-vous",
+        'bouton'                => "Valider mon formulaire et réserver",
         'confirme_titre'        => "C'est noté !",
         'bouton_autre'          => "Réserver un autre moment",
 
@@ -251,6 +251,7 @@ return [
         'reservation_echouee'             => "La réservation n'a pas pu aboutir. Réessayez dans un instant ou utilisez le formulaire de demande.",
         'creneau_pris'                    => "Ce créneau vient d'être pris. Choisissez-en un autre.",
         'reservation_confirmee'           => "Votre rendez-vous « {prestation} » est confirmé pour le {date}. Une confirmation vient de partir à {email}.",
+        'reservation_sans_email'          => "Votre rendez-vous « {prestation} » est confirmé pour le {date}, mais l’envoi de la confirmation par e-mail a rencontré un problème. Contactez Elodie si vous ne la recevez pas. Ne réservez pas une deuxième fois.",
         'reservation_confirmee_telephone' => "Je vous écrirai au numéro indiqué à l'heure prévue.",
         'email_invalide'                  => "L'adresse e-mail ne semble pas valide.",
         'nom_invalide'                    => "Merci d'indiquer un nom et un prénom valides.",
