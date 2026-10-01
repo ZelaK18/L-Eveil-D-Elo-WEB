@@ -216,8 +216,17 @@ de demande accessibles. Le contenu reste visible également à l’impression.
 
 Vérifier les contrastes, le focus clavier, les retours à la ligne et le texte
 agrandi à 200 % lors de chaque évolution des composants.
+La réservation présente deux cases obligatoires et non précochées : majorité et
+conditions de la séance ; traitement des réponses personnelles. Les conditions
+détaillées restent lisibles avant ces cases, et changer le créneau réinitialise l’accord.
+Le message de contact accepte 5 000 caractères au maximum. Les saisies trop longues
+sont refusées avec une explication, jamais coupées silencieusement. Pendant l’envoi,
+le formulaire est verrouillé pour éviter les doubles demandes. Une confirmation
+e-mail échouée est signalée sans faire croire que la demande ou l’annulation a échoué.
 Le test tests/responsive-browser.cjs couvre les pages et interactions responsive ;
 tests/booking-browser.cjs vérifie le parcours de réservation.
+tests/http-server.cjs contrôle les pages, les fichiers internes protégés, les
+redirections, le sitemap et le cache sur le serveur web réellement utilisé.
 
 8. DIRECTION VISUELLE
 
@@ -235,3 +244,19 @@ Fond : #F7EDDD. Cartes : #FFF9F2. Titres et boutons : #825A38.
 Texte courant : #6F523C. Texte secondaire : #86644A. Pied de page : #503823.
 Conteneur : 1180px maximum. Cartes : arrondi 18px. Boutons : arrondi 30px.
 Formulaires : saisie d’au moins 16px. Boutons principaux : hauteur d’au moins 44px.
+
+10. E-MAILS DES FORMULAIRES
+
+Les messages de réservation, de contact et d’annulation partagent le rendu
+de app/mail.php. Leurs textes se modifient dans textes/appointment-text.php.
+
+- Police Arial, Helvetica, sans-serif ; taille 14px ; interligne 1.6 ; texte #222.
+- Paragraphes alignés à gauche, séparés par une marge basse de 16px.
+- Intitulés en gras ; réponses rédigées et messages sur la ligne suivante.
+- Coordonnées, séance et accords séparés en paragraphes dans les avis pour Elodie.
+- Accords cochés numérotés ; horodatage et empreinte des conditions conservés au dossier.
+- Version texte avec les mêmes paragraphes et retours à la ligne que le HTML.
+- Largeur fluide et mots longs sécables pour les petits écrans.
+
+tests/mail.php vérifie les rendus ; l’option --preview produit des exemples
+fictifs pour chaque prestation, le contact et l’annulation dans storage/mail-preview/.

@@ -12,6 +12,7 @@ $id = $param('r');
 $signature = $param('s');
 $appointment = null;
 $state = 'invalide';
+$clientEmailSent = true;
 
 try {
     if ($id !== '' && hash_equals(cancel_signature($id), $signature)) {
@@ -53,16 +54,9 @@ try {
 
         if ($cancelled) {
             // Textes : textes/appointment-text.php.
-            $details = ['Prestation' => $appointment['prestation'], 'Date' => period_fr($appointment['start'], $appointment['end'])];
-            send_text_mails([
-                [$appointment['email'], 'annulation', null, $details],
-                [config('mail_to'), 'avis_annulation', $appointment['email'], $details + [
-                    'Nom'       => $appointment['nom'],
-                    'Prénom'    => $appointment['prenom'],
-                    'E-mail'    => $appointment['email'],
-                    'Téléphone' => $appointment['telephone'],
-                ]],
-            ], person_values($appointment) + ['prestation' => $appointment['prestation'], 'date' => date_fr($appointment['start'])], 'Annulation');
+            $sent = send_text_mails(cancellation_emails($appointment),
+                person_values($appointment) + ['prestation' => $appointment['prestation'], 'date' => date_fr($appointment['start'])], 'Annulation');
+            $clientEmailSent = $sent[0];
         }
     }
 } catch (GoogleError $e) {
@@ -101,7 +95,7 @@ $say = fn(string $key): string => strtr(format_text(fill_placeholders((string) (
     <h1><?= format_text($texts[$state === 'annule' ? 'annule_titre' : 'titre'] ?? '') ?></h1>
 
     <section class="card cancel">
-      <p><?= $say($state) ?></p>
+      <p><?= $say($state === 'annule' && !$clientEmailSent ? 'annule_sans_email' : $state) ?></p>
 
       <div class="cancel__actions">
       <?php if ($state === 'confirmer'): ?>

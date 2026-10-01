@@ -2,13 +2,11 @@
 // Formulaires issus des documents Word. Prix, durée et format restent ceux de site-text.php.
 // Modifier la version lors d'un changement de conditions ; leur empreinte est aussi vérifiée à l'envoi.
 return [
-    'version' => '2026-10-01',
+    'version' => '2026-10-01.2',
     'intro' => 'Quelques mots pour préparer notre rencontre. Les champs marqués * sont obligatoires. Si un sujet est trop personnel, indiquez simplement que vous préférez en parler pendant la séance.',
     'privacy' => 'Elodie Fauquex utilise vos coordonnées et vos réponses pour préparer et réaliser la prestation, vous contacter et assurer la facturation. Votre formulaire et vos accords datés sont conservés dans un dossier à accès restreint sur le site et transmis à Elodie par e-mail via Google/Gmail. Seuls vos coordonnées, la prestation et le créneau sont inscrits dans Google Agenda. Google peut traiter ces données aux États-Unis. Les e-mails ordinaires ne sont pas chiffrés de bout en bout : évitez les détails médicaux et les informations identifiant des tiers ; vous pouvez réserver leur discussion à la séance. Pour vos droits et les durées de conservation, consultez la politique de confidentialité.',
     'consents' => [
-        'adult' => 'Je confirme avoir au moins 18 ans, réserver pour moi-même et participer librement à cette prestation.',
-        'scope' => 'J’ai compris le cadre et les limites de cette prestation. Je reste responsable de mes décisions et je m’adresse à un professionnel compétent pour toute question médicale, psychologique, juridique ou financière.',
-        'terms' => 'J’ai relu et j’accepte la prestation, son format, son tarif, la date et l’heure récapitulés, ainsi que les conditions de réservation, de paiement et d’annulation ci-dessus. Je demande la réservation de ce rendez-vous.',
+        'terms' => 'Je confirme avoir au moins 18 ans et réserver librement pour moi-même. J’ai lu et j’accepte le cadre et les limites de la prestation, son format, son tarif, le créneau choisi et les conditions de réservation, de paiement et d’annulation.',
         'consent' => 'J’accepte expressément que mes réponses, y compris les informations sensibles que je choisis de communiquer, soient utilisées par Elodie pour cet accompagnement, conservées avec mes accords et transmises par e-mail selon les informations de confidentialité ci-dessus.',
     ],
     'services' => [

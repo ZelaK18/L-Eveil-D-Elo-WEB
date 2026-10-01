@@ -171,9 +171,9 @@ function input(string $key): string
     return is_string($value) ? trim(mb_scrub($value, 'UTF-8')) : '';
 }
 
-function single_line(string $text, int $max = 150): string
+function single_line(string $text): string
 {
-    return mb_substr(trim(preg_replace('/\s+/u', ' ', $text) ?? ''), 0, $max);
+    return trim(preg_replace('/\s+/u', ' ', $text) ?? '');
 }
 
 function json_response(array $data, int $status = 200): never
@@ -190,13 +190,18 @@ function form_response(bool $ok, string $message, int $status = 200, array $extr
     if (str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json')) {
         json_response(['ok' => $ok, 'message' => $message] + $extra, $ok ? 200 : $status);
     }
-    header('Location: ../?demande=' . ($ok ? 'ok' : 'erreur') . '#rendez-vous', true, 303);
+    $state = !$ok ? 'erreur' : (($extra['email_sent'] ?? true) ? 'ok' : 'ok-sans-email');
+    header('Location: ../?demande=' . $state . '#rendez-vous', true, 303);
     exit;
 }
 
 function app_key(): string
 {
-    return (string) (secret('app_key') ?: hash('sha256', __DIR__));
+    $key = secret('app_key');
+    if (!is_string($key) || strlen($key) < 32) {
+        throw new RuntimeException('Configurez une clé aléatoire app_key d’au moins 32 caractères dans app/secrets.php.');
+    }
+    return $key;
 }
 
 // Jeton horodaté et signé : écarte les robots qui postent sans charger la page ou en moins de 3 secondes.
@@ -260,14 +265,21 @@ function guard_form(string $action, int $max, int $seconds): void
 function read_person(): array
 {
     $person = [
-        'nom'       => single_line(input('nom'), 60),
-        'prenom'    => single_line(input('prenom'), 60),
+        'nom'       => single_line(input('nom')),
+        'prenom'    => single_line(input('prenom')),
         'email'     => single_line(input('email')),
-        'telephone' => single_line(input('telephone'), 40),
-        'message'   => mb_substr(input('message'), 0, 5000),
+        'telephone' => single_line(input('telephone')),
+        'message'   => input('message'),
     ];
-    if (in_array('', [$person['nom'], $person['prenom'], $person['telephone'], input('consent')], true)) {
+    if (in_array('', [$person['nom'], $person['prenom'], $person['telephone']], true)
+        || !in_array(input('consent'), ['1', 'on'], true)) {
         form_response(false, message('champs_obligatoires'), 422);
+    }
+    foreach (['nom' => 60, 'prenom' => 60, 'email' => 150, 'telephone' => 25, 'message' => 5000] as $field => $max) {
+        if (mb_strlen($person[$field]) > $max) {
+            $labels = ['nom' => 'nom', 'prenom' => 'prénom', 'email' => 'e-mail', 'telephone' => 'téléphone', 'message' => 'message'];
+            form_response(false, strtr(message('champ_trop_long'), ['{champ}' => $labels[$field], '{max}' => (string) $max]), 422);
+        }
     }
     if (!filter_var($person['email'], FILTER_VALIDATE_EMAIL)) {
         form_response(false, message('email_invalide'), 422);
@@ -276,7 +288,8 @@ function read_person(): array
     if (preg_match('#https?:|www\.|[<>/@]|\.(com|net|org|ch|fr|de|io|co|ru|xyz|info|biz|link|top)\b#i', "{$person['prenom']} {$person['nom']}")) {
         form_response(false, message('nom_invalide'), 422);
     }
-    if (!preg_match('/^\+?[0-9 ().-]{6,25}$/', $person['telephone'])) {
+    $digits = preg_replace('/\D/', '', $person['telephone']);
+    if (!preg_match('/^\+?[0-9 ().-]{6,25}$/D', $person['telephone']) || strlen($digits) < 6 || strlen($digits) > 15) {
         form_response(false, message('telephone_invalide'), 422);
     }
     return $person;

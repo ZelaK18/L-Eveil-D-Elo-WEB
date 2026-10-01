@@ -10,13 +10,18 @@ function intake_definition(array $service): array
     return intake_texts()['services'][$service['service']] ?? [];
 }
 
-// La même version est affichée, vérifiée côté serveur et jointe aux confirmations.
+function booking_service_summary(array $service): string
+{
+    return $service['name'] . ' · ' . ($service['offer_duration'] ?? duration_label($service['duration'])) . ' · ' . price_label($service);
+}
+
+// Conditions affichées et vérifiées côté serveur, puis conservées dans leur intégralité dans le dossier.
 function booking_terms(array $service): array
 {
     $definition = intake_definition($service);
     $terms = [
         'Prestataire' => config('site.owner') . ' · ' . config('site.name') . ' · ' . config('site.email'),
-        'Prestation et tarif' => $service['name'] . ' · ' . ($service['offer_duration'] ?? duration_label($service['duration'])) . ' · ' . price_label($service) . ' · ' . $service['format'] . '.',
+        'Prestation et tarif' => booking_service_summary($service) . ' · ' . $service['format'] . '.',
         'Cadre de la prestation' => $definition['scope'] ?? '',
     ];
     if ($service['service'] !== 'coaching') {
@@ -114,14 +119,57 @@ function intake_receipt(array $service, array $person, array $answers, DateTimeI
     ];
 }
 
-function intake_agreement_details(array $receipt): array
+// Trois paragraphes comme dans elodie.docx : coordonnées, séance et réponses, accords cochés.
+function intake_owner_mail_details(array $service, array $receipt): array
 {
-    return [
-        'Accord validé par' => $receipt['person']['prenom'] . ' ' . $receipt['person']['nom'],
-        'Validation' => (new DateTimeImmutable($receipt['validated_at']))->format('d.m.Y à H:i:s P') . ' (Europe/Zurich)',
-        'Version des conditions' => $receipt['version'] . ' · ' . $receipt['conditions_hash'],
-        'Accords cochés' => implode("\n", array_values($receipt['consents'])),
-    ] + $receipt['conditions'];
+    $person = $receipt['person'];
+    $answers = $receipt['answers'];
+    $fields = intake_definition($service)['fields'];
+    $contact = person_details($person);
+    $contact['Date de naissance'] = $answers['Date de naissance'];
+
+    $appointment = $receipt['appointment'];
+    $details = ['Prestation' => $appointment['Prestation'] . ' (' . $appointment['Format'] . ')'];
+    if (isset($fields['tirage'])) {
+        $label = $fields['tirage']['label'];
+        $details[$label] = $answers[$label];
+        unset($fields['tirage']);
+    }
+    $details += ['Date' => $appointment['Date'], 'Tarif' => $appointment['Tarif']];
+    foreach ($fields as $field) {
+        $value = $answers[$field['label']];
+        $details[$field['label']] = ($field['type'] ?? '') === 'select' ? $value : mail_below($value);
+    }
+
+    $consents = [];
+    foreach (array_values($receipt['consents']) as $index => $consent) {
+        $consents[] = ($index + 1) . '. ' . $consent;
+    }
+    return [$contact, $details, [
+        'Accord validé par' => $person['prenom'] . ' ' . $person['nom'],
+        'Accords cochés' => mail_below(implode("\n", $consents)),
+    ]];
+}
+
+// Sélection et présentation de client.docx ; les réponses et références techniques restent dans le dossier.
+function intake_client_mail_details(array $service, array $receipt): array
+{
+    $terms = $receipt['conditions'];
+    $appointment = $receipt['appointment'];
+    $blocks = [[
+        'Prestataire' => $terms['Prestataire'],
+        'Date' => $appointment['Date'],
+        'Prestation et tarif' => booking_service_summary($service),
+        'Tarif' => $appointment['Tarif'],
+        'Format' => $service['visio'] ? $appointment['Format'] : $appointment['Format'] . ', au ' . $receipt['person']['telephone'],
+    ]];
+    foreach (['Réservation et paiement', 'Cadre de la prestation', 'Questions non traitées', 'Organisation de l’accompagnement', 'Fin de l’accompagnement', 'Annulation et retard'] as $label) {
+        if (isset($terms[$label])) {
+            $blocks[] = [$label => mail_below($terms[$label])];
+        }
+    }
+    $blocks[] = ['Validation en ligne' => $terms['Validation en ligne']];
+    return $blocks;
 }
 
 function deliver_booking_emails(string $recordName, array &$record): void

@@ -15,6 +15,7 @@ $antispam = '<input type="hidden" name="jeton" value="' . e(form_token()) . '">'
 // Retour du formulaire de demande quand il a été envoyé sans JavaScript.
 [$requestState, $requestMessage] = match ($_GET['demande'] ?? '') {
     'ok'     => ['is-ok', message('demande_envoyee')],
+    'ok-sans-email' => ['is-ok', message('demande_sans_email')],
     'erreur' => ['is-error', message('envoi_echoue')],
     default  => ['', ''],
 };
@@ -151,7 +152,7 @@ $schema = [
 
     <div class="hero__media reveal">
       <figure class="portrait">
-        <img src="images/test-pp.jpg" alt="<?= e(site_text('accueil.description_photo')) ?>" class="portrait__img" fetchpriority="high">
+        <img src="images/test-pp.jpg" alt="<?= e(site_text('accueil.description_photo')) ?>" class="portrait__img" width="880" height="1320" fetchpriority="high">
       </figure>
       <svg class="portrait__stars" viewBox="0 0 100 100" aria-hidden="true">
         <use href="#ico-star" x="14.53" y="13.23" width="1.54" height="1.54"/>
@@ -450,14 +451,14 @@ $schema = [
         <h3><?= t('rendez_vous.demande_titre') ?></h3>
         <p><?= t('rendez_vous.demande_texte') ?></p>
 
-        <form class="form" id="rdvForm" action="api/contact.php" method="post" novalidate>
+        <form class="form" id="rdvForm" action="api/contact.php" method="post">
           <?= $antispam ?>
 
           <?php require __DIR__ . '/app/partials/person-fields.php' ?>
 
           <label class="field">
             <span><?= t('rendez_vous.demande_message') ?></span>
-            <textarea name="message" id="demandeMessage" rows="5" placeholder="<?= e(site_text('rendez_vous.demande_message_exemple')) ?>"></textarea>
+            <textarea name="message" id="demandeMessage" rows="5" maxlength="5000" placeholder="<?= e(site_text('rendez_vous.demande_message_exemple')) ?>"></textarea>
           </label>
 
           <?php $consent = 'rendez_vous.demande_accord'; require __DIR__ . '/app/partials/consent.php' ?>

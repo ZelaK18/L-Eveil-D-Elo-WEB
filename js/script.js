@@ -120,23 +120,33 @@ document.addEventListener("DOMContentLoaded", () => {
     return result;
   };
 
+  let contactBusy = false;
+  form.noValidate = true; // Sans JavaScript, le navigateur garde ses contrôles natifs.
   form.addEventListener("submit", async e => {
     e.preventDefault();
+    if (contactBusy) return;
     if (!form.reportValidity()) {
       setStatus(status, messages.champs_obligatoires, "is-error");
       return;
     }
 
     const submit = form.querySelector(".form__submit");
+    const body = new FormData(form);
+    contactBusy = true;
+    form.inert = true;
+    form.setAttribute("aria-busy", "true");
     submit.disabled = true;
     setStatus(status, messages.envoi_en_cours);
     try {
-      const result = await send(form.action, { method: "POST", body: new FormData(form) }, messages.envoi_echoue);
+      const result = await send(form.action, { method: "POST", body }, messages.envoi_echoue);
       form.reset();
       setStatus(status, result.message, "is-ok");
     } catch (error) {
       setStatus(status, error.message, "is-error");
     } finally {
+      contactBusy = false;
+      form.inert = false;
+      form.removeAttribute("aria-busy");
       submit.disabled = false;
     }
   });

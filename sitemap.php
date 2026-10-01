@@ -3,18 +3,18 @@
 require __DIR__ . '/app/bootstrap.php';
 
 $pages = [
-    ''                     => 'index.php',
-    'mentions-legales.php' => 'mentions-legales.php',
+    '' => ['index.php', 'textes/site-text.php', 'textes/booking-forms.php', 'app/intake.php'],
+    'mentions-legales.php' => ['mentions-legales.php', 'textes/mentions-legales.php'],
 ];
 
 header('Content-Type: application/xml; charset=utf-8');
 echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
 ?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<?php foreach ($pages as $path => $file): ?>
+<?php foreach ($pages as $path => $files): ?>
   <url>
     <loc><?= e(config('site.url') . $path) ?></loc>
-    <lastmod><?= date('Y-m-d', max(filemtime(__DIR__ . "/$file"), filemtime(__DIR__ . '/app/config.php'))) ?></lastmod>
+    <lastmod><?= date('Y-m-d', max(array_map(fn(string $file) => filemtime(__DIR__ . '/' . $file), [...$files, 'app/config.php']))) ?></lastmod>
   </url>
 <?php endforeach ?>
 </urlset>

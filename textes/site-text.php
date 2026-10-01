@@ -33,7 +33,7 @@ return [
         'bouton_prestations' => "Découvrir les prestations",
         'valeurs'            => ["Guidance intuitive", "Connexion", "Authenticité"],
         'badge_photo'        => "À distance & en visio",
-        'description_photo'  => "Elodie Fauquex, coach en spiritualité",
+        'description_photo'  => "Nuages aux teintes roses et bleues",
     ],
 
     // QUI SUIS-JE
@@ -225,6 +225,7 @@ return [
         'garder'        => "Garder mon rendez-vous",
         'annule_titre'  => "Rendez-vous annulé",
         'annule'        => "Votre rendez-vous **{prestation}** du **{date}** est bien annulé. Une confirmation vient de vous être envoyée par e-mail.",
+        'annule_sans_email' => "Votre rendez-vous **{prestation}** du **{date}** est bien annulé, mais la confirmation par e-mail n’a pas pu être envoyée. L’annulation est enregistrée ; contactez Elodie au {telephone} si vous avez besoin d’une confirmation.",
         'bouton_autre'  => "Réserver un autre moment",
         'trop_tard'     => "Votre rendez-vous du **{date}** a lieu dans moins de {delai}, il ne s'annule plus en ligne. Pour l'annuler ou le déplacer, envoyez-moi un message au {telephone}.",
         'passe'         => "Ce rendez-vous est déjà passé.",
@@ -240,6 +241,7 @@ return [
         'champs_obligatoires'             => "Merci de compléter les champs obligatoires.",
         'envoi_en_cours'                  => "Envoi en cours…",
         'demande_envoyee'                 => "Merci ! Votre demande est bien partie, une confirmation vient de vous être envoyée par e-mail. Je vous réponds sous 48 h.",
+        'demande_sans_email'              => "Votre demande a bien été transmise à Elodie, mais l’e-mail de confirmation n’a pas pu vous être envoyé. Inutile de renvoyer le formulaire : je vous réponds sous 48 h.",
         'envoi_echoue'                    => "L'envoi a échoué. Vous pouvez m'écrire directement par e-mail ou par téléphone.",
         'recherche'                       => "Recherche des disponibilités…",
         'aucun_creneau'                   => "Plus aucun créneau libre ce mois-ci : essayez le mois suivant.",
@@ -255,6 +257,7 @@ return [
         'email_invalide'                  => "L'adresse e-mail ne semble pas valide.",
         'nom_invalide'                    => "Merci d'indiquer un nom et un prénom valides.",
         'telephone_invalide'              => "Le numéro de téléphone ne semble pas valide.",
+        'champ_trop_long'                 => "Le champ « {champ} » ne doit pas dépasser {max} caractères.",
         'trop_envois'                     => "Trop d'envois en peu de temps. Réessayez plus tard ou écrivez-moi directement.",
         'page_expiree'                    => "La page a expiré. Rechargez-la puis réessayez.",
     ],

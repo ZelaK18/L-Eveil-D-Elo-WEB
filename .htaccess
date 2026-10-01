@@ -14,9 +14,9 @@ DirectoryIndex index.php
   RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
   # Code interne, scripts en ligne de commande, jetons et fichiers de travail
-  RewriteRule ^(app|bin|storage|tests|textes)(/|$) - [F,L]
-  RewriteRule ^\.git - [F,L]
-  RewriteRule (^|/)charte-graphique\.txt$ - [F,L]
+  RewriteRule ^(app|bin|storage|tests|textes|php)(/|$) - [F,L,NC]
+  RewriteRule (^|/)\.(?!well-known(/|$)) - [F,L]
+  RewriteRule (^|/)charte-graphique\.txt$ - [F,L,NC]
 </IfModule>
 
 # CSS et JS gardés un an : leur adresse change à chaque modification (?v=).

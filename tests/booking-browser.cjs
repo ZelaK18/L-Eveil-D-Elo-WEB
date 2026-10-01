@@ -47,10 +47,18 @@ const { launchBrowser, availability } = require('./browser-helpers.cjs');
         await chooseSlot();
         assert.equal(await page.locator('[data-intake]:visible').count(), 1);
         assert.equal(await page.locator('[data-intake]:visible').getAttribute('data-intake'), service.split('.')[0]);
+        assert.equal(await booking.locator('.consent input').count(), 2, 'deux accords pour chaque prestation');
+        assert.equal(await booking.locator('.consent input:checked').count(), 0, 'aucun accord précoché');
         const before = submitted.length;
         await booking.locator('.form__submit').click();
         assert.equal(submitted.length, before, 'formulaire vide : aucune soumission');
         await fill();
+        for (const name of ['terms', 'consent']) {
+          await booking.locator(`[name="${name}"]`).uncheck();
+          await booking.locator('.form__submit').click();
+          assert.equal(submitted.length, before, `accord ${name} absent : aucune soumission`);
+          await booking.locator(`[name="${name}"]`).check();
+        }
         await page.locator('.slot[data-time="09:00"]').click();
         assert.equal(await booking.locator('.consent input:checked').count(), 0, 'autre horaire : accords à redonner');
         await fill();

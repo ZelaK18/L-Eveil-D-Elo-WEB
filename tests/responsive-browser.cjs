@@ -66,6 +66,7 @@ async function mockApi(page, state = {}) {
     }
     assert(route.request().url().includes('/contact.php'), 'API inattendue bloquée');
     state.contact = (state.contact || 0) + 1;
+    if (state.contactPending) await state.contactPending;
     return route.fulfill({ json: { ok: true, message: 'Votre demande a bien été envoyée.' } });
   });
 }
@@ -120,13 +121,13 @@ async function auditAccessibility(page) {
             const panel = page.locator('#' + await offer.getAttribute('aria-controls'));
             await offer.click();
             await assertLayout(page, `${label} détail prestation`);
-            assert.equal(await panel.locator('[data-close]').evaluate(el => el === document.activeElement), true);
+            assert.equal(await panel.locator('[data-close]').evaluate(el => el === document.activeElement), true, 'focus sur la fermeture de la formule');
             await page.keyboard.press('Escape');
             assert.equal(await offer.getAttribute('aria-expanded'), 'false');
           }
           await openBooking(page);
           await assertLayout(page, `${label} questionnaire`);
-          assert.equal(await page.locator('#bookingForm input[type="date"]').evaluate(el => parseFloat(getComputedStyle(el).fontSize) >= 16), true);
+          assert.equal(await page.locator('#bookingForm input[type="date"]').evaluate(el => parseFloat(getComputedStyle(el).fontSize) >= 16), true, 'date : taille de saisie au moins 16px');
           if ([320, 768, 1440].includes(viewport.width)) await screenshot(page, `${engine}-${viewport.width}-formulaire`, '#bookingIntakeTitle');
           if (engine === 'chromium' && [320, 1440].includes(viewport.width)) await auditAccessibility(page);
           for (const route of ['mentions-legales.php', 'annuler.php']) {
@@ -165,6 +166,7 @@ async function auditAccessibility(page) {
         const context = await browser.newContext({ viewport: { width: 320, height: 740 }, javaScriptEnabled, reducedMotion: 'reduce' });
         const page = await context.newPage();
         try {
+          await page.route('**/api/**', route => route.abort());
           if (javaScriptEnabled) await page.route('**/js/script.js*', route => route.abort());
           await page.goto(base);
           await assertLayout(page, `${engine} sans script`);
@@ -172,6 +174,7 @@ async function auditAccessibility(page) {
           assert(await page.locator('.booking__fallback').isVisible(), 'alternative à la réservation dynamique');
           assert.equal(await page.locator('.presta__offre:visible').count(), 4, 'toutes les formules lisibles sans script');
           assert.equal(await page.locator('#bookingForm').isVisible(), false);
+          assert.equal(await page.locator('#rdvForm').evaluate(form => form.noValidate), false, 'validation native maintenue sans script');
           console.log(`OK ${engine} ${javaScriptEnabled ? 'script bloqué' : 'JavaScript désactivé'}`);
         } catch (error) { failures.push(`${engine} sans script: ${error.message}`); console.error(failures.at(-1)); }
         finally { await context.close(); }
@@ -183,6 +186,7 @@ async function auditAccessibility(page) {
         const state = { offline: true };
         await mockApi(page, state);
         await page.goto(base);
+        await settle(page);
         await page.locator('label:has(input[value="tirage"])').click();
         await page.locator('#calendarRetry').waitFor({ state: 'visible' });
         state.offline = false;
@@ -206,7 +210,13 @@ async function auditAccessibility(page) {
         assert((await page.locator('#demandeMessage').inputValue()).length > 0);
         for (const [name, value] of Object.entries({ nom: 'Exemple', prenom: 'Camille', email: 'client@example.test', telephone: '+41790000000' })) await page.locator(`#rdvForm [name="${name}"]`).fill(value);
         await page.locator('#rdvForm [name="consent"]').check();
+        let releaseContact;
+        state.contactPending = new Promise(resolve => { releaseContact = resolve; });
+        const contactRequest = page.waitForRequest(request => request.url().includes('/api/contact.php'));
         await page.locator('#rdvForm .form__submit').click();
+        await contactRequest;
+        await page.locator('#rdvForm').evaluate(form => form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })));
+        releaseContact();
         await page.locator('#formStatus.is-ok').waitFor();
         assert.equal(state.contact, 1);
         checks++;

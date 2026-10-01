@@ -4,8 +4,9 @@ require dirname(__DIR__) . '/app/bootstrap.php';
 $tz = new DateTimeZone(config('booking.timezone'));
 $first = (new DateTimeImmutable('first day of this month', $tz))->setTime(0, 0);
 $last = (new DateTimeImmutable('today', $tz))->modify('+' . config('booking.max_days') . ' days')->modify('first day of this month');
-$month = preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', (string) ($_GET['month'] ?? ''))
-    ? new DateTimeImmutable($_GET['month'] . '-01', $tz)
+$requestedMonth = $_GET['month'] ?? '';
+$month = is_string($requestedMonth) && preg_match('/^\d{4}-(0[1-9]|1[0-2])$/D', $requestedMonth)
+    ? new DateTimeImmutable($requestedMonth . '-01', $tz)
     : $first;
 $month = min(max($month, $first), $last);
 

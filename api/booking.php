@@ -30,7 +30,6 @@ $recordName = 'booking-form-' . $eventId;
 $fingerprint = hash('sha256', json_encode([$id, $slot, $person, $answers, booking_terms_version($service)], JSON_THROW_ON_ERROR));
 $site = config('site');
 $name = "{$person['prenom']} {$person['nom']}";
-$contact = person_details($person);
 $end = $start->modify("+{$service['duration']} minutes");
 
 $event = [
@@ -132,7 +131,6 @@ if (!empty($record['response'])) {
 record_attempt('booking');
 
 $when = date_fr($start);
-$period = period_fr($start, $end) . ' (heure suisse, Europe/Zurich)';
 $values = person_values($person) + [
     'prestation'       => $service['name'],
     'date'             => $when,
@@ -143,18 +141,8 @@ $values = person_values($person) + [
 
 // Textes : textes/appointment-text.php (avis pour Elodie, confirmation propre à la prestation).
 $emails = [
-    [config('mail_to'), 'avis_reservation', $person['email'], [
-        'Prestation' => "{$service['name']} ({$service['format']})",
-        'Date'       => $period,
-        'Tarif'      => price_label($service),
-    ] + array_diff_key($contact, ['Message' => true]) + $record['receipt']['answers'] + intake_agreement_details($record['receipt'])],
-    [$person['email'], $service['service'], config('site.email'), [
-        'Prestation' => $service['name'],
-        'Date'       => $period,
-        'Tarif'      => price_label($service),
-        // « Par message, au 079… » : la personne voit sur quel numéro Elodie la contactera.
-        'Format'     => $service['visio'] ? $service['format'] : "{$service['format']}, au {$person['telephone']}",
-    ] + intake_agreement_details($record['receipt'])],
+    [config('mail_to'), 'avis_reservation', $person['email'], intake_owner_mail_details($service, $record['receipt'])],
+    [$person['email'], $service['service'], config('site.email'), intake_client_mail_details($service, $record['receipt'])],
 ];
 
 // Chaque envoi est suivi séparément et peut être repris sans recréer le rendez-vous.
