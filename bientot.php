@@ -35,10 +35,6 @@ $description = site_text('bientot.description');
 
   <p class="soon__contact"><?= t('bientot.contact') ?></p>
   <div class="soon__actions">
-    <a class="button-primary" href="mailto:<?= e($site['email']) ?>">
-      <svg width="20" height="20" aria-hidden="true"><use href="#ico-mail"/></svg>
-      <?= t('bientot.bouton_email') ?>
-    </a>
     <a class="button-secondary" href="<?= e($site['instagram']) ?>" target="_blank" rel="noopener noreferrer">
       <svg width="20" height="20" aria-hidden="true"><use href="#ico-insta"/></svg>
       <?= t('bientot.bouton_instagram') ?>
