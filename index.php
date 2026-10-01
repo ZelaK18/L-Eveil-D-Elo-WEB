@@ -90,8 +90,6 @@ $schema = [
 
 <link rel="apple-touch-icon" href="images/favicon.png">
 
-<noscript><style>.reveal { opacity: 1; }</style></noscript>
-
 <script type="application/ld+json">
 <?= json_encode($schema, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?>
 
@@ -382,6 +380,7 @@ $schema = [
       <div class="card booking__online reveal">
         <h3><?= t('rendez_vous.en_ligne_titre') ?></h3>
         <p><?= t('rendez_vous.en_ligne_texte') ?></p>
+        <p class="booking__fallback"><?= t('rendez_vous.sans_javascript') ?> <a href="#demande"><?= t('rendez_vous.demande_titre') ?></a></p>
 
         <form class="form booking-flow" id="bookingForm" action="api/booking.php" method="post" novalidate>
           <?= $antispam ?>
@@ -432,6 +431,7 @@ $schema = [
           </fieldset>
 
           <p class="form__status" id="bookingStatus" role="status" aria-live="polite"></p>
+          <button type="button" class="button-secondary" id="calendarRetry" hidden><?= t('rendez_vous.reessayer_agenda') ?></button>
         </form>
 
         <div class="booking__done" id="bookingDone" tabindex="-1" hidden>

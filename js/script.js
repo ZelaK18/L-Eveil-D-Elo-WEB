@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  document.documentElement.classList.add("js");
   const $ = id => document.getElementById(id);
   const messages = JSON.parse($("messages").textContent);
   const header = $("header");
@@ -15,7 +16,19 @@ document.addEventListener("DOMContentLoaded", () => {
     burger.setAttribute("aria-label", open ? "Fermer le menu" : "Ouvrir le menu");
   };
   burger.addEventListener("click", () => setMenu(!nav.classList.contains("is-open")));
-  nav.querySelectorAll("a").forEach(link => link.addEventListener("click", () => setMenu(false)));
+  header.querySelectorAll("a").forEach(link => link.addEventListener("click", () => setMenu(false)));
+  ["pointerdown", "focusin"].forEach(event => document.addEventListener(event, e => {
+    if (!header.contains(e.target)) setMenu(false);
+  }));
+  const compactMenu = matchMedia("(max-width: 1100px)");
+  compactMenu.addEventListener("change", () => {
+    setMenu(false);
+    if (compactMenu.matches && nav.contains(document.activeElement)) burger.focus();
+  });
+  // Le décalage suit aussi les retours à la ligne lorsque le texte est agrandi.
+  new ResizeObserver(() => {
+    document.documentElement.style.setProperty("--header-offset", `${header.offsetHeight}px`);
+  }).observe(header);
   document.addEventListener("keydown", e => {
     if (e.key === "Escape" && nav.classList.contains("is-open")) {
       setMenu(false);
@@ -41,17 +54,24 @@ document.addEventListener("DOMContentLoaded", () => {
   observe(document.querySelectorAll("main section[id]"), { rootMargin: "-45% 0px -50% 0px" }, section =>
     navLinks.forEach(link => link.classList.toggle("is-active", link.hash === "#" + section.id))
   );
-  observe(document.querySelectorAll(".reveal"), { rootMargin: "0px 0px -8% 0px", threshold: .12 }, (el, io) => {
+  observe(document.querySelectorAll(".reveal"), { rootMargin: "0px 0px -8% 0px" }, (el, io) => {
     el.classList.add("is-in");
     io.unobserve(el);
   });
 
   // Prestations : le nom d'une formule ouvre son détail par-dessus la carte, la croix (ou Échap) referme.
   const offers = document.querySelectorAll(".tag--offre");
+  const setOffer = (button, open) => {
+    const panel = $(button.getAttribute("aria-controls"));
+    button.setAttribute("aria-expanded", open);
+    panel.hidden = !open;
+    // Le clavier ne doit pas atteindre les liens masqués par le détail de la formule.
+    [...panel.parentElement.children].filter(el => !el.classList.contains("presta__offre"))
+      .forEach(el => { el.inert = open; });
+  };
   // preventScroll : le focus seul ferait remonter la page trop haut.
   const closeOffer = (button, focus = true) => {
-    button.setAttribute("aria-expanded", "false");
-    $(button.getAttribute("aria-controls")).hidden = true;
+    setOffer(button, false);
     if (focus) button.focus({ preventScroll: true });
   };
   // Remonte juste assez pour voir la croix sous l'en-tête. On mesure la carte : le détail, lui, glisse en apparaissant.
@@ -66,12 +86,12 @@ document.addEventListener("DOMContentLoaded", () => {
       offers.forEach(other => {
         if (other !== button && other.getAttribute("aria-expanded") === "true") closeOffer(other, false);
       });
-      button.setAttribute("aria-expanded", "true");
-      panel.hidden = false;
+      setOffer(button, true);
       close.focus({ preventScroll: true });
       showClose(button.closest(".presta"));
     });
     close.addEventListener("click", () => closeOffer(button));
+    panel.querySelector("[data-service]").addEventListener("click", () => closeOffer(button, false));
     panel.addEventListener("keydown", e => {
       if (e.key === "Escape") closeOffer(button);
     });
@@ -123,6 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const booking = $("bookingForm");
   const bookingStatus = $("bookingStatus");
+  const calendarRetry = $("calendarRetry");
   const when = $("bookingWhen");
   const calendar = $("calendar");
   const calendarGrid = $("calendarGrid");
@@ -167,20 +188,22 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // Une requête par mois pour toutes les prestations, relue après 30 secondes pour suivre les changements de l'agenda.
-  const monthRequests = {};
+  const monthRequests = new Map();
   const fetchMonth = month => {
-    if (!monthRequests[month] || Date.now() - monthRequests[month].at > 30000) {
-      const request = send(`api/availability.php?${new URLSearchParams({ month })}`, {}, messages.agenda_indisponible);
-      monthRequests[month] = request.then(result => {
-        monthRequests[result.month] = monthRequests[month];
+    if (!monthRequests.has(month) || Date.now() - monthRequests.get(month).at > 30000) {
+      const entry = { at: Date.now() };
+      entry.promise = send(`api/availability.php?${new URLSearchParams({ month })}`, {}, messages.agenda_indisponible).then(result => {
+        if (monthRequests.get(month) === entry) monthRequests.set(result.month, entry);
         return result;
       });
-      monthRequests[month].at = Date.now();
-      monthRequests[month].catch(() => delete monthRequests[month]);
+      monthRequests.set(month, entry);
+      entry.promise.catch(() => {
+        for (const [key, cached] of monthRequests) if (cached === entry) monthRequests.delete(key);
+      });
     }
-    return monthRequests[month];
+    return monthRequests.get(month).promise;
   };
-  const forgetMonths = () => Object.keys(monthRequests).forEach(month => delete monthRequests[month]);
+  const forgetMonths = () => monthRequests.clear();
 
   const press = (container, value, key) => container.querySelectorAll(`[data-${key}]`)
     .forEach(button => button.setAttribute("aria-pressed", button.dataset[key] === value));
@@ -241,6 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const view = ++agenda.view;
     // L'ancien créneau ne doit pas rester réservable pendant le chargement d'un autre mois.
     clearSelection();
+    calendarRetry.hidden = true;
     calendar.querySelectorAll("button").forEach(button => { button.disabled = true; });
     calendar.setAttribute("aria-busy", "true");
     setStatus(bookingStatus, notice || messages.recherche, notice && "is-error");
@@ -249,17 +273,19 @@ document.addEventListener("DOMContentLoaded", () => {
       if (view !== agenda.view) return;
       Object.assign(agenda, { month: result.month, min: result.min, max: result.max, days: result.services[agenda.service] ?? {} });
       renderCalendar();
-      if (agenda.date in agenda.days) selectDate(agenda.date);
-      else clearSelection();
       const empty = !Object.keys(agenda.days).length && messages.aucun_creneau;
       setStatus(bookingStatus, notice || empty || "", notice && "is-error");
       if (result.month < result.max) fetchMonth(shiftMonth(result.month, 1));
     } catch (error) {
-      if (view === agenda.view) setStatus(bookingStatus, error.message, "is-error");
+      if (view === agenda.view) {
+        setStatus(bookingStatus, error.message, "is-error");
+        calendarRetry.hidden = false;
+      }
     } finally {
       if (view === agenda.view) calendar.setAttribute("aria-busy", "false");
     }
   };
+  calendarRetry.addEventListener("click", () => showMonth(agenda.month));
 
   // L'agenda est lu dès l'arrivée sur le site : au clic sur une prestation, il est déjà là.
   // Relu à l'approche de la section si cette première lecture a plus de 30 secondes.
@@ -309,6 +335,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setGroup(button, false);
     });
     when.hidden = true;
+    calendarRetry.hidden = true;
     done.hidden = true;
     booking.hidden = false;
     setStatus(bookingStatus, "");

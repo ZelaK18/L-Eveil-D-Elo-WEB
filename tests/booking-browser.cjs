@@ -2,12 +2,12 @@
 // Démarrer le site local, puis : node tests/booking-browser.cjs [http://127.0.0.1:8765]
 // Toutes les API sont interceptées : aucun agenda, e-mail ou fichier client réel n'est modifié.
 const assert = require('node:assert/strict');
-const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const { launchBrowser, availability } = require('./browser-helpers.cjs');
 
 (async () => {
-  const browser = await chromium.launch({ channel: 'msedge', headless: true });
+  const browser = await launchBrowser();
   try {
-    for (const width of [1440, 390]) {
+    for (const width of [1440, 768, 390, 320]) {
       const page = await browser.newPage({ viewport: { width, height: 1000 }, reducedMotion: 'reduce' });
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
@@ -15,7 +15,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
       let failSlot = false;
       await page.route('**/api/**', async route => {
         if (route.request().url().includes('/availability.php')) {
-          return route.fulfill({ json: { ok: true, month: '2030-01', min: '2030-01', max: '2030-01', services: Object.fromEntries(['tirage', 'pendule', 'coaching.0', 'coaching.1', 'coaching.2', 'coaching.3'].map(key => [key, { '2030-01-14': ['09:00', '10:00'] }])) } });
+          return route.fulfill({ json: { ...availability(), max: '2030-01' } });
         }
         assert(route.request().url().includes('/booking.php'), 'API inattendue bloquée');
         submitted.push(route.request().postData());

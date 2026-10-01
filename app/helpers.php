@@ -171,12 +171,6 @@ function input(string $key): string
     return is_string($value) ? trim(mb_scrub($value, 'UTF-8')) : '';
 }
 
-function input_list(string $key): array
-{
-    $values = $_POST[$key] ?? [];
-    return is_array($values) ? array_filter($values, 'is_string') : [];
-}
-
 function single_line(string $text, int $max = 150): string
 {
     return mb_substr(trim(preg_replace('/\s+/u', ' ', $text) ?? ''), 0, $max);

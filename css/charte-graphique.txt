@@ -1,128 +1,237 @@
 CHARTE GRAPHIQUE L’ÉVEIL D’ELO
+Mise à jour : 1er octobre 2026
 
-Ce fichier centralise l’identité visuelle du projet afin de retrouver
-facilement les couleurs, typographies et règles d’utilisation du site.
+Cette charte décrit l’identité visuelle et les règles appliquées au site.
+Référence technique : css/style.css. Chargement des polices : app/partials/head.php.
+Synchroniser cette charte lors des changements visuels.
 
-1. COULEURS
+1. COULEURS ET USAGES
 
-Couleurs principales
+#F7EDDD — Beige principal
+Fond général, sections principales, fonds des champs et du calendrier.
 
--   Beige principal / fond : #F7EDDD
--   Brun principal / logo et titres : #825A38
+#DFCEB7 — Beige secondaire
+Fond de la section des bons cadeaux, bordures des cartes et des champs.
 
-Couleurs secondaires
+#C4AB91 — Beige brun clair
+Fond du pied de page, bordures, séparateurs et détails décoratifs.
 
--   Brun secondaire : #A38465
--   Brun texte : #6F523C
--   Beige brun clair : #C4AB91
--   Beige secondaire : #DFCEB7
--   Blanc chaud : #FFF9F2
+#825A38 — Brun principal
+Titres, liens, icônes, boutons principaux et options sélectionnées.
 
-2. UTILISATION DES COULEURS
+#A38465 — Brun secondaire
+Accents décoratifs, étoiles, traits et certains contours.
+Pour les petits textes, employer les bruns plus foncés ci-dessous.
 
-#F7EDDD : Beige principal Utilisation : fond général du site et sections
-principales.
+#6F523C — Brun texte
+Paragraphes et texte courant sur les fonds clairs.
+Également utilisé pour les surtitres et les étapes sur le beige secondaire.
 
-#825A38 : Brun principal Utilisation : logo, grands titres, boutons
-principaux, icônes et éléments décoratifs importants.
+#86644A — Brun doux
+Petits textes secondaires, indications des champs et accent du titre d’accueil.
+Couleur de survol des liens et fond de survol du bouton principal.
 
-#A38465 : Brun secondaire Utilisation : sous-titres, détails, éléments
-secondaires et états de survol.
+#503823 — Brun contraste
+Textes et liens du pied de page sur son fond beige brun clair.
 
-#6F523C : Brun texte Utilisation : paragraphes et textes courants.
+#FFF9F2 — Blanc chaud
+Cartes, sections alternatives et texte sur les boutons bruns.
 
-#C4AB91 : Beige brun clair Utilisation : bordures, séparateurs et
-détails discrets.
+#A3502F — Erreur
+Messages d’erreur et bordures des champs invalides.
 
-#DFCEB7 : Beige secondaire Utilisation : fonds alternatifs, encadrés et
-zones secondaires.
+rgba(111, 82, 60, .35) — Trait
+Séparateurs et contours discrets du pied de page.
 
-#FFF9F2 : Blanc chaud Utilisation : cartes, fonds clairs et texte sur
-boutons bruns.
+2. TYPOGRAPHIES
 
-3. TYPOGRAPHIES
+Titres et identité : Cormorant Garamond, graisses 400 et 500.
+Replis : Georgia, puis serif.
+Usages : titres, nom de marque, signature, bon cadeau et titres du calendrier.
 
-Titres et identité
+Texte courant et interface : Montserrat, graisses 400, 500 et 600.
+Replis : Lato si disponible, puis sans-serif. Lato n’est pas chargée par le site.
+Usages : paragraphes, navigation, boutons, formulaires et informations pratiques.
 
-Police recommandée : Cormorant Garamond Style : Serif Graisses
-recommandées : 400 à 500
+Les tailles principales sont fluides et suivent la largeur de l’écran :
 
-Utilisation : - H1 - H2 - H3 - grands titres - éléments élégants de
-l’identité visuelle
+h1 { font-size: clamp(2.6rem, 6vw, 4rem); font-weight: 400; }
+.hero__text h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); }
+.legal h1 { font-size: clamp(2rem, 4.5vw, 2.8rem); }
+h2 { font-size: clamp(2rem, 4.2vw, 2.9rem); }
+h3, h4 { font-size: clamp(1.35rem, 2.3vw, 1.7rem); }
+p { font-size: 1.0625rem; }
+.lead { font-size: 1.14rem; }
 
-Texte courant
+Interligne courant : 1.7. Interligne des titres h1 à h4 : 1.12.
+Graisse générale des titres : 500, sauf h1 à 400.
+Les titres sont brun principal ; l’italique du h1 est brun doux.
+Les composants peuvent préciser leur propre taille, notamment les cartes et formulaires.
 
-Police recommandée : Montserrat Alternative : Lato Style : Sans-serif
-Graisses recommandées : 400 à 500
+Les surtitres, la navigation et les libellés de champs sont en majuscules,
+avec un espacement des lettres. Les paragraphes restent en casse normale.
 
-Utilisation : - paragraphes - menus - boutons - formulaires -
-informations pratiques
+3. VARIABLES CSS DE RÉFÉRENCE
 
-4. VARIABLES CSS
+Extrait de :root dans css/style.css :
 
-:root { –beige-principal: #F7EDDD; –beige-secondaire: #DFCEB7;
-–beige-brun-clair: #C4AB91;
+:root {
+  --beige-principal: #F7EDDD;
+  --beige-secondaire: #DFCEB7;
+  --beige-brun-clair: #C4AB91;
+  --brun-principal: #825A38;
+  --brun-secondaire: #A38465;
+  --brun-texte: #6F523C;
+  --brun-contraste: #503823;
+  --brun-doux: #86644A;
+  --blanc-chaud: #FFF9F2;
+  --erreur: #A3502F;
+  --trait: rgba(111, 82, 60, .35);
 
-–brun-principal: #825A38; –brun-secondaire: #A38465; –brun-texte:
-#6F523C;
+  --font-titre: "Cormorant Garamond", Georgia, serif;
+  --font-texte: "Montserrat", "Lato", sans-serif;
 
-–blanc-chaud: #FFF9F2; }
+  --radius: 18px;
+  --radius-pill: 30px;
+  --max-width: 1180px;
+  --gutter: clamp(20px, 5vw, 56px);
+  --section-y: clamp(72px, 9vw, 128px);
+  --header-h: 84px;
+  --header-offset: var(--header-h);
 
-5. TYPOGRAPHIE CSS
+  --ease: cubic-bezier(.22, .68, .32, 1);
+  --t: .3s var(--ease);
+  --t-lent: .45s var(--ease);
+}
 
-h1, h2, h3 { font-family: “Cormorant Garamond”, serif; color: #825A38; }
+Les variantes responsive de ces valeurs sont décrites au point 6.
+Les ombres sont centralisées dans --ombre-legere, --ombre-carte et --ombre-portee.
 
-h1 { font-size: 64px; font-weight: 400; }
+4. BOUTONS, LIENS ET FORMULAIRES
 
-h2 { font-size: 42px; font-weight: 500; }
+Boutons principaux et secondaires :
+- Arrondi de 30px, bordure de 1px et hauteur minimale de 44px.
+- Espacement intérieur de 14px 30px ; largeur limitée au conteneur.
+- Montserrat, .9rem, graisse 500 et interligne 1.5.
+- Texte centré, avec retour à la ligne si nécessaire.
 
-h3 { font-size: 30px; font-weight: 500; color: #A38465; }
+Bouton principal : fond et bordure brun principal, texte blanc chaud.
+Au survol : fond et bordure brun doux, texte blanc chaud conservé.
 
-body { font-family: “Montserrat”, sans-serif; color: #6F523C;
-background: #F7EDDD; }
+Bouton secondaire : fond transparent, texte et bordure brun principal.
+Au survol : fond brun principal et texte blanc chaud.
 
-p { font-size: 17px; line-height: 1.7; }
+Les liens intégrés aux paragraphes, aux accords et aux mentions légales
+sont soulignés pour être identifiables sans dépendre uniquement de la couleur.
+Le focus clavier visible utilise un contour brun de 2px, décalé de 3px.
 
-6. BOUTONS
+Champs de saisie :
+- Fond beige principal, texte brun texte et bordure beige secondaire.
+- Arrondi de 12px, espacement intérieur de 13px 16px.
+- Police : max(1rem, 16px) ; champs limités à la largeur disponible.
+- Au focus : fond blanc chaud et bordure brun secondaire.
+- En cas d’erreur : bordure dans la couleur --erreur.
 
-Bouton principal
+Le bouton du menu, les fermetures des formules et les flèches du calendrier
+mesurent 44px par 44px. Les jours du calendrier et les créneaux ont une hauteur
+minimale de 44px ; la largeur des jours s’adapte aux sept colonnes.
 
-.button-primary { background: #825A38; color: #FFF9F2; border: none;
-border-radius: 30px; padding: 14px 28px; font-family: “Montserrat”,
-sans-serif; transition: 0.3s; }
+5. CARTES, SECTIONS ET IDENTITÉ
 
-.button-primary:hover { background: #A38465; }
+.card : fond blanc chaud, bordure beige secondaire de 1px, arrondi de 18px.
+Espacement intérieur général : clamp(26px, 3vw, 36px).
+Cartes de réservation : clamp(26px, 3.2vw, 42px), puis 18px jusqu’à 400px.
 
-Bouton secondaire
+Le fond principal vient du body ; aucune classe .section-main n’est utilisée.
+.section-alt : fond blanc chaud.
+.section-soft : fond beige secondaire, notamment pour les bons cadeaux.
 
-.button-secondary { background: transparent; color: #825A38; border: 1px
-solid #825A38; border-radius: 30px; padding: 14px 28px; }
+Le contenu reste centré, dans une largeur maximale de 1180px, marges intérieures
+comprises. Les espacements verticaux des sections varient de 72px à 128px.
+Les cartes de prestations sont en deux colonnes lorsque la place le permet.
+Les cartes de contact s’adaptent automatiquement à la largeur disponible.
 
-.button-secondary:hover { background: #825A38; color: #FFF9F2; }
+Le questionnaire de réservation ouvert occupe toute la largeur de sa grille ;
+son contenu est limité à 780px. Le calendrier est limité à 390px.
+Le bon cadeau garde une légère rotation et un cadre intérieur. Sa hauteur suit
+le contenu : minimum de 250px, ramené à 200px jusqu’à 400px de largeur d’écran.
 
-7. CARTES ET SECTIONS
+Emblème utilisé : images/logo-embleme.png.
+Icône du site : images/favicon.png. Image de partage : images/og-image.jpg.
+Conserver les proportions de l’emblème et les teintes de la palette.
 
-.card { background: #FFF9F2; border: 1px solid #DFCEB7; border-radius:
-18px; padding: 30px; }
+6. ADAPTATION AUX ÉCRANS
 
-.section-main { background: #F7EDDD; }
+Les seuils sont exprimés en pixels CSS de largeur de la fenêtre.
+Les règles se cumulent lorsque l’écran devient plus étroit.
 
-.section-alt { background: #FFF9F2; }
+Jusqu’à 1359px :
+- Les décors d’étoiles .sky sont masqués.
+
+Jusqu’à 1100px :
+- Le menu se replie derrière son bouton lorsque JavaScript est disponible.
+- Le menu ouvert peut défiler et reste dans la hauteur disponible en paysage.
+- Les deux parcours de réservation sont empilés.
+Au-dessus de 1100px, ils peuvent être côte à côte tant que le questionnaire est fermé.
+
+Jusqu’à 980px :
+- Accueil, présentation et bons cadeaux passent sur une colonne.
+- Hauteur minimale de l’en-tête : 76px.
+- Présentation de l’autrice et groupes du pied de page centrés.
+
+Jusqu’à 760px :
+- Les cartes de prestations passent sur une colonne.
+
+Jusqu’à 600px :
+- Hauteur minimale de l’en-tête : 68px.
+- Champs de formulaire et actions d’accueil ou d’annulation empilés.
+- Le bouton de retour en haut est masqué lorsque le questionnaire est ouvert.
+
+Jusqu’à 500px :
+- Introductions et cartes de prestations centrées ; listes à puces à gauche.
+- Le détail d’une formule remplace le contenu de sa carte et prend sa propre hauteur.
+
+Jusqu’à 400px :
+- Marges latérales de 16px et espacement intérieur des cartes de 18px.
+- Nom, durée et tarif des formules de réservation disposés sur une colonne.
+
+Au-dessus de 500px, les introductions ciblées par le CSS sont justifiées avec
+césure automatique. Les descriptions des prestations le sont à partir de 981px.
+
+L’en-tête peut prendre plus de hauteur lorsque le texte est agrandi. Sur l’accueil,
+le décalage des ancres et du menu suit sa hauteur réelle grâce à --header-offset.
+Les mots longs, adresses et champs doivent rester dans leur conteneur.
+
+7. MOUVEMENT ET ACCESSIBILITÉ
+
+Transitions courantes : .3s ; transitions lentes : .45s.
+Apparition des sections : .8s, avec un léger décalage entre les éléments.
+Le soulèvement des cartes au survol est réservé aux appareils capables de survol.
+
+Respecter la préférence de réduction des animations : transitions et animations
+sont presque instantanées, et le défilement devient immédiat.
+
+Sans JavaScript, conserver la navigation, les détails des formules et le formulaire
+de demande accessibles. Le contenu reste visible également à l’impression.
+
+Vérifier les contrastes, le focus clavier, les retours à la ligne et le texte
+agrandi à 200 % lors de chaque évolution des composants.
+Le test tests/responsive-browser.cjs couvre les pages et interactions responsive ;
+tests/booking-browser.cjs vérifie le parcours de réservation.
 
 8. DIRECTION VISUELLE
 
-Style général : - doux - élégant - chaleureux - spirituel - minimaliste
+Un univers doux, élégant, chaleureux et spirituel, avec une présentation sobre.
 
-Privilégier : - beaucoup d’espace autour des éléments - des séparateurs
-fins - des arrondis légers - très peu d’ombres - les motifs du soleil,
-de la lune et des étoiles avec parcimonie - une cohérence constante
-entre le beige et le brun
+- Des espaces généreux, des séparateurs fins et des formes arrondies.
+- Une palette beige et brune, avec des ombres discrètes.
+- Des étoiles et des motifs spirituels employés avec parcimonie.
+- Une lecture confortable, même sur petit écran ou avec du texte agrandi.
 
 9. RÉFÉRENCE RAPIDE
 
-Fond principal : #F7EDDD Logo / titres : #825A38 Texte courant : #6F523C
-Accent secondaire : #A38465 Bordures : #C4AB91 Fond secondaire : #DFCEB7
-Blanc chaud : #FFF9F2
-
-Titres : Cormorant Garamond Texte / interface : Montserrat Alternative
-texte : Lato
+Titres : Cormorant Garamond. Texte et interface : Montserrat.
+Fond : #F7EDDD. Cartes : #FFF9F2. Titres et boutons : #825A38.
+Texte courant : #6F523C. Texte secondaire : #86644A. Pied de page : #503823.
+Conteneur : 1180px maximum. Cartes : arrondi 18px. Boutons : arrondi 30px.
+Formulaires : saisie d’au moins 16px. Boutons principaux : hauteur d’au moins 44px.
