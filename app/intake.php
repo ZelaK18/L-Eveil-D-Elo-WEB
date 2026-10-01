@@ -16,6 +16,7 @@ function booking_terms(array $service): array
     $definition = intake_definition($service);
     $terms = [
         'Prestataire' => config('site.owner') . ' · ' . config('site.name') . ' · ' . config('site.email'),
+        'Prestation et tarif' => $service['name'] . ' · ' . ($service['offer_duration'] ?? duration_label($service['duration'])) . ' · ' . price_label($service) . ' · ' . $service['format'] . '.',
         'Cadre de la prestation' => $definition['scope'] ?? '',
     ];
     if ($service['service'] !== 'coaching') {
