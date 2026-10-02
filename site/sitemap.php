@@ -4,7 +4,8 @@ require __DIR__ . '/app/bootstrap.php';
 
 $pages = [
     '' => ['index.php', 'textes/site-text.php', 'textes/booking-forms.php', 'app/intake.php'],
-    'mentions-legales.php' => ['mentions-legales.php', 'textes/mentions-legales.php'],
+    'mentions-legales' => ['mentions-legales.php', 'textes/mentions-legales.php'],
+    'confidentialite' => ['mentions-legales.php', 'textes/mentions-legales.php'],
 ];
 
 header('Content-Type: application/xml; charset=utf-8');

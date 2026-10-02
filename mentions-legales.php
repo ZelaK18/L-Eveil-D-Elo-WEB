@@ -3,8 +3,18 @@ require __DIR__ . '/app/bootstrap.php';
 
 $site = config('site');
 $legal = texts_file('mentions-legales');
-$title = (string) ($legal['google_titre'] ?? '');
-$description = (string) ($legal['google_description'] ?? '');
+
+// L'ancienne page PHP conserve les deux sections pour les liens déjà partagés.
+$slug = basename((string) parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH));
+$sections = match ($slug) {
+    'mentions-legales' => ['impressum' => 'mentions'],
+    'confidentialite' => ['confidentialite' => 'confidentialite'],
+    default => ['impressum' => 'mentions', 'confidentialite' => 'confidentialite'],
+};
+$page = count($sections) === 1 ? $legal[reset($sections)] : $legal;
+$title = (string) ($page['google_titre'] ?? (($page['titre'] ?? '') . ' - ' . $site['name']));
+$description = (string) ($page['google_description'] ?? $legal['google_description'] ?? '');
+$canonical = $slug === 'confidentialite' ? 'confidentialite' : 'mentions-legales';
 
 $links = [
     '{email}'     => '<a href="mailto:' . e($site['email']) . '">' . e($site['email']) . '</a>',
@@ -18,7 +28,7 @@ $paragraph = fn(string $text) => strtr(nl2br(format_text(trim(preg_replace('/\n[
 <html lang="fr-CH">
 <head>
 <?php require __DIR__ . '/app/partials/head.php' ?>
-<link rel="canonical" href="<?= e($site['url']) ?>mentions-legales.php">
+<link rel="canonical" href="<?= e($site['url'] . $canonical) ?>">
 </head>
 <body>
 
@@ -33,15 +43,15 @@ $paragraph = fn(string $text) => strtr(nl2br(format_text(trim(preg_replace('/\n[
   <div class="container legal__inner">
 
     <p class="eyebrow"><?= format_text($legal['surtitre'] ?? '') ?></p>
-    <h1><?= format_text($legal['titre'] ?? '') ?></h1>
+    <h1><?= format_text($page['titre'] ?? '') ?></h1>
     <p class="legal__update"><?= format_text($legal['mise_a_jour'] ?? '') ?></p>
 
     <nav class="legal__toc" aria-label="Sommaire">
-      <a href="#impressum" class="button-secondary"><?= format_text($legal['mentions']['titre'] ?? '') ?></a>
-      <a href="#confidentialite" class="button-secondary"><?= format_text($legal['confidentialite']['titre'] ?? '') ?></a>
+      <a href="mentions-legales" class="button-secondary"<?= $slug === 'mentions-legales' ? ' aria-current="page"' : '' ?>><?= format_text($legal['mentions']['titre'] ?? '') ?></a>
+      <a href="confidentialite" class="button-secondary"<?= $slug === 'confidentialite' ? ' aria-current="page"' : '' ?>><?= format_text($legal['confidentialite']['titre'] ?? '') ?></a>
     </nav>
 
-    <?php foreach (['impressum' => 'mentions', 'confidentialite' => 'confidentialite'] as $anchor => $part): ?>
+    <?php foreach ($sections as $anchor => $part): ?>
     <section class="card legal__block" id="<?= $anchor ?>">
       <h2><?= format_text($legal[$part]['titre'] ?? '') ?></h2>
       <?php foreach ($legal[$part]['introduction'] ?? [] as $text): ?>

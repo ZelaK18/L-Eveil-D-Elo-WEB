@@ -1,0 +1,12 @@
+{
+  "name": "leveildelo-review",
+  "private": true,
+  "scripts": {
+    "review": "node review-browser.cjs",
+    "review:http": "node review-http.cjs"
+  },
+  "devDependencies": {
+    "axe-core": "4.13.0",
+    "playwright-core": "1.63.0"
+  }
+}

@@ -42,7 +42,14 @@ function duration_label(int $minutes): string
     return $minutes < 60 ? "$minutes min" : sprintf('%d h %02d', intdiv($minutes, 60), $minutes % 60);
 }
 
-// price_text : tarif d'une formule, écrit tel quel dans site-text.php (« Offert », « 330 CHF »…).
+// La durée reste utilisée par l'agenda même lorsqu'elle n'est pas affichée aux visiteurs.
+function service_duration_label(array $service): string
+{
+    return ($service['show_duration'] ?? true)
+        ? ($service['offer_duration'] ?? duration_label($service['duration'])) : '';
+}
+
+// price_text : tarif d'une formule, écrit tel quel dans site-text.php (« Offert », « 120 CHF »…).
 function price_label(array $service): string
 {
     return $service['price_text'] ?? 'CHF ' . $service['price'] . (isset($service['price_unit']) ? ' / ' . $service['price_unit'] : '');
@@ -113,18 +120,27 @@ function events_around(DateTimeImmutable $from, DateTimeImmutable $to, int $cach
         return $entry['events'];
     }
 
-    $started = microtime(true);
-    $events = calendar_events($from, $to);
-    // Une réservation terminée pendant cette lecture la rend périmée : elle n'est pas gardée.
-    with_lock('calendar-cache', function () use ($key, $started, $events, $cache): void {
+    // Plusieurs visiteurs du même mois partagent une seule lecture Google.
+    // Ce verrou est distinct de l'invalidation, pour ne jamais retarder une réservation.
+    return with_lock('calendar-fetch-' . hash('sha256', $key), function () use ($key, $from, $to, $cache): array {
         $stored = storage_read('calendar-cache');
-        $cleared = $stored['cleared'] ?? 0;
-        if ($started > $cleared) {
-            $entries = array_filter($stored['entries'] ?? [], fn(array $entry) => $entry['at'] > microtime(true) - $cache);
-            storage_write('calendar-cache', ['cleared' => $cleared, 'entries' => [$key => ['at' => $started, 'events' => $events]] + $entries]);
+        $entry = $stored['entries'][$key] ?? null;
+        if ($entry && $entry['at'] > max(microtime(true) - $cache, $stored['cleared'] ?? 0)) {
+            return $entry['events'];
         }
+        $started = microtime(true);
+        $events = calendar_events($from, $to);
+        // Une réservation terminée pendant cette lecture la rend périmée : elle n'est pas gardée.
+        with_lock('calendar-cache', function () use ($key, $started, $events, $cache): void {
+            $stored = storage_read('calendar-cache');
+            $cleared = $stored['cleared'] ?? 0;
+            if ($started > $cleared) {
+                $entries = array_filter($stored['entries'] ?? [], fn(array $entry) => $entry['at'] > microtime(true) - $cache);
+                storage_write('calendar-cache', ['cleared' => $cleared, 'entries' => [$key => ['at' => $started, 'events' => $events]] + $entries]);
+            }
+        });
+        return $events;
     });
-    return $events;
 }
 
 function forget_calendar_cache(): void
@@ -343,7 +359,7 @@ function cancel_signature(string $eventId): string
 
 function cancel_url(string $eventId): string
 {
-    return site_url() . 'annuler.php?' . http_build_query(['r' => $eventId, 's' => cancel_signature($eventId)]);
+    return site_url() . 'annuler?' . http_build_query(['r' => $eventId, 's' => cancel_signature($eventId)]);
 }
 
 // « 24 h »

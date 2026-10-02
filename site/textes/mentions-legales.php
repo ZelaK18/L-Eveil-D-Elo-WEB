@@ -1,6 +1,6 @@
 <?php
 /*
- * TEXTES DE LA PAGE « MENTIONS LÉGALES ET CONFIDENTIALITÉ ».
+ * TEXTES DES PAGES « MENTIONS LÉGALES » ET « CONFIDENTIALITÉ ».
  *
  * Comment modifier : mêmes règles que site-text.php (texte entre guillemets "…", **gras**, *italique*).
  * - Chaque rubrique a un titre, puis ses paragraphes entre guillemets.
@@ -21,6 +21,7 @@ return [
     'retour_accueil'     => "Retour à l'accueil",
 
     'mentions' => [
+        'google_description' => "Mentions légales de L'éveil d'Elo : éditrice du site, hébergement et informations sur les prestations.",
         'titre'     => "Mentions légales",
         'rubriques' => [
             "Éditrice du site" => [
@@ -53,6 +54,7 @@ return [
     ],
 
     'confidentialite' => [
+        'google_description' => "Politique de confidentialité de L'éveil d'Elo : utilisation de vos données personnelles et droits.",
         'titre'        => "Politique de confidentialité",
         'introduction' => [
             "La protection de vos données me tient à cœur. Cette page explique quelles données sont traitées, dans quel but et quels sont vos droits, conformément à la loi fédérale sur la protection des données (LPD).",
@@ -61,12 +63,12 @@ return [
             "Responsable du traitement" => [
                 "Elodie Fauquex, L'éveil d'Elo, canton de Fribourg.
                 Contact : {email}
-                Adresse postale : voir les mentions légales ci-dessus.",
+                Adresse postale : voir la page des mentions légales.",
             ],
             "Données traitées et finalités" => [
                 [
                     "**Formulaire de demande** : nom, prénom, e-mail, téléphone, prestation souhaitée et message. Ces données servent uniquement à répondre à votre demande et à organiser un rendez-vous. Elles sont transmises par e-mail à Elodie, et une confirmation de réception vous est envoyée à l'adresse indiquée. Elles ne sont pas enregistrées sur le site lui-même.",
-                    "**Réservation en ligne** : nom, prénom, e-mail, téléphone, date de naissance (vérification de la majorité), prestation, créneau et réponses au questionnaire propre à votre prestation. L'adresse de facturation est facultative pour le coaching. Ces informations servent à organiser et préparer votre séance. Vos coordonnées, la prestation et le créneau sont enregistrés dans Google Agenda. Les réponses au questionnaire ne sont pas inscrites dans l'agenda ; elles sont transmises à Elodie par e-mail. Une confirmation avec les conditions acceptées vous est envoyée.",
+                    "**Réservation en ligne** : nom, prénom, e-mail, téléphone, date de naissance (vérification de la majorité), prestation, créneau et réponses au questionnaire propre à votre prestation. Ces informations servent à organiser et préparer votre séance. Vos coordonnées, la prestation et le créneau sont enregistrés dans Google Agenda. Les réponses au questionnaire ne sont pas inscrites dans l'agenda ; elles sont transmises à Elodie par e-mail. Une confirmation avec les conditions acceptées vous est envoyée.",
                     "**Trace de votre accord** : le formulaire validé, votre identité déclarée, les accords cochés, la date et l'heure de validation et une copie des conditions et de cette politique sont conservés dans un dossier du site dont l'accès public est bloqué. Cette trace permet de retrouver votre demande et les conditions de la réservation. Elle ne constitue pas une vérification officielle d'identité ni une signature électronique qualifiée.",
                     "**Séances en visio** : les informations de connexion vous sont transmises avant la séance.",
                     "**Bons cadeaux** : les coordonnées de la personne qui offre et le prénom de la personne qui reçoit servent uniquement à établir et envoyer le bon.",
@@ -80,10 +82,10 @@ return [
                 "Les formulaires sont transmis par e-mail à Elodie. Les e-mails ordinaires ne sont pas chiffrés de bout en bout. Limitez vos réponses à ce qui est utile, ne donnez pas de détails médicaux ni d'informations identifiant des tiers ; vous pouvez indiquer que vous préférez en parler pendant la séance.",
             ],
             "Destinataires" => [
-                "Vos données ne sont ni vendues ni cédées. Seuls les prestataires nécessaires au fonctionnement du site y ont accès : o2switch (hébergement, en France) et Google (Gmail pour l'envoi des e-mails, Google Agenda pour les rendez-vous et Google Fonts pour les polices de caractères).",
+                "Vos données ne sont ni vendues ni cédées. Seuls les prestataires nécessaires au fonctionnement du site y ont accès : o2switch (hébergement, en France) et Google (Gmail pour l'envoi des e-mails et Google Agenda pour les rendez-vous).",
             ],
             "Cookies et mesure d'audience" => [
-                "Ce site n'utilise ni cookies, ni outil de mesure d'audience. Les polices de caractères sont chargées depuis les serveurs de Google (Google Fonts), ce qui transmet votre adresse IP à Google lors de votre visite.",
+                "Ce site n'utilise ni cookies, ni outil de mesure d'audience. Les polices de caractères sont hébergées directement sur ce site ; leur affichage ne nécessite aucune connexion aux serveurs de Google.",
             ],
             "Transfert de données à l'étranger" => [
                 "Les données du site sont hébergées en France chez o2switch. Google peut traiter des données aux États-Unis. Ce transfert repose sur le Swiss-U.S. Data Privacy Framework, auquel Google a adhéré.",

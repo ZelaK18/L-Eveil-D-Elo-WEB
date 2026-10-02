@@ -114,8 +114,15 @@ function cancellation_emails(array $appointment): array
         'Prestation' => $appointment['prestation'],
         'Date' => period_fr($appointment['start'], $appointment['end']) . ' (heure suisse, Europe/Zurich)',
     ];
+    $clientDetails = $details;
+    foreach (config('services') as $service) {
+        if ($service['name'] === $appointment['prestation'] && !($service['show_duration'] ?? true)) {
+            $clientDetails['Date'] = date_fr($appointment['start']) . ' (heure suisse, Europe/Zurich)';
+            break;
+        }
+    }
     return [
-        [$appointment['email'], 'annulation', config('site.email'), [$details]],
+        [$appointment['email'], 'annulation', config('site.email'), [$clientDetails]],
         [config('mail_to'), 'avis_annulation', $appointment['email'], [person_details($appointment), $details]],
     ];
 }

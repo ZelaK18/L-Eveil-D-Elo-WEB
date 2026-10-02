@@ -4,6 +4,7 @@ require __DIR__ . '/app/bootstrap.php';
 $site = config('site');
 $title = site_text('bientot.titre_page') . ' | ' . $site['name'];
 $description = site_text('bientot.description');
+$stylesheet = 'css/soon.css';
 ?>
 <!DOCTYPE html>
 <html lang="fr-CH">
@@ -18,7 +19,10 @@ $description = site_text('bientot.description');
 
 <main class="soon__main">
   <div class="soon__identity">
-    <img class="soon__logo" src="<?= e(asset('images/og-image.jpg')) ?>" width="1200" height="630" alt="<?= e($site['name']) ?>">
+    <picture>
+      <source type="image/webp" srcset="<?= e(asset('images/logo-transparent-560.webp')) ?>">
+      <img class="soon__logo" src="<?= e(asset('images/logo-transparent.png')) ?>" width="1254" height="1254" fetchpriority="high" alt="<?= e($site['name']) ?>">
+    </picture>
   </div>
 
   <p class="soon__status"><?= t('bientot.statut') ?></p>

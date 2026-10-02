@@ -4,6 +4,7 @@ require __DIR__ . '/app/bootstrap.php';
 $site = config('site');
 $services = config('services');
 $bookingOptions = booking_options();
+$hasPortrait = is_file(__DIR__ . '/images/test-pp.jpg');
 // Tout ce qui se réserve, formules comprises : la fourchette de prix de Google suit chaque prix et chaque tarif.
 $prices = array_filter(array_map('price_amount', $bookingOptions), fn(?int $amount) => $amount !== null);
 $title = (string) site_text('google.titre');
@@ -152,7 +153,11 @@ $schema = [
 
     <div class="hero__media reveal">
       <figure class="portrait">
-        <img src="images/test-pp.jpg" alt="<?= e(site_text('accueil.description_photo')) ?>" class="portrait__img" width="880" height="1320" fetchpriority="high">
+        <?php if ($hasPortrait): ?>
+        <img src="<?= e(asset('images/test-pp.jpg')) ?>" alt="<?= e(site_text('accueil.description_photo')) ?>" class="portrait__img" width="880" height="1320" fetchpriority="high">
+        <?php else: ?>
+        <img src="<?= e(asset('images/logo-transparent-560.webp')) ?>" alt="<?= e($site['name']) ?>" class="portrait__img portrait__img--logo" width="560" height="560" fetchpriority="high">
+        <?php endif ?>
       </figure>
       <svg class="portrait__stars" viewBox="0 0 100 100" aria-hidden="true">
         <use href="#ico-star" x="14.53" y="13.23" width="1.54" height="1.54"/>
@@ -230,13 +235,15 @@ $schema = [
           <li><?= format_text($point) ?></li>
           <?php endforeach ?>
         </ul>
-        <div class="presta__meta">
+        <div class="presta__meta<?= $offers ? ' presta__meta--offres' : '' ?>">
           <?php if ($offers): ?>
           <?php foreach ($offers as $index => $offer): ?>
           <button type="button" class="tag tag--offre" aria-expanded="false" aria-controls="offre-<?= e($id) ?>-<?= $index ?>"><?= e($offer['nom']) ?></button>
           <?php endforeach ?>
           <?php elseif ($service['available']): ?>
-          <span class="tag"><?= e(duration_label($service['duration'])) ?></span>
+          <?php if (service_duration_label($service) !== ''): ?>
+          <span class="tag"><?= e(service_duration_label($service)) ?></span>
+          <?php endif ?>
           <span class="tag"><?= e(price_label($service)) ?></span>
           <span class="tag tag--format"><?= e($service['format']) ?></span>
           <?php else: ?>
@@ -258,6 +265,9 @@ $schema = [
           <p><?= format_text($offer['finalite']) ?></p>
           <div class="presta__meta">
             <span class="tag"><?= e($offer['duree']) ?></span>
+            <?php if (isset($offer['tarif_habituel'])): ?>
+            <span class="tag">Tarif habituel : <?= e($offer['tarif_habituel']) ?></span>
+            <?php endif ?>
             <span class="tag"><?= e($offer['tarif']) ?></span>
             <span class="tag tag--format"><?= e($offer['format']) ?></span>
           </div>
@@ -392,43 +402,46 @@ $schema = [
 
           <fieldset class="field field--choices">
             <legend><span class="booking__step">1</span><?= t('rendez_vous.etape_prestation') ?></legend>
-            <div class="choices">
+            <div class="choices choices--services">
               <?php foreach ($services as $id => $service): ?>
               <?php if (!$service['available']): ?>
-              <label><input type="radio" disabled><span><?= e($service['name']) ?> &middot; <?= t('prestations.a_venir') ?></span></label>
+              <label><input type="radio" disabled><span><?= e($service['name']) ?><small class="choices__detail"><?= t('prestations.a_venir') ?></small></span></label>
               <?php elseif (!empty($service['offers'])): ?>
-              <button type="button" class="choices__groupe" aria-expanded="false" aria-controls="formules-<?= e($id) ?>"><?= e($service['name']) ?><svg width="12" height="12" aria-hidden="true"><use href="#ico-chevron"/></svg></button>
+              <button type="button" class="choices__groupe" aria-expanded="false" aria-controls="formules-<?= e($id) ?>"><?= e($service['name']) ?><small class="choices__detail"><?= count($service['offers']) ?> formules<svg width="12" height="12" aria-hidden="true"><use href="#ico-chevron"/></svg></small></button>
+              <?php elseif (isset($bookingOptions[$id])): ?>
+              <label><input type="radio" name="service" value="<?= e($id) ?>" data-label="<?= e($service['name']) ?>" data-duration="<?= ($service['show_duration'] ?? true) ? e($service['duration']) : '' ?>" required><span><?= e($service['name']) ?><small class="choices__detail"><?= e(implode(' · ', array_filter([service_duration_label($service), price_label($service)]))) ?></small></span></label>
+              <?php endif ?>
+              <?php endforeach ?>
+              <?php foreach ($services as $id => $service): if (!$service['available'] || empty($service['offers'])) continue ?>
               <div class="choices choices--formules" id="formules-<?= e($id) ?>" hidden>
                 <?php foreach ($bookingOptions as $key => $option): if ($option['service'] !== $id) continue ?>
                 <label><input type="radio" name="service" value="<?= e($key) ?>" data-label="<?= e($option['name']) ?>" data-duration="<?= e($option['duration']) ?>"><span><?= e($option['offer']) ?><small class="choices__duree"><?= e($option['offer_duration']) ?></small><small class="choices__tarif"><?= e(price_label($option)) ?></small></span></label>
                 <?php endforeach ?>
               </div>
-              <?php elseif (isset($bookingOptions[$id])): ?>
-              <label><input type="radio" name="service" value="<?= e($id) ?>" data-label="<?= e($service['name']) ?>" data-duration="<?= e($service['duration']) ?>" required><span><?= e($service['name']) ?> &middot; <?= e(duration_label($service['duration'])) ?> &middot; <?= e(price_label($service)) ?></span></label>
-              <?php endif ?>
               <?php endforeach ?>
             </div>
           </fieldset>
 
           <div class="field" id="bookingWhen" hidden>
             <span><span class="booking__step">2</span><?= t('rendez_vous.etape_date') ?></span>
-            <div class="calendar" id="calendar" aria-busy="false">
-              <div class="calendar__head">
-                <button type="button" class="calendar__nav" data-step="-1" aria-label="Mois précédent">‹</button>
-                <p class="calendar__title" id="calendarTitle" aria-live="polite"></p>
-                <button type="button" class="calendar__nav" data-step="1" aria-label="Mois suivant">›</button>
+            <p class="booking__hint">Horaires en heure suisse</p>
+            <div class="booking__schedule">
+              <div class="calendar" id="calendar" aria-busy="false">
+                <div class="calendar__head">
+                  <button type="button" class="calendar__nav" data-step="-1" aria-label="Mois précédent">‹</button>
+                  <p class="calendar__title" id="calendarTitle" aria-live="polite"></p>
+                  <button type="button" class="calendar__nav" data-step="1" aria-label="Mois suivant">›</button>
+                </div>
+                <div class="calendar__grid" id="calendarGrid"></div>
               </div>
-              <div class="calendar__grid" id="calendarGrid"></div>
+              <div class="slots" id="slots" role="group" aria-label="Heures disponibles"></div>
             </div>
-            <div class="slots" id="slots" role="group" aria-label="Heures disponibles"></div>
           </div>
 
           <fieldset class="booking__details" id="bookingDetails" hidden disabled>
-            <p class="booking__recap" id="bookingRecap"></p>
-
             <?php require __DIR__ . '/app/partials/booking-intake.php' ?>
 
-            <button type="submit" class="button-primary form__submit"><?= t('rendez_vous.bouton') ?></button>
+            <button type="submit" class="button-primary form__submit" aria-describedby="bookingConfirmationHint"><?= t('rendez_vous.bouton') ?></button>
           </fieldset>
 
           <p class="form__status" id="bookingStatus" role="status" aria-live="polite"></p>
@@ -505,9 +518,9 @@ $schema = [
   <div class="container footer__bottom">
     <?php require __DIR__ . '/app/partials/copyright.php' ?>
     <p class="footer__legal">
-      <a href="mentions-legales.php#impressum"><?= t('pied_de_page.mentions_legales') ?></a>
+      <a href="mentions-legales"><?= t('pied_de_page.mentions_legales') ?></a>
       <span aria-hidden="true">&middot;</span>
-      <a href="mentions-legales.php#confidentialite"><?= t('pied_de_page.confidentialite') ?></a>
+      <a href="confidentialite"><?= t('pied_de_page.confidentialite') ?></a>
     </p>
     <p class="footer__disclaimer"><?= t('pied_de_page.avertissement') ?></p>
   </div>

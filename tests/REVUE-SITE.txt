@@ -1,0 +1,77 @@
+REVUE DU SITE L'ÉVEIL D'ELO — 2 OCTOBRE 2026
+
+Périmètre
+Page d'attente à la racine et site complet dans site/. Les modifications déjà
+présentes ont été conservées. Aucun déploiement, e-mail ni rendez-vous réel.
+
+Corrections
+- L'accueil référençait images/test-pp.jpg, absent. Il affiche maintenant le logo
+  existant si la photo n'est pas disponible. Remettre cette photo réactive son rendu.
+- Polices, palette, base, boutons et réduction des animations centralisés dans
+  css/theme.css, chargé avant style.css ou soon.css. Les deux distributions
+  conservent leurs propres fichiers pour pouvoir être déployées séparément.
+- Cormorant Garamond pour les titres et Montserrat pour les textes et contrôles.
+  Les boutons natifs héritent désormais aussi de la police prévue.
+- Sélection du texte : contraste porté de 2,10:1 à 5,79:1 en restant dans la palette.
+  Suppression de l'opacité qui réduisait la lisibilité des petits textes du bon cadeau.
+- Boutons des formules : hauteur minimale de 44px au lieu de 36px.
+- Logo de la page bientôt : version transparente commune à la page d'attente,
+  proportions conservées, sans recadrage carré forcé. Le logo de remplacement
+  sur l'accueil garde une marge pour ne pas couper son nom dans le cadre rond.
+- JavaScript : validation, prévention des doubles envois, verrouillage, reprise
+  et erreurs regroupés dans bindAsyncForm pour les deux formulaires.
+  Les statuts restent accessibles pendant l'envoi ; les saisies sont conservées
+  en cas d'erreur. Le focus est rétabli lorsque nécessaire.
+- Les réponses HTTP en erreur ne peuvent plus produire un faux succès.
+  Une requête d'agenda bloquée expire après 15 secondes et peut être réessayée.
+- robots.php tient compte du sous-dossier /site/ dans le chemin des API.
+- Secrets et données de stockage retirés de l'index Git et ajoutés au .gitignore.
+  Fichiers locaux conservés ; les protections storage/.htaccess restent suivies.
+
+Validation effectuée
+- Chrome 154.0.8037.95 : 17 largeurs CSS, de 320 à 2560px, sur 8 pages.
+- Edge 154.0.4258.53, Firefox 155.0, WebKit 26.6 : 5 largeurs sur les mêmes pages.
+- Petits téléphones, mobiles, petites/grandes tablettes, ordinateurs ; portrait
+  et paysage ; texte à 200% ; navigation sans JavaScript ; mouvement réduit.
+- Aucun débordement horizontal détecté dans les pages et états testés.
+- Menus, ouverture/fermeture de toutes les formules, questionnaire de chaque
+  prestation, changement de créneau, réinitialisation des accords, réservation
+  et demande simulées, nouvelle réservation après confirmation.
+- Scénarios d'erreur : double soumission, HTTP 500, agenda indisponible puis
+  réessai, créneau déjà pris, champs conservés et déverrouillés après erreur.
+- Aucun défaut détecté par axe-core sur les 8 pages et le questionnaire mobile
+  dans les règles WCAG 2 A/AA, 2.1 AA et 2.2 AA exécutées.
+- 89 contrôles PHP : questionnaires, âge minimum, conditions périmées, accords,
+  limites des réponses, collisions/pauses de l'agenda, heure suisse et échappement.
+- 25 contrôles HTTP sur le virtual host LeveilDelo.app : pages, redirections,
+  cache CSS/JS, sitemap et refus des fichiers internes.
+
+Points restant à traiter avant publication ou partage
+1. Les secrets et dossiers de réservation retirés du suivi restent présents dans
+   l'historique Git existant. S'il a été partagé, révoquer/renouveler les accès
+   concernés et assainir l'historique avec les personnes utilisant le dépôt.
+   Aucune réécriture d'historique ni révocation d'accès n'a été effectuée.
+2. Le téléphone configuré est 079 123 45 67 : vérifier qu'il s'agit bien du numéro
+   voulu avant ouverture des prises de rendez-vous.
+3. L'état de préproduction est conservé : robots.txt exclut /site/ et site/.htaccess
+   bloque volontairement l'accès Apache en attendant la protection cPanel.
+   Le serveur Nginx de Laragon utilise sa propre configuration.
+4. Les tests navigateur simulent les tailles d'écran ; ils ne constituent pas
+   des essais sur chaque appareil physique. WebKit ne remplace pas un essai iOS.
+   Les contrôles automatisés ne certifient pas toute l'accessibilité.
+5. Les échanges réels Google Agenda/Gmail, la délivrabilité des e-mails et le
+   serveur de production ne sont pas testés : les API navigateur sont simulées.
+
+Relancer
+Depuis la racine, installer les outils avec : npm --prefix tests ci
+Puis : node tests/review-browser.cjs
+PowerShell, tous les moteurs :
+  $env:REVIEW_BROWSERS = 'chromium,edge,firefox,webkit'
+  node tests/review-browser.cjs
+Les navigateurs Playwright Firefox/WebKit doivent être installés :
+  node tests/node_modules/playwright-core/cli.js install firefox webkit
+Chrome et Edge sont utilisés via leurs installations système.
+HTTP Laragon : node tests/review-http.cjs
+Le script affiche le dossier temporaire contenant résultats JSON, captures et
+journal PHP. Il copie les sources sans les secrets ni le stockage réel ; les
+tests PHP s'exécutent uniquement dans cette copie.

@@ -60,7 +60,8 @@ return [
         'offre_fermer'  => "Revenir à la prestation",
 
         // Une carte par prestation. Chaque valeur modifiée ici se met à jour partout, rien d'autre à changer :
-        // - duree : en minutes. Carte, liste de réservation, heures proposées par le calendrier, fin du rendez-vous dans l'agenda.
+        // - duree : en minutes. Heures proposées par le calendrier et fin du rendez-vous dans l'agenda.
+        // - afficher_duree : false pour garder la durée interne, sans l'afficher aux visiteurs (true par défaut).
         // - prix : en francs, sans « CHF ». Carte, liste de réservation, e-mails, agenda, fiche Google.
         // - disponible : true = réservable, false = affichée « À venir ».
         // - offres : facultatif. Une prestation à formules n'a ni duree ni prix : chaque formule a les siens.
@@ -68,31 +69,34 @@ return [
         //   duree : texte affiché sur la carte de la formule et dans la liste de réservation (ex. "3 × 60 min").
         //   duree_reservation : en minutes, heures proposées par le calendrier et fin du rendez-vous dans l'agenda
         //   (pour un pack, la durée de la première séance).
-        //   tarif : texte affiché tel quel (ex. "Offert", "330 CHF"). Carte, liste de réservation, e-mails, agenda,
+        //   tarif : texte affiché tel quel (ex. "Offert", "120 CHF"). Carte, liste de réservation, e-mails, agenda,
         //   et fiche Google (le premier nombre du tarif).
+        //   tarif_habituel : facultatif, affiché en complément du tarif de lancement, sans changer le prix réservé.
         'cartes' => [
             'tirage' => [
                 'nom'        => "Tirage de cartes",
-                'texte'      => "À travers les cartes, je vous accompagne dans vos questionnements pour vous aider à prendre du recul, découvrir de nouvelles perspectives et écouter davantage ce que votre intuition vous souffle.",
-                'points'     => ["Question libre ou thématique", "Lecture intuitive", "Récapitulatif par écrit"],
+                'texte'      => "À travers les cartes, je vous invite à poser un regard différent sur ce que vous traversez. Un moment pour mettre en lumière vos questionnements et laisser émerger de nouvelles pistes.",
+                'points'     => ["Une question ou une thématique", "Un récapitulatif écrit de votre tirage"],
                 'duree'      => 20,
+                'afficher_duree' => false,
                 'prix'       => 20,
                 'format'     => "Par message",
                 'disponible' => true,
             ],
             'pendule' => [
                 'nom'        => "Pendule",
-                'texte'      => "Le pendule est pour moi un outil d’écoute et de guidance. Il nous permet d’explorer ensemble une question précise et de clarifier vos ressentis.",
-                'points'     => ["Réponse claire et ciblée", "Idéal en complément d'un tirage",],
+                'texte'      => "À travers le pendule, je vous invite à explorer une question précise.",
+                'points'     => ["Une réponse claire et ciblée", "Idéal seul ou en complément d’un tirage"],
                 'duree'      => 10,
+                'afficher_duree' => false,
                 'prix'       => 5,
                 'format'     => "Par message",
                 'disponible' => true,
             ],
             'coaching' => [
                 'nom'        => "Coaching spirituel",
-                'texte'      => "Besoin de faire le point, de retrouver confiance ou simplement de vous reconnecter à vous-même ? Je vous accompagne pour poser un regard différent sur ce que vous traversez et retrouver vos propres repères.",
-                'points'     => ["Séance découverte sans engagement", "Suivi personnalisé, à votre rythme", "Exercices entre les rendez-vous"],
+                'texte'      => "Parfois, on ressent simplement le besoin de faire une pause et d’y voir plus clair. Je vous accompagne dans ce moment, avec écoute et bienveillance, pour vous aider à retrouver vos propres repères.",
+                'points'     => ["Un temps d’échange et d’écoute", "Suivi personnalisé", "Des pistes pour avancer au quotidien"],
                 'format'     => "En visio",
                 'disponible' => true,
                 'offres' => [
@@ -100,32 +104,33 @@ return [
                         'nom'               => "Premier pas vers Soi",
                         'duree'             => "30 min",
                         'duree_reservation' => 30,
-                        'finalite'          => "Faire connaissance, clarifier la demande et vérifier si le coaching est adapté.",
+                        'finalite'          => "Pour faire connaissance, clarifier votre besoin et vérifier si mon accompagnement vous correspond (recommandé avant chaque début de coaching)",
                         'tarif'             => "Offert",
                         'format'            => "En visio",
                     ],
                     [
-                        'nom'               => "Séance individuelle",
+                        'nom'               => "Élan vers Soi",
                         'duree'             => "60 min",
                         'duree_reservation' => 60,
-                        'finalite'          => "Travailler une problématique ciblée et repartir avec une action concrète.",
-                        'tarif'             => "100 CHF",
+                        'finalite'          => "Pour travailler sur une situation ou un questionnement précis, avec un exercice personnalisé et une action concrète à intégrer.",
+                        'tarif'             => "40 CHF",
                         'format'            => "En visio",
                     ],
                     [
                         'nom'               => "Pack Clarté",
                         'duree'             => "3 × 60 min",
                         'duree_reservation' => 60,
-                        'finalite'          => "Comprendre les blocages, retrouver une direction et amorcer le changement.",
-                        'tarif'             => "330 CHF",
+                        'finalite'          => "Pour approfondir une problématique et avancer sur plusieurs semaines : trois séances à utiliser sur 6 à 8 semaines, avec exercices entre les rencontres.",
+                        'tarif'             => "120 CHF",
                         'format'            => "En visio",
                     ],
                     [
-                        'nom'               => "Revenir à Soi",
-                        'duree'             => "6 × 60 min sur 12 semaines",
+                        'nom'               => "Programme Revenir à Soi",
+                        'duree'             => "6 × 60 min",
                         'duree_reservation' => 60,
-                        'finalite'          => "Vivre un parcours complet d’alignement, de transformation et d’ancrage.",
-                        'tarif'             => "650 CHF",
+                        'finalite'          => "Pour vivre un accompagnement plus profond sur 12 semaines : 6 séances de 60 min, exercices personnalisés, temps d’intégration et support bref entre les séances.",
+                        'tarif'             => "220 CHF au lancement",
+                        'tarif_habituel'    => "280 CHF",
                         'format'            => "En visio",
                     ],
                 ],
@@ -133,7 +138,7 @@ return [
             'reiki' => [
                 'nom'        => "Soin énergétique (Reiki)",
                 'texte'      => "Le Reiki à distance est un moment de détente et de recentrage, à vivre confortablement depuis chez vous.",
-                'points'     => ["Cette séance énergétique vous invite simplement à ralentir, à vous accorder une pause et à retrouver une sensation de calme et d’harmonie intérieure."],
+                'points'     => ["Un moment de profonde détente", "Un rééquilibrage énergétique en douceur", "Une sensation de calme et d’harmonie intérieure"],
                 'disponible' => false,
             ],
         ],
@@ -174,26 +179,26 @@ return [
     'rendez_vous' => [
         'surtitre' => "Réserver",
         'titre'    => "Prendre rendez-vous",
-        'texte'    => "Deux façons de convenir d'un moment ensemble : choisissez celle qui vous ressemble le plus.",
+        'texte'    => "Réservez en ligne ou écrivez-moi pour trouver un moment ensemble.",
         'ou'       => "ou",
 
         'en_ligne_titre'        => "Réserver en ligne",
-        'en_ligne_texte'        => "Choisissez votre prestation et un créneau libre, puis complétez son formulaire ici même. Votre rendez-vous est réservé uniquement après votre validation finale. Le règlement sera convenu avec Elodie.",
+        'en_ligne_texte'        => "Choisissez votre séance et un créneau, puis complétez le formulaire pour confirmer.",
         'etape_prestation'      => "La prestation",
         'etape_date'            => "Le jour et l'heure",
-        'sans_javascript'      => "Pour réserver, utilisez le formulaire de demande ci-dessous :",
+        'sans_javascript'      => "Pour réserver, passez par le formulaire de demande.",
         'reessayer_agenda'     => "Réessayer de charger l’agenda",
-        'bouton'                => "Valider mon formulaire et réserver",
+        'bouton'                => "Confirmer mon rendez-vous",
         'confirme_titre'        => "C'est noté !",
         'bouton_autre'          => "Réserver un autre moment",
 
         'demande_titre'             => "Faire une demande",
-        'demande_texte'             => "Dites-moi ce qui vous amène, je vous propose un créneau par retour de message.",
+        'demande_texte'             => "Dites-moi ce qui vous amène, je vous réponds sous 48 h.",
         'demande_message'           => "Votre message",
         'demande_message_exemple'   => "Ce qui vous amène, une question…",
         // Écrit dans le message quand on clique sur « Commander un bon cadeau ».
         'demande_message_bon_cadeau' => "Bonjour, je souhaite commander un bon cadeau.",
-        'demande_accord'            => "J'accepte que ces informations soient utilisées pour me recontacter",
+        'demande_accord'            => "J’accepte l’utilisation de mes informations pour me répondre",
         'demande_bouton'            => "Envoyer ma demande",
     ],
 
@@ -253,10 +258,10 @@ return [
         'champs_obligatoires'             => "Merci de compléter les champs obligatoires.",
         'envoi_en_cours'                  => "Envoi en cours…",
         'demande_envoyee'                 => "Merci ! Votre demande est bien partie, une confirmation vient de vous être envoyée par e-mail. Je vous réponds sous 48 h.",
-        'demande_sans_email'              => "Votre demande a bien été transmise à Elodie, mais l’e-mail de confirmation n’a pas pu vous être envoyé. Inutile de renvoyer le formulaire : je vous réponds sous 48 h.",
+        'demande_sans_email'              => "Votre demande est bien partie, mais la confirmation par e-mail n’a pas pu être envoyée. Inutile de renvoyer le formulaire, je vous réponds sous 48 h.",
         'envoi_echoue'                    => "L'envoi a échoué. Vous pouvez m'écrire directement par e-mail ou par téléphone.",
         'recherche'                       => "Recherche des disponibilités…",
-        'aucun_creneau'                   => "Plus aucun créneau libre ce mois-ci : essayez le mois suivant.",
+        'aucun_creneau'                   => "Plus de créneau libre ce mois-ci, essayez le mois suivant.",
         'agenda_indisponible'             => "L'agenda ne répond pas pour le moment. Réessayez plus tard ou utilisez le formulaire de demande.",
         'reservation_fermee'              => "La réservation en ligne n'est pas encore ouverte. En attendant, le formulaire de demande fonctionne.",
         'choisir_creneau'                 => "Choisissez une prestation, un jour et une heure.",
@@ -264,6 +269,7 @@ return [
         'reservation_echouee'             => "La réservation n'a pas pu aboutir. Réessayez dans un instant ou utilisez le formulaire de demande.",
         'creneau_pris'                    => "Ce créneau vient d'être pris. Choisissez-en un autre.",
         'reservation_confirmee'           => "Votre rendez-vous « {prestation} » est confirmé pour le {date}. Une confirmation vient de partir à {email}.",
+        'reservation_email_en_cours'      => "Votre rendez-vous « {prestation} » est confirmé pour le {date}. Votre confirmation par e-mail est en cours d’envoi à {email}. Si vous ne la recevez pas, contactez Elodie. Ne réservez pas une deuxième fois.",
         'reservation_sans_email'          => "Votre rendez-vous « {prestation} » est confirmé pour le {date}, mais l’envoi de la confirmation par e-mail a rencontré un problème. Contactez Elodie si vous ne la recevez pas. Ne réservez pas une deuxième fois.",
         'reservation_confirmee_telephone' => "Je vous écrirai au numéro indiqué à l'heure prévue.",
         'email_invalide'                  => "L'adresse e-mail ne semble pas valide.",

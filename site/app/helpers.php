@@ -73,7 +73,7 @@ function message(string $key): string
 // Les cartes de textes/site-text.php complètent les prestations de config.php : nom, texte, prix, durée…
 function with_site_texts(array $config): array
 {
-    $fields = ['nom' => 'name', 'texte' => 'text', 'points' => 'points', 'format' => 'format', 'duree' => 'duration', 'prix' => 'price', 'prix_par' => 'price_unit', 'disponible' => 'available', 'offres' => 'offers'];
+    $fields = ['nom' => 'name', 'texte' => 'text', 'points' => 'points', 'format' => 'format', 'duree' => 'duration', 'afficher_duree' => 'show_duration', 'prix' => 'price', 'prix_par' => 'price_unit', 'disponible' => 'available', 'offres' => 'offers'];
     foreach (array_keys($config['services']) as $id) {
         foreach ($fields as $from => $to) {
             $value = site_text("prestations.cartes.$id.$from");
@@ -158,11 +158,19 @@ function with_lock(string $name, callable $callback): mixed
     }
 }
 
-// Verrou gardé jusqu'à la fin de la requête.
-function hold_lock(string $name): void
+// Verrou gardé jusqu'à la fin de la requête, ou libéré explicitement avant un travail différé.
+function hold_lock(string $name, bool $release = false): void
 {
     static $handles = [];
-    $handles[$name] = lock($name);
+    if ($release) {
+        if (isset($handles[$name])) {
+            flock($handles[$name], LOCK_UN);
+            fclose($handles[$name]);
+            unset($handles[$name]);
+        }
+        return;
+    }
+    $handles[$name] ??= lock($name);
 }
 
 function input(string $key): string

@@ -109,46 +109,72 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const send = async (url, options, fallback) => {
+    let response;
     let result;
     try {
-      const response = await fetch(url, { ...options, headers: { Accept: "application/json" } });
+      response = await fetch(url, { ...options, headers: { ...options.headers, Accept: "application/json" } });
       result = await response.json();
     } catch {
       throw new Error(fallback);
     }
-    if (!result.ok) throw Object.assign(new Error(result.message || fallback), { code: result.code });
+    if (!response.ok || result?.ok !== true) throw Object.assign(new Error(result?.message || fallback), { code: result?.code });
     return result;
   };
 
-  let contactBusy = false;
-  form.noValidate = true; // Sans JavaScript, le navigateur garde ses contrôles natifs.
-  form.addEventListener("submit", async e => {
-    e.preventDefault();
-    if (contactBusy) return;
-    if (!form.reportValidity()) {
-      setStatus(status, messages.champs_obligatoires, "is-error");
-      return;
-    }
+  // Validation, verrouillage et erreurs communs aux deux formulaires.
+  // Les champs sont bloqués pendant l'envoi, mais le statut reste accessible aux lecteurs d'écran.
+  const bindAsyncForm = (form, status, { pending, fallback, ready = () => true, success, failure }) => {
+    let busy = false;
+    form.noValidate = true; // Sans JavaScript, le navigateur garde ses contrôles natifs.
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      if (busy || !ready()) return;
+      if (!form.reportValidity()) {
+        setStatus(status, messages.champs_obligatoires, "is-error");
+        return;
+      }
 
-    const submit = form.querySelector(".form__submit");
-    const body = new FormData(form);
-    contactBusy = true;
-    form.inert = true;
-    form.setAttribute("aria-busy", "true");
-    submit.disabled = true;
-    setStatus(status, messages.envoi_en_cours);
-    try {
-      const result = await send(form.action, { method: "POST", body }, messages.envoi_echoue);
+      const body = new FormData(form);
+      const focused = document.activeElement;
+      const submit = form.querySelector("[type='submit']");
+      const submitLabel = submit.textContent;
+      const controls = [...form.querySelectorAll("input, select, textarea, button")]
+        .map(control => [control, control.disabled]);
+      busy = true;
+      form.setAttribute("aria-busy", "true");
+      controls.forEach(([control]) => { control.disabled = true; });
+      submit.textContent = pending;
+      setStatus(status, pending, "is-pending");
+      let result;
+      let error;
+      try {
+        result = await send(form.action, { method: "POST", body }, fallback);
+      } catch (reason) {
+        error = reason;
+      } finally {
+        busy = false;
+        controls.forEach(([control, disabled]) => { control.disabled = disabled; });
+        submit.textContent = submitLabel;
+        form.removeAttribute("aria-busy");
+      }
+      // Le calendrier peut être reconstruit par ces callbacks : restaurer les anciens champs avant.
+      if (error) {
+        if (failure) failure(error);
+        else setStatus(status, error.message, "is-error");
+      } else success(result);
+      if (!form.hidden && form.contains(focused) && document.activeElement === document.body) {
+        focused.focus({ preventScroll: true });
+      }
+    });
+  };
+
+  bindAsyncForm(form, status, {
+    pending: messages.envoi_en_cours,
+    fallback: messages.envoi_echoue,
+    success: result => {
       form.reset();
       setStatus(status, result.message, "is-ok");
-    } catch (error) {
-      setStatus(status, error.message, "is-error");
-    } finally {
-      contactBusy = false;
-      form.inert = false;
-      form.removeAttribute("aria-busy");
-      submit.disabled = false;
-    }
+    },
   });
 
   const booking = $("bookingForm");
@@ -180,7 +206,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // « 9h00 », comme dans l'e-mail de confirmation.
   const hour = time => time.replace(/^0/, "").replace(":", "h");
   const agenda = { service: "", month: "", min: "", max: "", days: {}, date: "", view: 0 };
-  let bookingBusy = false;
   const resetAgreements = () => details.querySelectorAll(".consent input").forEach(input => { input.checked = false; });
   const hideDetails = () => {
     details.hidden = details.disabled = true;
@@ -201,11 +226,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const monthRequests = new Map();
   const fetchMonth = month => {
     if (!monthRequests.has(month) || Date.now() - monthRequests.get(month).at > 30000) {
-      const entry = { at: Date.now() };
-      entry.promise = send(`api/availability.php?${new URLSearchParams({ month })}`, {}, messages.agenda_indisponible).then(result => {
+      const entry = { at: Infinity };
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      entry.promise = send(`api/availability.php?${new URLSearchParams({ month })}`, { signal: controller.signal }, messages.agenda_indisponible).then(result => {
+        entry.at = Date.now();
         if (monthRequests.get(month) === entry) monthRequests.set(result.month, entry);
         return result;
-      });
+      }).finally(() => clearTimeout(timeout));
       monthRequests.set(month, entry);
       entry.promise.catch(() => {
         for (const [key, cached] of monthRequests) if (cached === entry) monthRequests.delete(key);
@@ -260,14 +288,17 @@ document.addEventListener("DOMContentLoaded", () => {
     press(slots, time, "time");
     booking.elements.time.value = time;
     const service = booking.querySelector("input[name='service']:checked");
-    const end = addMinutes(time, Number(service.dataset.duration));
+    const when = service.dataset.duration
+      ? `de ${hour(time)} à ${hour(addMinutes(time, Number(service.dataset.duration)))}`
+      : `à ${hour(time)}`;
     showIntake(service.value);
     const terms = details.querySelector("[data-terms]:not([hidden])");
-    const recap = `${service.dataset.label} · ${dayName.format(toDate(agenda.date))}, de ${hour(time)} à ${hour(end)} (heure suisse, Europe/Zurich) · ${terms.dataset.price} · ${terms.dataset.format}`;
-    $("bookingRecap").textContent = $("bookingFinalRecap").textContent = recap;
+    $("bookingRecapService").textContent = service.dataset.label.replaceAll(" · ", ", ");
+    $("bookingRecapDate").textContent = `${dayName.format(toDate(agenda.date))}, ${when}`;
+    $("bookingRecapMeta").textContent = `${terms.dataset.format}, ${terms.dataset.price}`;
     details.hidden = details.disabled = false;
     $("bookingIntakeTitle").focus({ preventScroll: true });
-    $("bookingRecap").scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+    $("bookingIntakeTitle").scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
   };
 
   const showMonth = async (month, notice = "") => {
@@ -277,7 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
     calendarRetry.hidden = true;
     calendar.querySelectorAll("button").forEach(button => { button.disabled = true; });
     calendar.setAttribute("aria-busy", "true");
-    setStatus(bookingStatus, notice || messages.recherche, notice && "is-error");
+    setStatus(bookingStatus, notice || messages.recherche, notice ? "is-error" : "is-pending");
     try {
       const result = await fetchMonth(month);
       if (view !== agenda.view) return;
@@ -297,12 +328,17 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   calendarRetry.addEventListener("click", () => showMonth(agenda.month));
 
-  // L'agenda est lu dès l'arrivée sur le site : au clic sur une prestation, il est déjà là.
-  // Relu à l'approche de la section si cette première lecture a plus de 30 secondes.
-  fetchMonth("");
+  // Préparer le mois courant dès l'accueil, puis le rafraîchir à l'approche du formulaire.
+  // Tous ces déclencheurs partagent la même requête et le même cache de 30 secondes.
+  const preloadCalendar = () => { fetchMonth(""); };
+  if ("requestIdleCallback" in window) requestIdleCallback(preloadCalendar, { timeout: 1000 });
+  else setTimeout(preloadCalendar, 250);
+  document.querySelectorAll("a[href='#rendez-vous'], [data-service]").forEach(link => {
+    ["pointerenter", "focus", "pointerdown"].forEach(event => link.addEventListener(event, preloadCalendar, { passive: true }));
+  });
   observe([$("rendez-vous")], { rootMargin: "600px 0px" }, (section, io) => {
     io.unobserve(section);
-    fetchMonth("");
+    preloadCalendar();
   });
 
   // Prestation à formules : son nom ouvre la liste des formules, et reste marqué quand l'une d'elles est choisie.
@@ -363,26 +399,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }));
 
-  booking.addEventListener("submit", async e => {
-    e.preventDefault();
-    if (bookingBusy) return;
-    if (!booking.elements.time.value) return;
-    if (!booking.reportValidity()) {
-      setStatus(bookingStatus, messages.champs_obligatoires, "is-error");
-      return;
-    }
-
-    const submit = booking.querySelector(".form__submit");
-    const body = new FormData(booking);
-    bookingBusy = true;
-    booking.inert = true;
-    booking.setAttribute("aria-busy", "true");
-    submit.disabled = true;
-    setStatus(bookingStatus, messages.reservation_en_cours);
-    try {
-      const result = await send(booking.action, { method: "POST", body }, messages.reservation_echouee);
+  bindAsyncForm(booking, bookingStatus, {
+    pending: messages.reservation_en_cours,
+    fallback: messages.reservation_echouee,
+    ready: () => Boolean(booking.elements.time.value),
+    success: result => {
       forgetMonths();
-      $("bookingDoneText").textContent = (result.email_sent === false ? messages.reservation_sans_email : messages.reservation_confirmee)
+      const confirmation = result.email_pending ? messages.reservation_email_en_cours
+        : result.email_sent === false ? messages.reservation_sans_email : messages.reservation_confirmee;
+      $("bookingDoneText").textContent = confirmation
         .replaceAll("{prestation}", result.service)
         .replaceAll("{date}", result.when)
         .replaceAll("{email}", booking.elements.email.value)
@@ -391,19 +416,15 @@ document.addEventListener("DOMContentLoaded", () => {
       booking.hidden = true;
       done.hidden = false;
       done.focus();
-    } catch (error) {
+    },
+    failure: error => {
       if (error.code === "slot_taken") {
         forgetMonths();
         showMonth(agenda.month, error.message);
       } else {
         setStatus(bookingStatus, error.message, "is-error");
       }
-    } finally {
-      bookingBusy = false;
-      booking.inert = false;
-      booking.removeAttribute("aria-busy");
-      submit.disabled = false;
-    }
+    },
   });
 
   $("bookingAgain").addEventListener("click", resetBooking);

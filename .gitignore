@@ -1,0 +1,7 @@
+/tests/node_modules/
+/app/secrets.php
+/site/app/secrets.php
+/storage/*
+!/storage/.htaccess
+/site/storage/*
+!/site/storage/.htaccess

@@ -28,6 +28,8 @@ if (!preg_match('/^[a-f0-9]{32}$/D', $requestId)) {
 $eventId = hash_hmac('sha256', 'booking-event|' . $requestId, app_key());
 $recordName = 'booking-form-' . $eventId;
 $fingerprint = hash('sha256', json_encode([$id, $slot, $person, $answers, booking_terms_version($service)], JSON_THROW_ON_ERROR));
+// Le script de reprise des e-mails utilise le même verrou, propre à cette réservation.
+hold_lock($recordName);
 $site = config('site');
 $name = "{$person['prenom']} {$person['nom']}";
 $end = $start->modify("+{$service['duration']} minutes");
@@ -59,7 +61,7 @@ $event = [
 
 try {
     // Verrou : deux personnes ne peuvent pas prendre le même créneau au même instant.
-    $created = with_lock('booking', function () use ($id, $service, $person, $answers, $start, $end, $event, $recordName, $fingerprint, &$record): ?array {
+    $created = with_lock('booking', function () use ($service, $person, $answers, $start, $end, $event, $recordName, $fingerprint, &$record): ?array {
         $record = storage_read($recordName);
         if ($record) {
             if (!hash_equals($record['fingerprint'], $fingerprint)) {
@@ -81,7 +83,7 @@ try {
         $day = $start->setTime(0, 0);
         $until = $day->modify('+2 days');
         $events = events_around($day, $until);
-        $free = slots_by_option($events, $day, $until)[$id][$start->format('Y-m-d')] ?? [];
+        $free = available_slots($service['duration'], $events, $day, $until, time(), config('booking'))[$start->format('Y-m-d')] ?? [];
         $created = null;
         if (in_array($start->format('H:i'), $free, true)) {
             // Si la conservation échoue, aucun événement ni e-mail n'est créé.
@@ -148,14 +150,37 @@ $emails = [
 // Chaque envoi est suivi séparément et peut être repris sans recréer le rendez-vous.
 $record['emails'] ??= $emails;
 $record['values'] ??= $values;
+// PHP-FPM / LiteSpeed peuvent rendre la confirmation avant les appels de messagerie.
+// En local ou sur un autre serveur, l'envoi reste synchrone.
+$finishRequest = function_exists('fastcgi_finish_request') ? 'fastcgi_finish_request'
+    : (function_exists('litespeed_finish_request') ? 'litespeed_finish_request' : null);
+$deferred = $finishRequest !== null && str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json');
+$response = ['service' => $service['name'], 'when' => $when, 'visio' => $service['visio'],
+    'email_sent' => !empty($record['sent'][1]), 'email_pending' => $deferred];
+$record['response'] = $response;
 try {
+    // Rendez-vous et e-mails à envoyer doivent être conservés avant toute réponse anticipée.
     storage_write($recordName, $record);
+    hold_lock('form-booking', release: true);
+    if ($deferred) {
+        ignore_user_abort(true);
+        register_shutdown_function(static function () use ($finishRequest, $recordName, $record): void {
+            $finishRequest();
+            try {
+                deliver_booking_emails($recordName, $record);
+            } catch (Throwable $e) {
+                error_log('Confirmation réservation différée : ' . $e->getMessage());
+            }
+        });
+        form_response(true, 'Rendez-vous confirmé.', 200, $response);
+    }
     deliver_booking_emails($recordName, $record);
 } catch (Throwable $e) {
     error_log('Confirmation réservation : ' . $e->getMessage());
 }
 
-$response = ['service' => $service['name'], 'when' => $when, 'visio' => $service['visio'], 'email_sent' => !empty($record['sent'][1])];
+$response['email_sent'] = !empty($record['sent'][1]);
+$response['email_pending'] = false;
 $record['response'] = $response;
 try {
     storage_write($recordName, $record);

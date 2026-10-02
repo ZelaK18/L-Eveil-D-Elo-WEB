@@ -10,9 +10,14 @@ function intake_definition(array $service): array
     return intake_texts()['services'][$service['service']] ?? [];
 }
 
+function booking_confirmation_notice(): string
+{
+    return str_replace('{bouton}', (string) site_text('rendez_vous.bouton'), intake_texts()['confirmation_notice']);
+}
+
 function booking_service_summary(array $service): string
 {
-    return $service['name'] . ' · ' . ($service['offer_duration'] ?? duration_label($service['duration'])) . ' · ' . price_label($service);
+    return implode(', ', array_filter([$service['name'], service_duration_label($service), price_label($service)], fn(string $part) => $part !== ''));
 }
 
 // Conditions affichées et vérifiées côté serveur, puis conservées dans leur intégralité dans le dossier.
@@ -20,8 +25,8 @@ function booking_terms(array $service): array
 {
     $definition = intake_definition($service);
     $terms = [
-        'Prestataire' => config('site.owner') . ' · ' . config('site.name') . ' · ' . config('site.email'),
-        'Prestation et tarif' => booking_service_summary($service) . ' · ' . $service['format'] . '.',
+        'Prestataire' => config('site.owner') . ', ' . config('site.name') . ', ' . config('site.email'),
+        'Prestation et tarif' => booking_service_summary($service) . ', ' . $service['format'] . '.',
         'Cadre de la prestation' => $definition['scope'] ?? '',
     ];
     if ($service['service'] !== 'coaching') {
@@ -30,7 +35,7 @@ function booking_terms(array $service): array
         $terms['Organisation de l’accompagnement'] = 'Le créneau choisi réserve une séance. Pour un pack ou un programme, il s’agit de la première séance ; les suivantes seront convenues avec Elodie. Le tarif affiché pour un pack ou un programme correspond à l’ensemble de la formule. La séance découverte offerte n’engage à aucun accompagnement payant.';
         $terms['Fin de l’accompagnement'] = 'Chaque partie peut demander l’arrêt de l’accompagnement à tout moment. Les prestations déjà réalisées ou dues sont traitées selon les conditions convenues, sous réserve des dispositions impératives applicables. Le sort des séances non réalisées et de tout solde versé est convenu avec Elodie selon ces dispositions.';
     }
-    $terms['Réservation et paiement'] = 'Le rendez-vous est confirmé après validation de ce formulaire et vérification du créneau disponible. Aucun paiement n’est encaissé sur ce site. Le mode et l’échéance de règlement sont convenus directement avec Elodie ; la confirmation du rendez-vous ne vaut pas reçu de paiement.';
+    $terms['Réservation et paiement'] = booking_confirmation_notice() . ' Le mode et l’échéance de règlement sont convenus directement avec Elodie ; la confirmation du rendez-vous ne vaut pas reçu de paiement.';
     $terms['Annulation et retard'] = 'Toute annulation ou demande de report doit être communiquée au moins ' . cancel_notice_label() . ' avant la séance. Passé ce délai, la séance peut être facturée ou déduite du programme, sauf situation exceptionnelle acceptée par Elodie et sous réserve des dispositions impératives applicables. Une séance offerte reste gratuite. En cas de retard, la séance se termine à l’heure initialement prévue. Le lien de confirmation permet l’annulation en ligne dans le délai prévu ; pour un report, contactez Elodie.';
     $terms['Confidentialité des échanges'] = 'Les échanges sont traités avec confidentialité dans les limites de la loi. Aucun enregistrement audio ou vidéo n’est réalisé sans accord préalable distinct. Les destinataires techniques et les modalités de traitement des formulaires sont précisés ci-dessous.';
     $terms['Données du formulaire'] = intake_texts()['privacy'];
@@ -107,6 +112,7 @@ function intake_receipt(array $service, array $person, array $answers, DateTimeI
         'validated_at' => $at->format(DATE_RFC3339),
         'person' => $person,
         'answers' => $answers,
+        'client_date' => (($service['show_duration'] ?? true) ? period_fr($start, $end) : date_fr($start)) . ' (heure suisse, Europe/Zurich)',
         'appointment' => [
             'Prestation' => $service['name'], 'Date' => period_fr($start, $end) . ' (heure suisse, Europe/Zurich)',
             'Tarif' => price_label($service), 'Format' => $service['format'],
@@ -158,9 +164,8 @@ function intake_client_mail_details(array $service, array $receipt): array
     $appointment = $receipt['appointment'];
     $blocks = [[
         'Prestataire' => $terms['Prestataire'],
-        'Date' => $appointment['Date'],
+        'Date' => $receipt['client_date'] ?? $appointment['Date'],
         'Prestation et tarif' => booking_service_summary($service),
-        'Tarif' => $appointment['Tarif'],
         'Format' => $service['visio'] ? $appointment['Format'] : $appointment['Format'] . ', au ' . $receipt['person']['telephone'],
     ]];
     foreach (['Réservation et paiement', 'Cadre de la prestation', 'Questions non traitées', 'Organisation de l’accompagnement', 'Fin de l’accompagnement', 'Annulation et retard'] as $label) {
@@ -185,6 +190,11 @@ function deliver_booking_emails(string $recordName, array &$record): void
             $record['sent'][$index] = false;
             error_log("Confirmation $recordName, envoi $index à reprendre : " . $e->getMessage());
         }
+        storage_write($recordName, $record);
+    }
+    if (isset($record['response'])) {
+        $record['response']['email_sent'] = !empty($record['sent'][1]);
+        $record['response']['email_pending'] = false;
         storage_write($recordName, $record);
     }
 }

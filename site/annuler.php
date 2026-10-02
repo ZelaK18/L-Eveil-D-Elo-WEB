@@ -1,7 +1,7 @@
 <?php
 require __DIR__ . '/app/bootstrap.php';
 
-// Lien de l'e-mail de confirmation : annuler.php?r=<rendez-vous Google>&s=<signature>.
+// Lien de l'e-mail de confirmation : annuler?r=<rendez-vous Google>&s=<signature>.
 // Ouvrir le lien n'annule rien : un logiciel de messagerie qui visite les liens ne touche pas au rendez-vous.
 header('Cache-Control: no-store');
 header('X-Robots-Tag: noindex');
@@ -99,7 +99,7 @@ $say = fn(string $key): string => strtr(format_text(fill_placeholders((string) (
 
       <div class="cancel__actions">
       <?php if ($state === 'confirmer'): ?>
-        <form method="post" action="annuler.php">
+        <form method="post" action="annuler">
           <input type="hidden" name="r" value="<?= e($id) ?>">
           <input type="hidden" name="s" value="<?= e($signature) ?>">
           <button type="submit" class="button-primary"><?= format_text($texts['bouton'] ?? '') ?></button>

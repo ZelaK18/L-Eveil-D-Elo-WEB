@@ -1,0 +1,192 @@
+/* Polices locales : latin et latin etendu, fichiers Google Fonts sous licence OFL.
+   Le nom contient leur empreinte pour renouveler le cache si le fichier change. */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url(../fonts/cormorant-garamond-latin-ext.cfa9a397d86f.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url(../fonts/cormorant-garamond-latin.d80df8ff5aec.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url(../fonts/montserrat-latin-ext.54d9a78b7ff6.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url(../fonts/montserrat-latin.06b16db7a969.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* L'éveil d'Elo */
+
+:root {
+  --beige-principal: #F7EDDD;
+  --beige-secondaire: #DFCEB7;
+  --beige-brun-clair: #C4AB91;
+  --brun-principal: #825A38;
+  --brun-secondaire: #A38465;
+  --brun-texte: #6F523C;
+  --brun-contraste: #503823;
+  /* Brun secondaire assombri pour les petits textes : lisible (contraste 4,5:1) sur blanc chaud et sur beige */
+  --brun-doux: #86644A;
+  --blanc-chaud: #FFF9F2;
+  --erreur: #A3502F;
+  --trait: rgba(111, 82, 60, .35);
+
+  --font-titre: "Cormorant Garamond", Georgia, serif;
+  --font-texte: "Montserrat", "Lato", sans-serif;
+
+  --radius: 18px;
+  --radius-pill: 30px;
+  --max-width: 1180px;
+  --gutter: clamp(20px, 5vw, 56px);
+  --section-y: clamp(72px, 9vw, 128px);
+  --header-h: 84px;
+  --header-offset: var(--header-h);
+
+  --ease: cubic-bezier(.22, .68, .32, 1);
+  --t: .3s var(--ease);
+  --t-lent: .45s var(--ease);
+
+  --ombre-legere: 0 6px 26px -22px rgba(130, 90, 56, .8);
+  --ombre-carte: 0 24px 50px -42px rgba(130, 90, 56, .95);
+  --ombre-portee: 0 30px 60px -40px rgba(111, 82, 60, .85);
+}
+
+/* Base */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-offset) + 16px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-texte);
+  line-height: 1.7;
+  color: var(--brun-texte);
+  background: var(--beige-principal);
+}
+
+button, input, select, textarea { font: inherit; }
+
+img, svg { display: block; }
+img { max-width: 100%; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-titre);
+  margin: 0 0 .4em;
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: .005em;
+  color: var(--brun-principal);
+}
+h1 { font-size: clamp(2.6rem, 6vw, 4rem); font-weight: 400; }
+h2 { font-size: clamp(2rem, 4.2vw, 2.9rem); }
+h3, h4 { font-size: clamp(1.35rem, 2.3vw, 1.7rem); }
+h1 em { color: var(--brun-doux); }
+
+p { margin: 0 0 1.1em; font-size: 1.0625rem; }
+p:last-child { margin-bottom: 0; }
+strong,
+.form__status.is-ok { font-weight: 500; color: var(--brun-principal); }
+
+a { color: var(--brun-principal); text-decoration: none; transition: color var(--t); }
+a:hover { color: var(--brun-doux); }
+
+p a:not([class]),
+.consent a,
+.legal__block a { text-decoration: underline; text-underline-offset: 3px; }
+
+::selection { color: var(--blanc-chaud); background: var(--brun-principal); }
+
+:focus-visible {
+  outline: 2px solid var(--brun-principal);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Boutons partagés par le site et la page d’attente. */
+.button-primary,
+.button-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid;
+  border-radius: var(--radius-pill);
+  justify-content: center;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 14px 30px;
+  font-family: var(--font-texte);
+  font-size: .9rem;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  letter-spacing: .04em;
+  cursor: pointer;
+  transition: background var(--t), color var(--t), border-color var(--t), transform var(--t);
+}
+.button-primary,
+.button-secondary:hover {
+  color: var(--blanc-chaud);
+  background: var(--brun-principal);
+  border-color: var(--brun-principal);
+}
+.button-secondary {
+  color: var(--brun-principal);
+  background: transparent;
+  border-color: var(--brun-principal);
+}
+.button-primary:hover {
+  color: var(--blanc-chaud);
+  background: var(--brun-doux);
+  border-color: var(--brun-doux);
+}
+.button-primary:hover,
+.button-secondary:hover { transform: translateY(-2px); }
+.button-primary svg,
+.button-secondary svg { flex: none; }
+
+.divider-star { display: inline-flex; align-items: center; gap: 12px; color: var(--brun-doux); }
+.divider-star i {
+  display: block;
+  width: clamp(40px, 8vw, 78px);
+  height: 1px;
+  background: var(--beige-brun-clair);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+@media print {
+  body { background: #fff; }
+}

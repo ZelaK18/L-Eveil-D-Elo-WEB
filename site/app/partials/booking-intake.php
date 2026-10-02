@@ -33,16 +33,26 @@
 
 <?php endforeach ?>
 <h4 class="booking__heading"><span class="booking__step">4</span>Votre accord</h4>
-<p class="booking__hint">Relisez votre rendez-vous et les conditions avant de confirmer. Aucune réservation n’est effectuée avant votre validation finale.</p>
-<p class="booking__recap" id="bookingFinalRecap"></p>
+<div class="booking__recap" id="bookingFinalRecap" aria-live="polite" aria-atomic="true">
+  <strong id="bookingRecapService"></strong>
+  <span id="bookingRecapDate"></span>
+  <span class="booking__recap-meta" id="bookingRecapMeta"></span>
+</div>
 <?php foreach ($bookingOptions as $optionId => $option): ?>
 <section class="booking__terms" data-terms="<?= e($optionId) ?>" data-version="<?= e(booking_terms_version($option)) ?>" data-price="<?= e(price_label($option)) ?>" data-format="<?= e($option['format']) ?>" hidden aria-label="Conditions de la prestation">
-  <h5><?= $option['service'] === 'coaching' ? 'Votre contrat de coaching' : 'Le cadre de votre séance' ?></h5>
-  <?php foreach (booking_terms($option) as $heading => $paragraph): ?>
-  <h6><?= e($heading) ?></h6>
-  <p><?= e($paragraph) ?></p>
-  <?php endforeach ?>
-  <p><a href="mentions-legales.php#confidentialite" target="_blank" rel="noopener">Lire la politique de confidentialité (nouvel onglet)</a></p>
+  <p><?= e($intake['services'][$option['service']]['summary']) ?></p>
+  <p><?= e(str_replace('{delai}', cancel_notice_label(), $intake['terms_summary'])) ?></p>
+  <details class="booking__conditions">
+    <summary>Lire les conditions de la séance</summary>
+    <div class="booking__conditions-content">
+      <h5><?= $option['service'] === 'coaching' ? 'Votre contrat de coaching' : 'Le cadre de votre séance' ?></h5>
+      <?php foreach (booking_terms($option) as $heading => $paragraph): ?>
+      <h6><?= e($heading) ?></h6>
+      <p><?= e($paragraph) ?></p>
+      <?php endforeach ?>
+    </div>
+  </details>
+  <p><a href="confidentialite" target="_blank" rel="noopener" aria-label="Politique de confidentialité, nouvel onglet">Politique de confidentialité</a></p>
 </section>
 <?php endforeach ?>
 
@@ -54,4 +64,4 @@
   </label>
   <?php endforeach ?>
 </div>
-<p class="booking__hint">Votre nom et votre prénom ci-dessus identifient votre accord. Sa date et son heure sont enregistrées automatiquement lors de la validation.</p>
+<p class="booking__hint" id="bookingConfirmationHint"><?= e(booking_confirmation_notice()) ?></p>

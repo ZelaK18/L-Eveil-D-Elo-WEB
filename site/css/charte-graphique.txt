@@ -1,8 +1,8 @@
 CHARTE GRAPHIQUE L’ÉVEIL D’ELO
-Mise à jour : 1er octobre 2026
+Mise à jour : 2 octobre 2026
 
 Cette charte décrit l’identité visuelle et les règles appliquées au site.
-Référence technique : css/style.css. Chargement des polices : app/partials/head.php.
+Références techniques : css/theme.css pour les polices locales, la palette, la base et les boutons partagés ; css/style.css pour les composants du site complet ; css/soon.css pour la page d’attente. Le head charge theme.css avant la feuille de la page, avec une version de cache pour chacune.
 Synchroniser cette charte lors des changements visuels.
 
 1. COULEURS ET USAGES
@@ -73,7 +73,7 @@ avec un espacement des lettres. Les paragraphes restent en casse normale.
 
 3. VARIABLES CSS DE RÉFÉRENCE
 
-Extrait de :root dans css/style.css :
+Extrait de :root dans css/theme.css :
 
 :root {
   --beige-principal: #F7EDDD;
@@ -124,6 +124,8 @@ Au survol : fond brun principal et texte blanc chaud.
 Les liens intégrés aux paragraphes, aux accords et aux mentions légales
 sont soulignés pour être identifiables sans dépendre uniquement de la couleur.
 Le focus clavier visible utilise un contour brun de 2px, décalé de 3px.
+Le texte sélectionné est blanc chaud sur brun principal (contraste 5,79:1).
+Les boutons ouvrant les formules mesurent au moins 44px de haut.
 
 Champs de saisie :
 - Fond beige principal, texte brun texte et bordure beige secondaire.
@@ -156,7 +158,7 @@ son contenu est limité à 780px. Le calendrier est limité à 390px.
 Le bon cadeau garde une légère rotation et un cadre intérieur. Sa hauteur suit
 le contenu : minimum de 250px, ramené à 200px jusqu’à 400px de largeur d’écran.
 
-Emblème utilisé : images/logo-embleme.png.
+Emblème utilisé : images/logo-embleme.webp (original conservé en PNG).
 Icône du site : images/favicon.png. Image de partage : images/og-image.jpg.
 Conserver les proportions de l’emblème et les teintes de la palette.
 
@@ -223,10 +225,12 @@ Le message de contact accepte 5 000 caractères au maximum. Les saisies trop lon
 sont refusées avec une explication, jamais coupées silencieusement. Pendant l’envoi,
 le formulaire est verrouillé pour éviter les doubles demandes. Une confirmation
 e-mail échouée est signalée sans faire croire que la demande ou l’annulation a échoué.
-Le test tests/responsive-browser.cjs couvre les pages et interactions responsive ;
-tests/booking-browser.cjs vérifie le parcours de réservation.
-tests/http-server.cjs contrôle les pages, les fichiers internes protégés, les
-redirections, le sitemap et le cache sur le serveur web réellement utilisé.
+Depuis la racine du projet, tests/review-browser.cjs couvre les pages, les
+interactions responsive, les erreurs réseau, les réservations simulées et
+l’accessibilité automatisée. Il utilise une copie isolée, sans données réelles.
+tests/review-php.php vérifie les questionnaires et le calcul des disponibilités.
+tests/review-http.cjs contrôle les pages, les fichiers internes protégés, les
+redirections, le sitemap et le cache sur le virtual host Laragon réellement utilisé.
 
 8. DIRECTION VISUELLE
 
@@ -258,19 +262,19 @@ de app/mail.php. Leurs textes se modifient dans textes/appointment-text.php.
 - Version texte avec les mêmes paragraphes et retours à la ligne que le HTML.
 - Largeur fluide et mots longs sécables pour les petits écrans.
 
-tests/mail.php vérifie les rendus ; l’option --preview produit des exemples
-fictifs pour chaque prestation, le contact et l’annulation dans storage/mail-preview/.
+tests/review-php.php vérifie l’échappement des réponses dans les e-mails.
+Le rendu dans les logiciels de messagerie et les envois réels ne sont pas couverts.
 
 11. PAGE D’ATTENTE
 
-bientot.php présente « Le site arrive bientôt » avec l’emblème et le nom du site.
+bientot.php présente « Le site arrive bientôt » avec l’identité du site.
 Ses textes se modifient dans la rubrique bientot de textes/site-text.php ; les
 coordonnées e-mail et Instagram restent celles de app/config.php.
 
 - Composition centrée, fond beige éclairci au centre et cercles décoratifs fins.
 - Logo aux proportions conservées, titre en Cormorant Garamond et seconde ligne en italique.
 - Mention « En cours de création », message d’accueil et signature d’Elodie.
-- Boutons e-mail et Instagram partagés avec le site, empilés jusqu’à 500px.
+- Bouton Instagram partagé avec le site, étendu en largeur jusqu’à 500px.
 - Hauteur minimale de l’écran, avec défilement naturel sur les petits écrans.
 - Aucun JavaScript requis ; focus clavier et préférence de mouvement réduit respectés.
 
