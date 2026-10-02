@@ -17,25 +17,22 @@ return [
     'retour'             => "← Retour",
     'surtitre'           => "Informations légales",
     'titre'              => "Mentions légales & confidentialité",
-    'mise_a_jour'        => "Dernière mise à jour : 1er octobre 2026",
+    'mise_a_jour'        => "Dernière mise à jour : 3 octobre 2026",
     'retour_accueil'     => "Retour à l'accueil",
 
     'mentions' => [
-        'google_description' => "Mentions légales de L'éveil d'Elo : éditrice du site, hébergement et informations sur les prestations.",
+        'google_description' => "Mentions légales de L'éveil d'Elo : éditrice du site et informations sur les prestations.",
         'titre'     => "Mentions légales",
         'rubriques' => [
             "Éditrice du site" => [
                 "L'éveil d'Elo - Elodie Fauquex
-                Case postale …, NPA Localité, Suisse
+                1690 Villaz-St-Pierre
                 E-mail : {email}
                 Téléphone : {telephone}",
             ],
             "Forme juridique" => [
                 "Raison individuelle, non inscrite au registre du commerce.
                 Non assujettie à la TVA.",
-            ],
-            "Hébergement" => [
-                "o2switch, Chemin des Pardiaux, 63000 Clermont-Ferrand, France. Téléphone : +33 4 44 44 60 40. Site : https://www.o2switch.fr",
             ],
             "Nature des prestations" => [
                 "Les prestations proposées (tirage de cartes, pendule, coaching spirituel, Reiki) relèvent du bien-être et du développement personnel. Elles ne constituent ni un diagnostic, ni un traitement médical, psychologique ou psychothérapeutique, et ne remplacent en aucun cas l'avis ou le suivi d'un professionnel de la santé.",
