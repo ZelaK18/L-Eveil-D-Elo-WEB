@@ -3,7 +3,7 @@
     <symbol id="ico-star" viewBox="0 0 24 24">
       <path d="M12 .79 14.78 9.35 23.79 9.35 16.51 14.65 19.29 23.22 12 17.92 4.71 23.22 7.5 14.65 .21 9.35 9.22 9.35Z" fill="currentColor"/>
     </symbol>
-    <symbol id="ico-cards" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2">
+    <symbol id="ico-cards" viewBox="0 0 50 48" fill="none" stroke="currentColor" stroke-width="1.2">
       <rect x="6" y="12" width="20" height="30" rx="3" transform="rotate(-12 16 27)"/>
       <rect x="17" y="9" width="20" height="30" rx="3"/>
       <rect x="26" y="12" width="20" height="30" rx="3" transform="rotate(12 36 27)"/>

@@ -1,5 +1,5 @@
 CHARTE GRAPHIQUE L’ÉVEIL D’ELO
-Mise à jour : 2 octobre 2026
+Mise à jour : 3 octobre 2026
 
 Cette charte décrit l’identité visuelle et les règles appliquées au site.
 Références techniques : css/theme.css pour les polices locales, la palette, la base et les boutons partagés ; css/style.css pour les composants du site complet ; css/soon.css pour la page d’attente. Le head charge theme.css avant la feuille de la page, avec une version de cache pour chacune.
@@ -95,7 +95,9 @@ Extrait de :root dans css/theme.css :
   --radius-pill: 30px;
   --max-width: 1180px;
   --gutter: clamp(20px, 5vw, 56px);
-  --section-y: clamp(72px, 9vw, 128px);
+  --section-y: clamp(36px, 5vw, 64px);
+  --block-gap: clamp(24px, 3vw, 40px);
+  --card-gap: clamp(18px, 2.2vw, 26px);
   --header-h: 84px;
   --header-offset: var(--header-h);
 
@@ -134,6 +136,15 @@ Champs de saisie :
 - Au focus : fond blanc chaud et bordure brun secondaire.
 - En cas d’erreur : bordure dans la couleur --erreur.
 
+Numéros des étapes du formulaire et des bons cadeaux : Cormorant Garamond,
+graisse 400 et interligne 1, avec des chiffres alignés et centrés.
+Bons cadeaux : 1.3rem dans des ronds de 38px, en brun principal sur fond blanc
+chaud avec une bordure brun secondaire de 1px.
+Les quatre étapes du formulaire : 1rem dans des ronds pleins de 24px,
+en blanc chaud sur fond brun doux, sans bordure.
+Les quatre intitulés d’étape partagent le même style : Montserrat, .76rem,
+graisse 400, interligne 1.7, majuscules et espacement .12em, en brun doux.
+
 Le bouton du menu, les fermetures des formules et les flèches du calendrier
 mesurent 44px par 44px. Les jours du calendrier et les créneaux ont une hauteur
 minimale de 44px ; la largeur des jours s’adapte aux sept colonnes.
@@ -149,7 +160,17 @@ Le fond principal vient du body ; aucune classe .section-main n’est utilisée.
 .section-soft : fond beige secondaire, notamment pour les bons cadeaux.
 
 Le contenu reste centré, dans une largeur maximale de 1180px, marges intérieures
-comprises. Les espacements verticaux des sections varient de 72px à 128px.
+comprises. Les espacements verticaux des sections varient de 36px à 64px par côté,
+soit 72px à 128px entre les contenus de deux sections successives. L'accueil et les
+pages légales suivent aussi cette règle. Le pied de page reprend cet espacement
+en haut et en bas. L'en-tête conserve 12px de marge intérieure de chaque côté vertical.
+Les titres de section, les blocs empilés et les deux côtés du séparateur du pied
+de page utilisent --block-gap (24px à 40px). Les cartes de prestations et de contact
+utilisent --card-gap (18px à 26px), également partagé par les liens de navigation.
+Sur une colonne, 48px supplémentaires réservent la place des étoiles du portrait
+avant l'image, pour que l'espace visible reste celui des autres blocs.
+Le badge du portrait dispose de 36px réservés
+sous son image, afin de conserver une marge visible avant la section suivante.
 Les cartes de prestations sont en deux colonnes lorsque la place le permet.
 Les cartes de contact s’adaptent automatiquement à la largeur disponible.
 
@@ -179,7 +200,8 @@ Au-dessus de 1100px, ils peuvent être côte à côte tant que le questionnaire 
 Jusqu’à 980px :
 - Accueil, présentation et bons cadeaux passent sur une colonne.
 - Hauteur minimale de l’en-tête : 76px.
-- Présentation de l’autrice et groupes du pied de page centrés.
+- Présentation de l’autrice centrée ; groupes du pied de page empilés et centrés,
+  avec le même espacement entre logo, navigation et liens sociaux.
 
 Jusqu’à 760px :
 - Les cartes de prestations passent sur une colonne.
