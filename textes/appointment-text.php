@@ -71,7 +71,7 @@ return [
 
             Merci pour votre message et pour votre intérêt.
 
-            Votre demande est bien arrivée. Je vous répondrai dans un délai de 48 heures.
+            Votre demande est bien arrivée. Je vous répondrai dans un délai de 24 heures.
 
             Si vous souhaitez compléter votre demande, répondez simplement à cet e-mail ou envoyez-moi un message au {telephone_elodie}.
 

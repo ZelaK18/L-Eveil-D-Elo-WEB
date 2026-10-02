@@ -6,7 +6,7 @@
  * - Chaque rubrique a un titre, puis ses paragraphes entre guillemets.
  * - Un retour à la ligne à l'intérieur d'un texte fait un retour à la ligne sur la page.
  * - Une liste à puces s'écrit entre crochets : ["premier point", "deuxième point"].
- * - {email}, {telephone} et {pfpdt} deviennent des liens (e-mail et téléphone de app/config.php, site du PFPDT).
+ * - {email}, {telephone}, {pfpdt} et {whatsapp} deviennent des liens (contacts et politiques des services).
  * - Pensez à changer la date de mise à jour après une modification.
  */
 
@@ -67,11 +67,11 @@ return [
                     "**Formulaire de demande** : nom, prénom, e-mail, téléphone, prestation souhaitée et message. Ces données servent uniquement à répondre à votre demande et à organiser un rendez-vous. Elles sont transmises par e-mail à Elodie, et une confirmation de réception vous est envoyée à l'adresse indiquée. Elles ne sont pas enregistrées sur le site lui-même.",
                     "**Réservation en ligne** : nom, prénom, e-mail, téléphone, date de naissance (vérification de la majorité), prestation, créneau et réponses au questionnaire propre à votre prestation. Ces informations servent à organiser et préparer votre séance. Vos coordonnées, la prestation et le créneau sont enregistrés dans Google Agenda. Les réponses au questionnaire ne sont pas inscrites dans l'agenda ; elles sont transmises à Elodie par e-mail. Une confirmation avec les conditions acceptées vous est envoyée.",
                     "**Trace de votre accord** : le formulaire validé, votre identité déclarée, les accords cochés, la date et l'heure de validation et une copie des conditions et de cette politique sont conservés dans un dossier du site dont l'accès public est bloqué. Cette trace permet de retrouver votre demande et les conditions de la réservation. Elle ne constitue pas une vérification officielle d'identité ni une signature électronique qualifiée.",
-                    "**Séances en visio** : les informations de connexion vous sont transmises avant la séance.",
+                    "**Séances en visio** : les appels ont lieu sur WhatsApp avec votre numéro de téléphone, votre image et votre voix. Leur contenu est chiffré de bout en bout ; WhatsApp traite aussi des données techniques, comme votre adresse IP et la durée des appels.",
                     "**Bons cadeaux** : les coordonnées de la personne qui offre et le prénom de la personne qui reçoit servent uniquement à établir et envoyer le bon.",
                     "**E-mail, téléphone et Instagram** : les informations que vous transmettez servent uniquement à vous répondre.",
-                    "**Protection contre les abus** : lors de l'envoi d'un formulaire, une empreinte non réversible de votre adresse IP est conservée 24 heures au plus, afin de limiter les envois automatisés.",
-                    "**Hébergement** : comme tout hébergeur, o2switch enregistre des journaux techniques (dont l'adresse IP) nécessaires à la sécurité et au bon fonctionnement du site.",
+                    "**Protection contre les abus** : après l'envoi réussi d'un formulaire, une empreinte de votre adresse IP et la date et l'heure de l'envoi sont enregistrées pour limiter les envois automatisés. L'adresse IP elle-même n'est pas conservée dans ce dispositif. Les envois datant de plus de 24 heures ne sont plus pris en compte et leurs traces sont supprimées lors du prochain envoi réussi d'un formulaire ; elles peuvent donc rester enregistrées plus longtemps si aucun nouveau formulaire n'est envoyé.",
+                    "**Sécurité du site** : des journaux techniques, comprenant notamment votre adresse IP, sont enregistrés pour la sécurité et le bon fonctionnement du site.",
                 ],
             ],
             "Confidentialité des séances" => [
@@ -79,19 +79,27 @@ return [
                 "Les formulaires sont transmis par e-mail à Elodie. Les e-mails ordinaires ne sont pas chiffrés de bout en bout. Limitez vos réponses à ce qui est utile, ne donnez pas de détails médicaux ni d'informations identifiant des tiers ; vous pouvez indiquer que vous préférez en parler pendant la séance.",
             ],
             "Destinataires" => [
-                "Vos données ne sont ni vendues ni cédées. Seuls les prestataires nécessaires au fonctionnement du site y ont accès : o2switch (hébergement, en France) et Google (Gmail pour l'envoi des e-mails et Google Agenda pour les rendez-vous).",
+                "Vos données ne sont pas vendues. Les prestataires utilisés sont un prestataire d'hébergement en France, Google pour les e-mails et l'agenda, et WhatsApp pour les appels vidéo. Chacun traite les données liées au service concerné.",
             ],
             "Cookies et mesure d'audience" => [
                 "Ce site n'utilise ni cookies, ni outil de mesure d'audience. Les polices de caractères sont hébergées directement sur ce site ; leur affichage ne nécessite aucune connexion aux serveurs de Google.",
             ],
             "Transfert de données à l'étranger" => [
-                "Les données du site sont hébergées en France chez o2switch. Google peut traiter des données aux États-Unis. Ce transfert repose sur le Swiss-U.S. Data Privacy Framework, auquel Google a adhéré.",
+                "Les données du site sont hébergées en France. Google peut traiter des données aux États-Unis. Ce transfert repose sur le Swiss-U.S. Data Privacy Framework, auquel Google a adhéré.",
+                "WhatsApp est fourni depuis l'Irlande et traite des données notamment aux États-Unis, avec le Swiss-U.S. Data Privacy Framework pour les transferts couverts. Les autres pays de traitement et garanties sont décrits dans sa politique : {whatsapp}.",
             ],
             "Durée de conservation" => [
-                "Les demandes restées sans suite sont supprimées après 12 mois. Les réponses personnelles liées aux prestations sont conservées le temps nécessaire au suivi, puis supprimées lorsqu'elles ne sont plus nécessaires. Les traces d'accord sont conservées dans la mesure nécessaire à la gestion de la relation contractuelle et à la défense de droits ; elles ne justifient pas de conserver indéfiniment les réponses personnelles. Les pièces comptables sont conservées pendant 10 ans. Ces durées concernent aussi les copies présentes dans les e-mails et les dossiers du site ; leur suppression est effectuée par Elodie ou la personne chargée de la maintenance.",
+                "Les demandes restées sans suite sont supprimées au plus tard 12 mois après le dernier échange.",
+                "Les questionnaires et réponses personnelles sont conservés pour préparer les séances et assurer le suivi, au maximum un an après la dernière séance de l'accompagnement concerné. Ils sont supprimés plus tôt lorsqu'ils ne sont plus utiles. Cette durée d'un an est une règle de gestion de L'éveil d'Elo, et non une obligation légale.",
+                "Les preuves de réservation et d'accord (identité, prestation, tarif, accords datés et version des conditions acceptées) sont conservées pendant l'exécution de la prestation et le règlement des montants dus. Après cela, seuls les éléments nécessaires pour établir ou défendre un droit sont conservés jusqu'à l'expiration du délai de prescription applicable ou, en cas de litige en cours, jusqu'à son règlement définitif. Les réponses personnelles au questionnaire ne sont pas conservées avec ces preuves au-delà de leur durée propre, sauf si une réponse est nécessaire au traitement d'un litige précis.",
+                "Les pièces comptables sont conservées pendant 10 ans à compter de la fin de l'exercice concerné. Cette obligation ne s'étend pas à l'ensemble du questionnaire.",
+                "La suppression des données gérées par Elodie est effectuée manuellement par Elodie ou la personne chargée de la maintenance. Elle concerne les fichiers du site, les e-mails, les données de rendez-vous et les copies de suivi conservées sur ses appareils. Les éventuelles sauvegardes doivent également être prises en compte ; les données supprimées ne doivent pas être réintroduites lors d'une restauration.",
+                "Les traces de protection contre les abus sont nettoyées selon le fonctionnement décrit plus haut. La conservation des autres journaux techniques dépend des règles du prestataire d'hébergement et des réglages d'archivage. Pour des précisions sur vos données et leur conservation, écrivez à {email}.",
             ],
             "Vos droits" => [
                 "Vous pouvez à tout moment demander l'accès à vos données, leur rectification ou leur suppression, ou vous opposer à leur traitement, en écrivant à {email}. Vous pouvez retirer votre consentement pour l'avenir ; ce retrait ne remet pas en cause les traitements déjà effectués et reste soumis aux obligations légales de conservation applicables.",
+                "Lorsque les conditions légales sont remplies, vous pouvez également demander la remise des données personnelles que vous avez fournies dans un format électronique couramment utilisé, ou leur transmission à un autre responsable du traitement.",
+                "Les demandes d'accès sont traitées en principe gratuitement et dans un délai de 30 jours. Si ce délai ne peut pas être respecté, vous êtes informé du délai dans lequel les renseignements vous seront fournis. Les informations nécessaires pour vérifier votre identité peuvent vous être demandées afin de protéger vos données.",
                 "Vous pouvez également vous adresser au Préposé fédéral à la protection des données et à la transparence (PFPDT) : {pfpdt}.",
             ],
             "Modifications" => [

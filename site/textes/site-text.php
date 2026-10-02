@@ -193,7 +193,7 @@ return [
         'bouton_autre'          => "Réserver un autre moment",
 
         'demande_titre'             => "Faire une demande",
-        'demande_texte'             => "Dites-moi ce qui vous amène, je vous réponds sous 48 h.",
+        'demande_texte'             => "Dites-moi ce qui vous amène, je vous réponds sous 24 h.",
         'demande_message'           => "Votre message",
         'demande_message_exemple'   => "Ce qui vous amène, une question…",
         // Écrit dans le message quand on clique sur « Commander un bon cadeau ».
@@ -266,8 +266,8 @@ return [
     'messages' => [
         'champs_obligatoires'             => "Merci de compléter les champs obligatoires.",
         'envoi_en_cours'                  => "Envoi en cours…",
-        'demande_envoyee'                 => "Merci ! Votre demande est bien partie, une confirmation vient de vous être envoyée par e-mail. Je vous réponds sous 48 h.",
-        'demande_sans_email'              => "Votre demande est bien partie, mais la confirmation par e-mail n’a pas pu être envoyée. Inutile de renvoyer le formulaire, je vous réponds sous 48 h.",
+        'demande_envoyee'                 => "Merci ! Votre demande est bien partie, une confirmation vient de vous être envoyée par e-mail. Je vous réponds sous 24 h.",
+        'demande_sans_email'              => "Votre demande est bien partie, mais la confirmation par e-mail n’a pas pu être envoyée. Inutile de renvoyer le formulaire, je vous réponds sous 24 h.",
         'envoi_echoue'                    => "L'envoi a échoué. Vous pouvez m'écrire directement par e-mail ou par téléphone.",
         'recherche'                       => "Recherche des disponibilités…",
         'aucun_creneau'                   => "Plus de créneau libre ce mois-ci, essayez le mois suivant.",
