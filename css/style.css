@@ -139,6 +139,8 @@ section { position: relative; padding-block: var(--section-y); }
 
 .js .reveal { opacity: 0; }
 .reveal.is-in { opacity: 1; animation: apparition .8s var(--ease) backwards; }
+/* Le premier écran reste visible sans attendre le script ni une animation. */
+.js .hero .reveal { opacity: 1; animation: none; }
 .stagger > .reveal:nth-child(2) { animation-delay: .12s; }
 .stagger > .reveal:nth-child(3) { animation-delay: .24s; }
 .stagger > .reveal:nth-child(4) { animation-delay: .36s; }
@@ -968,6 +970,7 @@ section { position: relative; padding-block: var(--section-y); }
 /* Zone de clic agrandie (32 px) sans bouger les liens : elle s'arrête avant la ligne suivante */
 .footer__nav a,
 .footer__legal a { padding-block: 5px; margin-block: -5px; }
+.footer__presentation { flex-basis: 100%; margin: 0; font-size: .85rem; line-height: 1.7; text-align: center; text-wrap: balance; }
 .footer__bottom .footer__disclaimer { flex-basis: 100%; font-size: .75rem; line-height: 1.6; }
 
 .footer__social { display: flex; gap: 12px; }

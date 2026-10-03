@@ -33,7 +33,7 @@ return [
         'bouton_prestations' => "Découvrir les prestations",
         'valeurs'            => ["Guidance intuitive", "Connexion", "Authenticité"],
         'badge_photo'        => "À distance & en visio",
-        'description_photo'  => "Nuages aux teintes roses et bleues",
+        'description_photo'  => "Portrait d’Elodie, coach en spiritualité",
     ],
 
     // QUI SUIS-JE
@@ -97,7 +97,7 @@ return [
                 'nom'        => "Coaching spirituel",
                 'texte'      => "Parfois, on ressent simplement le besoin de faire une pause et d’y voir plus clair. Je vous accompagne dans ce moment, avec écoute et bienveillance, pour vous aider à retrouver vos propres repères.",
                 'points'     => ["Un temps d’échange et d’écoute", "Suivi personnalisé", "Des pistes pour avancer au quotidien"],
-                'format'     => "En visio",
+                'format'     => "En visio sur Google Meet",
                 'disponible' => true,
                 'offres' => [
                     [
@@ -106,7 +106,7 @@ return [
                         'duree_reservation' => 30,
                         'finalite'          => "Pour faire connaissance, clarifier votre besoin et vérifier si mon accompagnement vous correspond (recommandé avant chaque début de coaching)",
                         'tarif'             => "Offert",
-                        'format'            => "En visio",
+                        'format'            => "En visio sur Google Meet",
                     ],
                     [
                         'nom'               => "Élan vers Soi",
@@ -114,24 +114,24 @@ return [
                         'duree_reservation' => 60,
                         'finalite'          => "Pour travailler sur une situation ou un questionnement précis, avec un exercice personnalisé et une action concrète à intégrer.",
                         'tarif'             => "40 CHF",
-                        'format'            => "En visio",
+                        'format'            => "En visio sur Google Meet",
                     ],
                     [
                         'nom'               => "Pack Clarté",
                         'duree'             => "3 × 60 min",
                         'duree_reservation' => 60,
-                        'finalite'          => "Pour approfondir une problématique et avancer sur plusieurs semaines : trois séances à utiliser sur 6 à 8 semaines, avec exercices entre les rencontres.",
+                        'finalite'          => "Pour approfondir une problématique et avancer sur plusieurs semaines, avec trois séances à utiliser sur 6 à 8 semaines, avec exercices entre les rencontres.",
                         'tarif'             => "120 CHF",
-                        'format'            => "En visio",
+                        'format'            => "En visio sur Google Meet",
                     ],
                     [
                         'nom'               => "Programme Revenir à Soi",
                         'duree'             => "6 × 60 min",
                         'duree_reservation' => 60,
-                        'finalite'          => "Pour vivre un accompagnement plus profond sur 12 semaines : 6 séances de 60 min, exercices personnalisés, temps d’intégration et support bref entre les séances.",
+                        'finalite'          => "Pour vivre un accompagnement plus profond sur 12 semaines, avec 6 séances de 60 min, exercices personnalisés, temps d’intégration et support bref entre les séances.",
                         'tarif'             => "220 CHF au lancement",
                         'tarif_habituel'    => "280 CHF",
-                        'format'            => "En visio",
+                        'format'            => "En visio sur Google Meet",
                     ],
                 ],
             ],
@@ -149,19 +149,22 @@ return [
         'surtitre'    => "Faire plaisir",
         'titre'       => "Bons cadeaux",
         'paragraphes' => [
-            "Offrir un bon cadeau, c'est offrir une parenthèse : un moment rien qu'à soi, pour souffler et y voir plus clair.",
-            "Valable sur toutes les prestations, pendant 12 mois.",
+            "Offrir un bon cadeau, c'est offrir une parenthèse, un moment rien qu'à soi, pour souffler et y voir plus clair.",
+            "Valable sur toutes les prestations disponibles, pendant 10 ans à compter de l'achat.",
+            "Paiement par TWINT. Votre bon personnalisé vous est envoyé par e-mail en PDF, sans frais d'envoi, dans les 24 heures après réception du paiement.",
+            "Le bon peut être transmis à une autre personne. Pour un bon d'un montant libre utilisé en plusieurs fois, le solde reste disponible jusqu'à sa date de fin de validité.",
+            "Pour utiliser votre bon, écrivez à Elodie en indiquant sa référence et la prestation souhaitée. Seul un éventuel complément de prix est à régler par TWINT.",
         ],
         'etapes' => [
             ['titre' => "Vous choisissez", 'texte' => "Une prestation précise ou un montant libre."],
             ['titre' => "Je crée le bon", 'texte' => "Personnalisé avec le prénom et votre petit mot."],
-            ['titre' => "Vous l'offrez", 'texte' => "Reçu par e-mail en PDF, ou imprimé sur beau papier."],
+            ['titre' => "Vous l'offrez", 'texte' => "Reçu par e-mail en PDF dans les 24 heures après paiement."],
         ],
         'bouton'         => "Commander un bon cadeau",
         'image_titre'    => "Bon cadeau",
         'image_texte'    => "Une séance au choix",
-        'image_pour'     => "Pour :",
-        'image_validite' => "Valable 12 mois",
+        'image_pour'     => "Pour",
+        'image_validite' => "Valable 10 ans",
     ],
 
     // CONTACT
@@ -183,7 +186,7 @@ return [
         'ou'       => "ou",
 
         'en_ligne_titre'        => "Réserver en ligne",
-        'en_ligne_texte'        => "Choisissez votre séance et un créneau, puis complétez le formulaire pour confirmer.",
+        'en_ligne_texte'        => "Choisissez votre séance et un créneau, puis complétez le formulaire pour confirmer. Les séances payantes se règlent par TWINT avant la séance, ou avant la première séance pour les packs et programmes.",
         'etape_prestation'      => "La prestation",
         'etape_date'            => "Le jour et l'heure",
         'sans_javascript'      => "Pour réserver, passez par le formulaire de demande.",
@@ -213,6 +216,7 @@ return [
 
     // BAS DE PAGE
     'pied_de_page' => [
+        'presentation'    => "Tirage de cartes, pendule et accompagnement spirituel à distance, en Suisse romande et partout dans le monde.",
         'avertissement'    => "Les séances proposées relèvent du bien-être et ne remplacent en aucun cas un avis ou un suivi médical.",
         'droits'           => "Tous droits réservés",
         'mentions_legales' => "Mentions légales",
@@ -225,7 +229,7 @@ return [
         'statut'            => "En cours de création",
         'titre_ligne_1'     => "Le site arrive",
         'titre_ligne_2'     => "bientôt.",
-        'description'      => "Un espace tout en douceur se prépare pour vous accompagner, vous inspirer et vous reconnecter à vous-même.",
+        'description'      => "Tirage de cartes, pendule et coaching spirituel en Suisse romande. Un espace tout en douceur se prépare pour vous accompagner à distance.",
         'contact'          => "En attendant, je reste à votre écoute sur Instagram.",
         'bouton_instagram' => "Suivre sur Instagram",
         'signature'        => "À très bientôt, Elodie",
@@ -247,7 +251,7 @@ return [
         'annule_sans_email' => "Votre annulation est bien enregistrée, mais la confirmation par e-mail n’a pas pu être envoyée. Contactez Elodie au {telephone} si vous avez besoin d’une confirmation.",
         'bouton_autre'  => "Réserver un autre moment",
         'trop_tard_titre' => "Un imprévu de dernière minute ?",
-        'trop_tard'     => "Votre séance a lieu dans **moins de {delai}** : l’annulation en ligne n’est plus disponible. Écrivez-moi directement pour l’annuler ou la déplacer.",
+        'trop_tard'     => "Votre séance a lieu dans **moins de {delai}**, l’annulation en ligne n’est plus disponible. Écrivez-moi directement pour l’annuler ou la déplacer.",
         'passe_titre'   => "Ce rendez-vous est passé",
         'passe'         => "La date de cette séance est passée, il n’y a plus rien à annuler. Vous pouvez choisir un nouveau moment si vous le souhaitez.",
         'deja_annule_titre' => "Ce rendez-vous est déjà annulé",
@@ -266,6 +270,8 @@ return [
     'messages' => [
         'champs_obligatoires'             => "Merci de compléter les champs obligatoires.",
         'envoi_en_cours'                  => "Envoi en cours…",
+        'demande_incertaine'              => "La réponse du serveur n'est pas arrivée. Votre demande a peut-être été envoyée. Vérifiez vos e-mails, puis réessayez ce même formulaire sans modifier vos informations. En cas de doute, contactez Elodie.",
+        'demande_modifiee'                => "Cette demande a déjà été envoyée avec d'autres informations. Contactez Elodie pour la compléter, ou rechargez la page pour une nouvelle demande.",
         'demande_envoyee'                 => "Merci ! Votre demande est bien partie, une confirmation vient de vous être envoyée par e-mail. Je vous réponds sous 24 h.",
         'demande_sans_email'              => "Votre demande est bien partie, mais la confirmation par e-mail n’a pas pu être envoyée. Inutile de renvoyer le formulaire, je vous réponds sous 24 h.",
         'envoi_echoue'                    => "L'envoi a échoué. Vous pouvez m'écrire directement par e-mail ou par téléphone.",
@@ -275,6 +281,8 @@ return [
         'reservation_fermee'              => "La réservation en ligne n'est pas encore ouverte. En attendant, le formulaire de demande fonctionne.",
         'choisir_creneau'                 => "Choisissez une prestation, un jour et une heure.",
         'reservation_en_cours'            => "Réservation en cours…",
+        'reservation_incertaine'          => "La réponse du serveur n'est pas arrivée. Votre rendez-vous est peut-être enregistré. Vérifiez vos e-mails, puis réessayez ce même formulaire sans modifier vos informations ou votre créneau. En cas de doute, contactez Elodie.",
+        'reservation_modifiee'            => "Ce rendez-vous a été annulé, modifié ou sa date est passée. Cette ancienne confirmation ne peut plus être utilisée. Contactez Elodie pour vérifier votre rendez-vous.",
         'reservation_echouee'             => "La réservation n'a pas pu aboutir. Réessayez dans un instant ou utilisez le formulaire de demande.",
         'creneau_pris'                    => "Ce créneau vient d'être pris. Choisissez-en un autre.",
         'reservation_confirmee'           => "Votre rendez-vous « {prestation} » est confirmé pour le {date}. Une confirmation vient de partir à {email}.",
@@ -291,8 +299,8 @@ return [
 
     // GOOGLE ET PARTAGE (onglet du navigateur, résultats de recherche, aperçu WhatsApp ou Facebook)
     'google' => [
-        'titre'         => "Tirage de cartes, pendule et coaching spirituel | L'éveil d'Elo", // 60 caractères au plus, sinon Google coupe
-        'description'   => "Tirage de cartes et pendule par message, coaching spirituel en visio. Un accompagnement doux et sans jugement en Suisse romande. Réservation en ligne.", // 155 caractères au plus
+        'titre'         => "Tirage de cartes en Suisse romande | L'éveil d'Elo", // Titre concis ; Google peut adapter son affichage.
+        'description'   => "Tirage de cartes en Suisse romande avec Elodie, à distance et par message. Découvrez aussi le pendule et le coaching spirituel en visio. Réservation en ligne.",
         'titre_partage' => "L'éveil d'Elo · Tirage de cartes, pendule et coaching spirituel",
     ],
 

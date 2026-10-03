@@ -8,7 +8,7 @@
 return [
 
     'tirage' => [
-        'subject' => 'Votre tirage de cartes est confirmé : {date}',
+        'subject' => 'Votre tirage de cartes est confirmé pour le {date}',
         'body'    => <<<'TEXTE'
             Bonjour {prenom},
 
@@ -18,7 +18,7 @@ return [
 
             Je vous contacterai à l’heure prévue, au numéro que vous m’avez indiqué. D’ici notre rendez-vous, vous pouvez prendre un moment pour réfléchir à la question ou à la thématique que vous souhaitez aborder lors de votre tirage.
 
-            Pour annuler, utilisez ce lien jusqu'à {delai_annulation} avant le rendez-vous : [annuler mon rendez-vous]({lien_annulation})
+            Vous pouvez [annuler votre rendez-vous]({lien_annulation}) jusqu'à {delai_annulation} avant la séance.
             Pour le déplacer, ou à moins de {delai_annulation}, répondez simplement à cet e-mail ou envoyez-moi un message au {telephone_elodie}.
 
             À bientôt,
@@ -27,7 +27,7 @@ return [
     ],
 
     'pendule' => [
-        'subject' => 'Votre séance de pendule est confirmée : {date}',
+        'subject' => 'Votre séance de pendule est confirmée pour le {date}',
         'body'    => <<<'TEXTE'
             Bonjour {prenom},
 
@@ -35,9 +35,9 @@ return [
 
             {details}
 
-            Je vous contacterai à l’heure prévue, au numéro que vous m’avez indiqué. Le pendule répond au mieux à des questions claires : notez celles que vous aimeriez éclaircir.
+            Je vous contacterai à l’heure prévue, au numéro que vous m’avez indiqué. Le pendule répond au mieux à des questions claires, notez celles que vous aimeriez éclaircir.
 
-            Pour annuler, utilisez ce lien jusqu'à {delai_annulation} avant le rendez-vous : [annuler mon rendez-vous]({lien_annulation})
+            Vous pouvez [annuler votre rendez-vous]({lien_annulation}) jusqu'à {delai_annulation} avant la séance.
             Pour le déplacer, ou à moins de {delai_annulation}, répondez simplement à cet e-mail ou envoyez-moi un message au {telephone_elodie}.
 
             À bientôt,
@@ -46,7 +46,7 @@ return [
     ],
 
     'coaching' => [
-        'subject' => 'Votre séance de coaching spirituel est confirmée : {date}',
+        'subject' => 'Votre séance de coaching spirituel est confirmée pour le {date}',
         'body'    => <<<'TEXTE'
             Bonjour {prenom},
 
@@ -54,9 +54,9 @@ return [
 
             {details}
 
-            Notre séance se déroulera en visioconférence. Je vous transmettrai les informations de connexion avant notre rendez-vous. Je vous invite simplement à prévoir un endroit calme et confortable, où vous pourrez profiter pleinement de ce moment.
+            Notre séance se déroulera en visioconférence sur Google Meet. Je vous transmettrai le lien de connexion par e-mail avant notre rendez-vous. Je vous invite simplement à prévoir un endroit calme et confortable, où vous pourrez profiter pleinement de ce moment.
 
-            Pour annuler, utilisez ce lien jusqu'à {delai_annulation} avant le rendez-vous : [annuler mon rendez-vous]({lien_annulation})
+            Vous pouvez [annuler votre rendez-vous]({lien_annulation}) jusqu'à {delai_annulation} avant la séance.
             Pour le déplacer, ou à moins de {delai_annulation}, répondez simplement à cet e-mail ou envoyez-moi un message au {telephone_elodie}.
 
             À bientôt,
@@ -99,7 +99,7 @@ return [
 
     // E-mails reçus par Elodie. {details} reprend les coordonnées, les réponses et les accords cochés.
     'avis_reservation' => [
-        'subject' => 'Nouveau rendez-vous : {prestation}, {date}',
+        'subject' => 'Nouveau rendez-vous, {prestation}, {date}',
         'body'    => <<<'TEXTE'
             {prenom} {nom} a réservé un rendez-vous depuis le site.
 
@@ -110,7 +110,7 @@ return [
     ],
 
     'avis_annulation' => [
-        'subject' => 'Rendez-vous annulé : {prestation}, {date}',
+        'subject' => 'Rendez-vous annulé, {prestation}, {date}',
         'body'    => <<<'TEXTE'
             {prenom} {nom} a annulé son rendez-vous depuis le site. Il est retiré de l'agenda.
 

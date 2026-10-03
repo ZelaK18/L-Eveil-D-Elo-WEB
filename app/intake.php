@@ -30,16 +30,16 @@ function booking_terms(array $service): array
         'Cadre de la prestation' => $definition['scope'] ?? '',
     ];
     if ($service['service'] !== 'coaching') {
-        $terms['Questions non traitées'] = 'Mort, diagnostic ou maladie ; vie privée d’un tiers ; contrôle d’une personne ; jeux d’argent ou investissements risqués ; urgence ou danger immédiat ; demande de certitude absolue sur l’avenir.';
+        $terms['Questions non traitées'] = 'Mort, diagnostic ou maladie, vie privée d’un tiers, contrôle d’une personne, jeux d’argent ou investissements risqués, urgence ou danger immédiat, demande de certitude absolue sur l’avenir.';
     } else {
-        $terms['Organisation de l’accompagnement'] = 'Le créneau choisi réserve une séance. Pour un pack ou un programme, il s’agit de la première séance ; les suivantes seront convenues avec Elodie. Le tarif affiché pour un pack ou un programme correspond à l’ensemble de la formule. La séance découverte offerte n’engage à aucun accompagnement payant.';
-        $terms['Fin de l’accompagnement'] = 'Chaque partie peut demander l’arrêt de l’accompagnement à tout moment. Les prestations déjà réalisées ou dues sont traitées selon les conditions convenues, sous réserve des dispositions impératives applicables. Le sort des séances non réalisées et de tout solde versé est convenu avec Elodie selon ces dispositions.';
+        $terms['Organisation de l’accompagnement'] = 'Le créneau choisi réserve une séance. Pour un pack ou un programme, il s’agit de la première séance, les suivantes seront convenues avec Elodie. Le tarif affiché pour un pack ou un programme correspond à l’ensemble de la formule. La séance découverte offerte n’engage à aucun accompagnement payant.';
+        $terms['Fin de l’accompagnement'] = 'Chaque partie peut mettre fin à l’accompagnement à tout moment. Si un pack ou un programme a été payé à l’avance, les séances non réalisées sont remboursées au prorata du prix payé, le prix total est divisé par le nombre de séances prévues. Par exemple, pour un pack de trois séances payé 120 CHF, une séance réalisée laisse 80 CHF à rembourser. Les éventuelles séances dues selon les conditions d’annulation sont déduites de ce solde, sous réserve des dispositions impératives applicables. Si Elodie annule une séance sans report convenu, cette séance est remboursée selon le même calcul.';
     }
-    $terms['Réservation et paiement'] = booking_confirmation_notice() . ' Le mode et l’échéance de règlement sont convenus directement avec Elodie ; la confirmation du rendez-vous ne vaut pas reçu de paiement.';
-    $terms['Annulation et retard'] = 'Toute annulation ou demande de report doit être communiquée au moins ' . cancel_notice_label() . ' avant la séance. Passé ce délai, la séance peut être facturée ou déduite du programme, sauf situation exceptionnelle acceptée par Elodie et sous réserve des dispositions impératives applicables. Une séance offerte reste gratuite. En cas de retard, la séance se termine à l’heure initialement prévue. Le lien de confirmation permet l’annulation en ligne dans le délai prévu ; pour un report, contactez Elodie.';
+    $terms['Réservation et paiement'] = booking_confirmation_notice() . ' Les séances payantes se règlent par TWINT avant la séance, selon les instructions transmises par Elodie. Pour un pack ou un programme, le montant total est à régler avant la première séance. Si vous utilisez un bon cadeau, transmettez sa référence à Elodie pour validation ; seul un éventuel complément est à régler. La séance découverte offerte reste gratuite. La confirmation du rendez-vous ne vaut pas reçu de paiement.';
+    $terms['Annulation et retard'] = 'Toute annulation ou demande de report doit être communiquée au moins ' . cancel_notice_label() . ' avant la séance. Passé ce délai, la séance peut être facturée ou déduite du programme, sauf situation exceptionnelle acceptée par Elodie et sous réserve des dispositions impératives applicables. Une séance offerte reste gratuite. En cas de retard, la séance se termine à l’heure initialement prévue. Le lien de confirmation permet l’annulation en ligne dans le délai prévu. Pour un report, contactez Elodie.';
     $terms['Confidentialité des échanges'] = 'Les échanges sont traités avec confidentialité dans les limites de la loi. Aucun enregistrement audio ou vidéo n’est réalisé sans accord préalable distinct. Les destinataires techniques et les modalités de traitement des formulaires sont précisés ci-dessous.';
     $terms['Données du formulaire'] = intake_texts()['privacy'];
-    $terms['Validation en ligne'] = 'Votre nom, votre prénom, vos cases cochées et la date et l’heure de validation sont conservés avec la version des conditions acceptées. Une copie des conditions est envoyée dans votre confirmation. Aucun document à imprimer ni signature manuscrite ne sont demandés.';
+    $terms['Validation en ligne'] = 'Votre nom, votre prénom, vos cases cochées et la date et l’heure de validation sont conservés avec la version des conditions acceptées. Votre e-mail de confirmation contient un récapitulatif du rendez-vous. Aucun document à imprimer ni signature manuscrite ne sont demandés.';
     return $terms;
 }
 
@@ -177,8 +177,49 @@ function intake_client_mail_details(array $service, array $receipt): array
     return $blocks;
 }
 
+// Le dossier local ne suffit pas : le rendez-vous a pu être annulé ou déplacé.
+// Une panne Google remonte à l'appelant et ne doit jamais être traitée comme une annulation.
+function booking_record_status(string $recordName, array &$record): string
+{
+    if (in_array($record['status'] ?? '', ['cancelled', 'changed', 'past'], true)) {
+        return $record['status'];
+    }
+    $expected = $record['event'];
+    $current = calendar_get_event($expected['id']);
+    $status = 'active';
+    if ($current === null) {
+        $status = 'cancelled';
+    } else {
+        foreach (['start', 'end'] as $point) {
+            if (empty($current[$point]['dateTime'])
+                || strtotime($current[$point]['dateTime']) !== strtotime($expected[$point]['dateTime'])) {
+                $status = 'changed';
+            }
+        }
+        foreach (['source', 'prestation', 'prenom', 'nom', 'email', 'telephone'] as $key) {
+            if (($current['extendedProperties']['private'][$key] ?? null)
+                !== ($expected['extendedProperties']['private'][$key] ?? null)) {
+                $status = 'changed';
+            }
+        }
+        if ($status === 'active' && strtotime($current['start']['dateTime']) <= time()) {
+            $status = 'past';
+        }
+    }
+    if ($status !== 'active') {
+        $record['status'] = $status;
+        unset($record['response']);
+        storage_write($recordName, $record);
+    }
+    return $status;
+}
+
 function deliver_booking_emails(string $recordName, array &$record): void
 {
+    $pending = array_filter(array_keys($record['emails']), fn($index) => empty($record['sent'][$index]));
+    if (!$pending || booking_record_status($recordName, $record) !== 'active') {
+        return;
+    }
     foreach ($record['emails'] as $index => [$to, $key, $replyTo, $details]) {
         if (!empty($record['sent'][$index])) {
             continue;

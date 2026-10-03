@@ -16,6 +16,11 @@ $clientEmailSent = true;
 
 try {
     if ($id !== '' && hash_equals(cancel_signature($id), $signature)) {
+        // Même ordre que réservation/reprise : dossier individuel, puis agenda.
+        $recordName = preg_match('/^[a-f0-9]{64}$/D', $id) ? 'booking-form-' . $id : null;
+        if ($recordName !== null) {
+            hold_lock($recordName);
+        }
         $event = calendar_get_event($id);
         $appointment = $event ? site_appointment($event) : null;
         $left = $appointment ? $appointment['start']->getTimestamp() - time() : 0;
@@ -29,7 +34,7 @@ try {
     }
 
     if ($state === 'confirmer' && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
-        $cancelled = with_lock('booking', function () use ($id, $appointment): bool {
+        $cancelled = with_lock('booking', function () use ($id, $appointment, $recordName): bool {
             // Relu sous le verrou : un double clic n'annule et ne prévient qu'une fois.
             if (!calendar_get_event($id)) {
                 return false;
@@ -41,6 +46,19 @@ try {
             $events = array_filter($around, fn(array $event) => $event['id'] !== $id);
 
             calendar_delete_event($id);
+            if ($recordName !== null) {
+                $record = storage_read($recordName);
+                if ($record) {
+                    $record['status'] = 'cancelled';
+                    unset($record['response']);
+                    try {
+                        storage_write($recordName, $record);
+                    } catch (RuntimeException $e) {
+                        // La reprise vérifiera aussi l'absence effective dans Google.
+                        error_log('Dossier annulation : ' . $e->getMessage());
+                    }
+                }
+            }
             try {
                 apply_availability_changes(restored_availability($events, $pieces, config('booking')));
             } catch (GoogleError $e) {

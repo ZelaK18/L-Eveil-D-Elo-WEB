@@ -1,0 +1,77 @@
+VITESSE ET CODE INUTILISÉ — 3 OCTOBRE 2026
+
+PÉRIMÈTRE
+Revue des références PHP, JavaScript, classes et variables CSS, messages,
+icônes et images. Mesures navigateur sur des copies locales sans secrets,
+avec une réponse d'agenda fictive. Aucun appel Google ni envoi réel.
+
+CORRECTIONS
+- Le mode JavaScript est activé avant l'affichage du corps de la page.
+  Auparavant, le menu mobile apparaissait déplié puis se repliait après le
+  chargement du script : l'accueil se déplaçait fortement.
+- Le script est découvert dans l'en-tête et chargé avec defer.
+- Si son téléchargement échoue, le mode sans JavaScript est rétabli :
+  navigation et contenu restent accessibles.
+- Le premier écran apparaît sans attendre l'animation d'entrée ; les
+  animations des autres sections sont conservées.
+- Suppression de la remise à zéro du calendrier faite deux fois lors du
+  choix d'une prestation : showMonth réalise déjà cette opération.
+
+MESURES LOCALES
+Chrome 154, largeur 390 px, densité 2, processeur ralenti x4, cache froid.
+Conditions réseau CDP : 1,6 Mbit/s, latence configurée 100 ms.
+Médiane de trois chargements par page ; observation du chargement initial.
+Les chiffres ne sont pas des mesures de production ni un score PageSpeed.
+
+Page                       Avant       Après
+Accueil complet /site/
+  Affichage principal LCP  1,364 s     1,296 s
+  Déplacements CLS         0,367       0
+  Corps des ressources     302 489 o   302 671 o
+Page d'attente /
+  Affichage principal LCP  0,644 s     0,616 s
+  Déplacements CLS         0           0
+  Corps des ressources     140 532 o   140 532 o
+
+Le gain net est la stabilité visuelle. Les petites différences de temps
+varient selon la charge de la machine ; elles ne prouvent pas un gain
+équivalent chez les visiteurs. Les tâches longues n'ont pas montré de
+réduction fiable. Aucun allègement important du poids réseau n'est revendiqué.
+Le préchargement des deux polices testé a été retiré faute de gain.
+
+CODE MORT ET FICHIERS
+- Aucun candidat manifeste parmi les fonctions PHP, les messages, les
+  identifiants d'icônes, les classes CSS et les variables CSS examinés.
+  Une référence ne garantit pas qu'un chemin soit encore utilisé en pratique.
+- Aucun framework JavaScript ni bibliothèque tierce chargée par les pages.
+- Les polices latin étendu ne sont pas téléchargées sur les deux accueils
+  mesurés ; les conserver permet l'affichage des caractères correspondants.
+- Les PNG de secours, le logo des données structurées et le JPEG de partage
+  ont encore un usage ; ils ne sont pas du code mort.
+- logo-transparent-total.png, logo-transparent-total (2).png et og-image.webp
+  ne sont pas référencés dans le code examiné. Conservés comme ressources
+  graphiques : ils ne sont pas téléchargés par les pages mesurées.
+- Les deux arborescences racine et site/ servent des pages distinctes :
+  leur duplication ne justifie pas une suppression globale.
+
+VALIDATION
+Contrôles de syntaxe PHP/JS, copies CSS synchronisées, git diff --check.
+89 contrôles PHP réussis. Aucun échec du lanceur navigateur : huit pages,
+17 largeurs, formulaires, mode sans JavaScript et échec de téléchargement
+du script. Résultats de la dernière passe après toutes les corrections :
+C:\Users\Dylan\AppData\Local\Temp\elo-site-review-CV6Jm6\results.json
+Pour reproduire les mesures dans PowerShell :
+  $env:REVIEW_PERFORMANCE_ONLY = '1'
+  node tests/review-browser.cjs
+  Remove-Item Env:REVIEW_PERFORMANCE_ONLY
+
+Résultats avant :
+C:\Users\Dylan\AppData\Local\Temp\elo-site-review-CElqu6\results.json
+Résultats après :
+C:\Users\Dylan\AppData\Local\Temp\elo-site-review-SXuL90\results.json
+
+LIMITES
+Serveur PHP local : compression et cache Apache, latence réelle de Google,
+temps d'envoi des e-mails et performances du serveur public non mesurés.
+Le compteur CLS présenté cumule les déplacements au chargement observé,
+pas les interactions d'une session entière. Seul Chrome a été mesuré ici.

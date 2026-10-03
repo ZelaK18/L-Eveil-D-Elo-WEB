@@ -68,11 +68,18 @@ try {
                 throw new InvalidArgumentException('Ce formulaire a déjà été validé. Pour modifier votre rendez-vous, contactez Elodie ou utilisez le lien de confirmation.');
             }
             if (!empty($record['event'])) {
+                if (booking_record_status($recordName, $record) !== 'active') {
+                    throw new InvalidArgumentException(message('reservation_modifiee'));
+                }
                 return $record['event'];
             }
             // Reprise après une interruption entre l'envoi à Google et la réponse du serveur.
             $existing = calendar_get_event($event['id']);
             if ($existing) {
+                $record['event'] = $event;
+                if (booking_record_status($recordName, $record) !== 'active') {
+                    throw new InvalidArgumentException(message('reservation_modifiee'));
+                }
                 $record['event'] = $existing;
                 storage_write($recordName, $record);
                 forget_calendar_cache();
@@ -179,6 +186,9 @@ try {
     error_log('Confirmation réservation : ' . $e->getMessage());
 }
 
+if (($record['status'] ?? 'active') !== 'active') {
+    form_response(false, message('reservation_modifiee'), 409);
+}
 $response['email_sent'] = !empty($record['sent'][1]);
 $response['email_pending'] = false;
 $record['response'] = $response;

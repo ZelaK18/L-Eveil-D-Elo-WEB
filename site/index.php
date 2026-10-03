@@ -4,7 +4,7 @@ require __DIR__ . '/app/bootstrap.php';
 $site = config('site');
 $services = config('services');
 $bookingOptions = booking_options();
-$hasPortrait = is_file(__DIR__ . '/images/test-pp.jpg');
+$hasPortrait = is_file(__DIR__ . '/images/portrait-elodie.webp');
 // Tout ce qui se réserve, formules comprises : la fourchette de prix de Google suit chaque prix et chaque tarif.
 $prices = array_filter(array_map('price_amount', $bookingOptions), fn(?int $amount) => $amount !== null);
 $title = (string) site_text('google.titre');
@@ -73,6 +73,8 @@ $schema = [
 <html lang="fr-CH">
 <head>
 <?php require __DIR__ . '/app/partials/head.php' ?>
+<script>document.documentElement.classList.add("js");</script>
+<script defer src="<?= e(asset('js/script.js')) ?>" onerror="document.documentElement.classList.remove('js')"></script>
 <meta name="author" content="<?= e($site['owner']) ?>">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#F7EDDD">
@@ -154,7 +156,7 @@ $schema = [
     <div class="hero__media reveal">
       <figure class="portrait">
         <?php if ($hasPortrait): ?>
-        <img src="<?= e(asset('images/test-pp.jpg')) ?>" alt="<?= e(site_text('accueil.description_photo')) ?>" class="portrait__img" width="880" height="1320" fetchpriority="high">
+        <img src="<?= e(asset('images/portrait-elodie.webp')) ?>" alt="<?= e(site_text('accueil.description_photo')) ?>" class="portrait__img" width="880" height="880" fetchpriority="high">
         <?php else: ?>
         <img src="<?= e(asset('images/logo-transparent-560.webp')) ?>" alt="<?= e($site['name']) ?>" class="portrait__img portrait__img--logo" width="560" height="560" fetchpriority="high">
         <?php endif ?>
@@ -466,6 +468,7 @@ $schema = [
 
         <form class="form" id="rdvForm" action="api/contact.php" method="post">
           <?= $antispam ?>
+          <input type="hidden" name="request_id" value="<?= e(bin2hex(random_bytes(16))) ?>">
 
           <?php require __DIR__ . '/app/partials/person-fields.php' ?>
 
@@ -513,6 +516,7 @@ $schema = [
         <svg width="20" height="20" aria-hidden="true"><use href="#ico-mail"/></svg>
       </a>
     </div>
+    <p class="footer__presentation"><?= t('pied_de_page.presentation') ?></p>
   </div>
 
   <div class="container footer__bottom">
@@ -531,6 +535,5 @@ $schema = [
 </a>
 
 <script type="application/json" id="messages"><?= json_encode(site_text('messages') ?? [], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
-<script src="<?= e(asset('js/script.js')) ?>"></script>
 </body>
 </html>

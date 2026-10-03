@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.documentElement.classList.add("js");
   const $ = id => document.getElementById(id);
   const messages = JSON.parse($("messages").textContent);
   const header = $("header");
@@ -108,14 +107,22 @@ document.addEventListener("DOMContentLoaded", () => {
     element.className = ("form__status " + state).trim();
   };
 
-  const send = async (url, options, fallback) => {
+  const newRequestId = () => Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, "0")).join("");
+
+  // Même gestion du délai pour l'agenda et les formulaires, y compris la lecture JSON.
+  const send = async (url, options, fallback, { timeoutMs = 15000, uncertain = fallback } = {}) => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
     let response;
     let result;
     try {
-      response = await fetch(url, { ...options, headers: { ...options.headers, Accept: "application/json" } });
+      response = await fetch(url, { ...options, signal: controller.signal, headers: { ...options.headers, Accept: "application/json" } });
       result = await response.json();
     } catch {
-      throw new Error(fallback);
+      // Interrompre le navigateur n'annule pas une opération déjà reçue par le serveur.
+      throw Object.assign(new Error(uncertain), { code: "result_unknown" });
+    } finally {
+      clearTimeout(timeout);
     }
     if (!response.ok || result?.ok !== true) throw Object.assign(new Error(result?.message || fallback), { code: result?.code });
     return result;
@@ -123,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Validation, verrouillage et erreurs communs aux deux formulaires.
   // Les champs sont bloqués pendant l'envoi, mais le statut reste accessible aux lecteurs d'écran.
-  const bindAsyncForm = (form, status, { pending, fallback, ready = () => true, success, failure }) => {
+  const bindAsyncForm = (form, status, { pending, fallback, uncertain, ready = () => true, success, failure }) => {
     let busy = false;
     form.noValidate = true; // Sans JavaScript, le navigateur garde ses contrôles natifs.
     form.addEventListener("submit", async e => {
@@ -148,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let result;
       let error;
       try {
-        result = await send(form.action, { method: "POST", body }, fallback);
+        result = await send(form.action, { method: "POST", body }, fallback, { timeoutMs: 30000, uncertain });
       } catch (reason) {
         error = reason;
       } finally {
@@ -171,8 +178,10 @@ document.addEventListener("DOMContentLoaded", () => {
   bindAsyncForm(form, status, {
     pending: messages.envoi_en_cours,
     fallback: messages.envoi_echoue,
+    uncertain: messages.demande_incertaine,
     success: result => {
       form.reset();
+      form.elements.request_id.value = newRequestId();
       setStatus(status, result.message, "is-ok");
     },
   });
@@ -227,13 +236,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const fetchMonth = month => {
     if (!monthRequests.has(month) || Date.now() - monthRequests.get(month).at > 30000) {
       const entry = { at: Infinity };
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 15000);
-      entry.promise = send(`api/availability.php?${new URLSearchParams({ month })}`, { signal: controller.signal }, messages.agenda_indisponible).then(result => {
+      entry.promise = send(`api/availability.php?${new URLSearchParams({ month })}`, {}, messages.agenda_indisponible).then(result => {
         entry.at = Date.now();
         if (monthRequests.get(month) === entry) monthRequests.set(result.month, entry);
         return result;
-      }).finally(() => clearTimeout(timeout));
+      });
       monthRequests.set(month, entry);
       entry.promise.catch(() => {
         for (const [key, cached] of monthRequests) if (cached === entry) monthRequests.delete(key);
@@ -353,7 +360,6 @@ document.addEventListener("DOMContentLoaded", () => {
   booking.querySelectorAll("input[name='service']").forEach(radio => radio.addEventListener("change", () => {
     agenda.service = radio.value;
     groups.forEach(button => button.classList.toggle("is-chosen", button === groupOf(radio.value)));
-    clearSelection();
     when.hidden = false;
     showMonth(agenda.month);
   }));
@@ -372,8 +378,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Formulaire vierge, formules refermées : pour un nouveau rendez-vous après une réservation.
   const resetBooking = () => {
+    ++agenda.view; // Ignorer les chargements de calendrier démarrés avant la remise à zéro.
     booking.reset();
-    booking.elements.request_id.value = Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, "0")).join("");
+    booking.elements.request_id.value = newRequestId();
     clearSelection();
     agenda.service = "";
     groups.forEach(button => {
@@ -388,7 +395,11 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // « Réserver » sur une carte : coche la prestation ou la formule. Pour une prestation à formules, ouvre leur liste.
-  document.querySelectorAll("[data-service]").forEach(link => link.addEventListener("click", () => {
+  document.querySelectorAll("[data-service]").forEach(link => link.addEventListener("click", event => {
+    if (booking.getAttribute("aria-busy") === "true") {
+      event.preventDefault();
+      return;
+    }
     if (booking.hidden) resetBooking();
     const group = groupOf(link.dataset.service);
     if (group) setGroup(group, true);
@@ -402,6 +413,7 @@ document.addEventListener("DOMContentLoaded", () => {
   bindAsyncForm(booking, bookingStatus, {
     pending: messages.reservation_en_cours,
     fallback: messages.reservation_echouee,
+    uncertain: messages.reservation_incertaine,
     ready: () => Boolean(booking.elements.time.value),
     success: result => {
       forgetMonths();

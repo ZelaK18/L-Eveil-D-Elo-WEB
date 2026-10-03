@@ -1,0 +1,158 @@
+AUDIT DU SITE L'ÉVEIL D'ELO — 3 OCTOBRE 2026
+
+PÉRIMÈTRE ET RÉSULTAT
+Revue des sources locales, du contenu et des parcours navigateur. Page d'attente
+à la racine et site complet dans site/. Aucun changement du site, déploiement,
+envoi d'e-mail réel ou réservation Google réelle pendant cet audit.
+Les tentatives de lecture du domaine public avec l'outil web n'ont pas abouti :
+cela ne démontre pas une panne. L'état réel de production reste à vérifier.
+
+La base technique passe les contrôles exécutés. Les principaux travaux restants
+portent sur la préparation au lancement, les coordonnées et les conditions
+commerciales. Les observations ci-dessous distinguent faits, risques à vérifier
+et améliorations facultatives ; elles ne constituent pas une certification.
+
+À TRAITER AVANT L'OUVERTURE PUBLIQUE
+
+1. Configuration de préproduction toujours active — constat, pas panne démontrée.
+   site/.htaccess:5 refuse tout accès avec Require all denied ; ligne 11 ajoute
+   noindex,nofollow. robots.txt:2 exclut /site/. L'accueil racine est une page
+   d'attente et site/app/config.php:9 utilise encore une adresse sous /site/.
+   Effet : un déploiement Apache tel quel bloque le site complet ; sa découverte
+   par les moteurs est également empêchée. Ce choix peut être voulu actuellement.
+   Action : prévoir une procédure de lancement avec URL finale, accès public,
+   indexation et sitemap cohérents. Ne pas lever les protections prématurément.
+
+2. Coordonnées à finaliser — adresse incomplète et téléphone à confirmer.
+   site/textes/mentions-legales.php:29 contient seulement 1690 Villaz-St-Pierre.
+   site/app/config.php:11-12 contient +41791234567 / 079 123 45 67, qui ressemble
+   à un numéro d'exemple. Sa validité n'a pas été vérifiée par appel.
+   Effet : adresse de contact insuffisamment précise et risque que les clients
+   appellent un mauvais numéro, également repris dans les confirmations.
+   Action : compléter l'adresse postale et confirmer/remplacer le téléphone
+   dans les deux configurations. Voir source officielle [1].
+
+3. Bons cadeaux : validité de 12 mois à revoir — risque juridique à clarifier.
+   site/textes/site-text.php:153 et :164 annoncent 12 mois.
+   Le BFC indique que la question n'est pas spécialement réglée par la loi,
+   mais qu'une durée trop courte peut être invalide et qu'une interprétation
+   applique les délais de prescription de cinq ou dix ans. Ne pas présenter
+   l'expiration à 12 mois comme une règle suisse incontestable. Voir [2].
+   Action : revoir les conditions de validité ; préciser aussi le délai d'envoi,
+   les frais éventuels du bon papier, son utilisation partielle et son transfert.
+
+4. Paiement et arrêt des packs trop peu précis — manque d'information pratique.
+   site/app/intake.php:38 laisse le moyen et l'échéance de paiement à convenir.
+   Ligne 36 renvoie aussi à un accord ultérieur pour les séances non réalisées.
+   Effet : le client réserve sans savoir clairement comment et quand payer,
+   ni comment sera calculé un éventuel remboursement du pack.
+   Action : fixer les moyens réellement acceptés, l'échéance, le traitement
+   des séances restantes et l'annulation par Elodie, sous réserve du droit
+   impératif. Un paiement en ligne n'est pas indispensable pour cela.
+
+5. Fichiers sensibles présents dans l'historique Git — vérification nécessaire.
+   git log --all retrouve site/app/secrets.php et site/storage/google-token.php
+   dans les anciens commits. Ils sont désormais ignorés et ne sont pas suivis
+   dans la version actuelle. Aucune valeur secrète n'a été affichée ou testée.
+   Effet possible : retirer ces fichiers du dernier commit ne les retire pas
+   des anciennes versions. Si le dépôt a été partagé, contrôler les accès
+   concernés, leur renouvellement et l'assainissement de l'historique.
+   Leur validité actuelle et une éventuelle exposition ne sont pas établies.
+
+CORRECTIONS TECHNIQUES ET COHÉRENCE
+
+6. Confirmation : promesse de copie des conditions partiellement tenue.
+   site/app/intake.php:42 annonce une copie des conditions dans l'e-mail.
+   intake_client_mail_details(), lignes 161-177, n'inclut qu'une sélection :
+   notamment les rubriques Confidentialité des échanges et Données du formulaire
+   ne sont pas reprises, ni le libellé exact des accords cochés.
+   Action : transmettre la version complète annoncée ou annoncer explicitement
+   un récapitulatif. La version conservée côté serveur est plus complète.
+
+7. Connexion bloquée pendant un envoi : absence de délai d'expiration explicite.
+   site/js/script.js:115 effectue fetch() pour les POST sans signal d'abandon.
+   Les champs restent désactivés jusqu'à la résolution de la requête (:142-157).
+   L'agenda, lui, dispose d'un délai explicite de 15 secondes (:230-236).
+   Effet possible : si la requête reste en attente, aucun réessai n'est proposé
+   tant que le navigateur ne finit pas par signaler l'échec. C'est un risque
+   relevé dans le code ; aucune durée maximale du navigateur n'a été mesurée.
+   Action : gérer un délai et un état « résultat inconnu » avec reprise sûre,
+   en conservant l'identifiant de réservation et les données saisies.
+
+8. Conservation : la politique nécessite une procédure opérationnelle.
+   site/textes/mentions-legales.php:93 annonce un an maximum après la dernière
+   séance ; :96 précise une suppression manuelle. Les dossiers de réservation
+   contiennent aussi des réponses dans receipt et dans les e-mails à envoyer.
+   Aucun outil de purge ou suivi de fin d'accompagnement n'a été trouvé.
+   Ce n'est pas la preuve que la suppression manuelle n'est pas réalisée.
+   Action : organiser une revue régulière et supprimer les copies concernées
+   dans les dossiers, les e-mails et les appareils, en séparant les justificatifs.
+   La durée des journaux du serveur et la rotation des sauvegardes restent
+   à vérifier dans l'hébergement. Les tests locaux ne peuvent pas les établir.
+
+AMÉLIORATIONS DE CONTENU, SANS CARACTÈRE OBLIGATOIRE PRÉSUMÉ
+
+9. Expliquer le déroulement des séances avant la réservation.
+   Les cartes et l'e-mail de coaching disent « en visio » ; WhatsApp est décrit
+   dans la confidentialité. Ajouter sur la prestation que l'appel se fait sur
+   WhatsApp, qui appelle et comment se préparer. Pour le tirage et le pendule,
+   préciser le canal des messages et si le client doit être disponible au créneau.
+   Une courte FAQ peut aussi regrouper paiement, report, majorité et bons cadeaux.
+
+10. Renforcer les informations sur Elodie.
+    site/textes/site-text.php:46 annonce « coach spirituelle certifiée » sans
+    nommer la formation ou l'organisme. Ajouter ces informations si elles sont
+    exactes et souhaitées. Le portrait est absent ; le logo de remplacement
+    s'affiche correctement. Une vraie photo serait une amélioration de confiance,
+    pas une correction technique. Aucun avis client ne doit être inventé.
+
+11. Simplifier certaines saisies et la lecture.
+    La date de naissance complète est obligatoire pour vérifier la majorité et
+    le téléphone est obligatoire même pour une simple demande de contact.
+    Réexaminer leur nécessité selon le parcours, sans affirmer ici une illégalité.
+    Sur ordinateur, les paragraphes justifiés créent des espaces irréguliers ;
+    un alignement à gauche serait plus facile à lire. Ajouter un lien visible
+    au focus « Aller au contenu » faciliterait la navigation au clavier.
+
+VALIDATION EXÉCUTÉE LE 3 OCTOBRE 2026
+- node tests/review-browser.cjs : aucun échec ; Chrome 154.0.8037.95, 17 largeurs
+  de 320 à 2560 px, huit pages, menus, formules, images, polices, formulaires
+  simulés, erreurs réseau, conflits de créneaux, double envoi, texte à 200 %,
+  navigation sans JavaScript et contrôles axe-core WCAG exécutés.
+- Le même script : 89 contrôles PHP réussis.
+- php -d extension_dir=php/ext tests/review-booking.php : 60 contrôles réussis
+  avec Google et la messagerie simulés, dont concurrence et reprise sans doublon.
+- node tests/review-http.cjs : 25 contrôles HTTP locaux réussis sur LeveilDelo.app,
+  dont les refus d'accès aux fichiers internes et les redirections.
+- Inspection visuelle des captures de l'accueil à 320 et 1440 px.
+- Le dossier de résultats temporaires est :
+  C:\Users\Dylan\AppData\Local\Temp\elo-site-review-hKAH3X
+
+LIMITES
+Pas d'essai d'envoi réel Gmail, de création/annulation Google réelle, de paiement,
+de délivrabilité, de sauvegarde/restauration, de performances sur réseau mobile
+réel ou d'audit exhaustif de sécurité. Les contrôles d'accessibilité automatisés
+ne constituent pas une certification. Seul Chrome a été exécuté cette fois.
+Le succès HTTP local ne valide pas la configuration Apache de production.
+
+SOURCES OFFICIELLES CONSULTÉES
+[1] SECO — Commerce électronique :
+https://www.seco.admin.ch/fr/commerce-electronique
+[2] Bureau fédéral de la consommation — FAQ, question 13 sur les bons :
+https://www.konsum.admin.ch/fr/foire-aux-questions-faq
+[3] PFPDT — Connaître et faire valoir mes droits :
+https://www.edoeb.admin.ch/fr/connaitre-et-faire-valoir-mes-droits
+
+SUIVI DES DÉCISIONS — 3 OCTOBRE 2026
+- Conditions mises à jour : paiement TWINT avant la séance ; montant total des
+  packs/programmes avant la première séance. La découverte offerte reste gratuite.
+- Arrêt d'un pack : remboursement au prorata du prix payé pour les séances non
+  réalisées, sous réserve des séances éventuellement dues selon les conditions
+  d'annulation et des dispositions impératives applicables.
+- Bons cadeaux : validité de 10 ans dès l'achat, PDF par e-mail sous 24 heures
+  après réception du paiement, sans frais d'envoi. La version papier est retirée.
+  Transmission du bon et conservation du solde d'un bon en montant libre précisées.
+- Préproduction conservée jusqu'au lancement. Pour les secrets, l'utilisateur
+  indique que tout est en ordre ; aucune révocation ni réécriture Git effectuée.
+- Ces changements portent sur les textes et les conditions : l'encaissement TWINT,
+  les remboursements et la création/envoi des bons restent gérés par Elodie.

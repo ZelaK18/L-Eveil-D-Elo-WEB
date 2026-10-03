@@ -178,8 +178,17 @@ async function review(browser, base, name) {
   await layout(nojs, `${name} sans JS`);
   await plain.close();
   if (name === 'chromium') {
+    const failedScript = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const fallback = await setupPage(failedScript);
+    await fallback.route('**/js/script.js?*', route => route.abort());
+    await fallback.goto(base + '/site/');
+    check(await fallback.locator('html').evaluate(el => !el.classList.contains('js')), 'Echec du script: mode sans JS restaure');
+    check(await fallback.locator('#nav').isVisible(), 'Echec du script: navigation accessible');
+    check(await fallback.locator('.hero__text').evaluate(el => getComputedStyle(el).opacity === '1'), 'Echec du script: contenu visible');
+    await failedScript.close();
     await bookingPerformance(browser, base);
     await networkScenarios(browser, base);
+    await timeoutScenarios(browser, base);
     const visual = await browser.newContext({ reducedMotion: 'no-preference' });
     const preview = await setupPage(visual);
     for (const width of [320, 1440]) {
@@ -231,6 +240,8 @@ async function bookingPerformance(browser, base) {
   await page.waitForFunction(() => document.querySelector('#bookingForm').getAttribute('aria-busy') === 'true');
   check((await page.locator('#bookingForm [type=submit]').textContent()).includes('en cours'), 'Réservation: attente visible sur le bouton');
   await page.locator('#bookingForm').evaluate(form => form.requestSubmit());
+  await page.locator('[data-service="tirage"]').first().dispatchEvent('click');
+  check(await page.locator('#bookingForm [name=service]:checked').inputValue() === 'pendule', 'Reservation: prestation conservee pendant l’envoi');
   finish();
   await page.locator('#bookingDone:visible').waitFor();
   check(posts === 1, 'Réservation: une seule requête malgré une double soumission');
@@ -290,6 +301,98 @@ async function networkScenarios(browser, base) {
   observations.push('Erreurs réseau/API : reprise agenda, HTTP 500, double soumission, saisies conservées, conflit de créneau');
 }
 
+// Mesures locales reproductibles ; Google est simule et Apache (gzip) n'est pas utilise.
+// REVIEW_PERFORMANCE_ONLY=1 node tests/review-browser.cjs
+async function performanceReview(browser, base) {
+  // Une reponse HTTP locale garde la limitation reseau CDP effective (sans page.route).
+  fs.mkdirSync(path.join(fixture, 'site/api'), { recursive: true });
+  fs.writeFileSync(path.join(fixture, 'site/api/availability.php'), '<?php header("Content-Type: application/json"); echo json_encode(["ok" => true, "month" => "2026-10", "min" => "2026-10", "max" => "2026-12", "services" => (object) []]);');
+  for (const pathname of ['/', '/site/']) {
+    const runs = [];
+    for (let run = 0; run < 3; run++) {
+      const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true });
+      const page = await context.newPage();
+      page.on('pageerror', error => failures.push(error.message));
+      const cdp = await context.newCDPSession(page);
+      await cdp.send('Network.enable');
+      await cdp.send('Network.setCacheDisabled', { cacheDisabled: true });
+      await cdp.send('Network.emulateNetworkConditionsByRule', { matchedNetworkConditions: [
+        { urlPattern: '', latency: 100, downloadThroughput: 200000, uploadThroughput: 100000 },
+      ] });
+      await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
+      await page.addInitScript(() => {
+        window.auditPerformance = { lcp: 0, cls: 0, longTasksMs: 0, shifts: [] };
+        new PerformanceObserver(list => list.getEntries().forEach(entry => {
+          window.auditPerformance.lcp = entry.startTime;
+        })).observe({ type: 'largest-contentful-paint', buffered: true });
+        new PerformanceObserver(list => list.getEntries().forEach(entry => {
+          if (!entry.hadRecentInput) {
+            window.auditPerformance.cls += entry.value;
+            window.auditPerformance.shifts.push({ at: entry.startTime, value: entry.value, nodes: entry.sources.map(source => source.node?.className || source.node?.nodeName) });
+          }
+        })).observe({ type: 'layout-shift', buffered: true });
+        new PerformanceObserver(list => list.getEntries().forEach(entry => {
+          window.auditPerformance.longTasksMs += entry.duration;
+        })).observe({ type: 'longtask', buffered: true });
+      });
+      await page.goto(base + pathname);
+      await page.evaluate(() => document.fonts.ready);
+      await page.waitForTimeout(1200);
+      runs.push(await page.evaluate(() => {
+        const navigation = performance.getEntriesByType('navigation')[0];
+        const resources = performance.getEntriesByType('resource').filter(entry => !entry.name.includes('/api/'));
+        return { ...window.auditPerformance, ttfb: navigation.responseStart,
+          bytes: navigation.encodedBodySize + resources.reduce((sum, entry) => sum + entry.encodedBodySize, 0),
+          resources: resources.map(entry => ({ path: new URL(entry.name).pathname, bytes: entry.encodedBodySize })) };
+      }));
+      await context.close();
+    }
+    const median = key => runs.map(run => run[key]).sort((a, b) => a - b)[1];
+    observations.push({ page: pathname, mobile: '390px, CPU x4, 1.6 Mbit/s, latence 100ms, cache froid, 3 passages',
+      median: Object.fromEntries(['lcp', 'cls', 'longTasksMs', 'ttfb', 'bytes'].map(key => [key, median(key)])), resources: runs[1].resources, shifts: runs[1].shifts });
+  }
+}
+
+async function timeoutScenarios(browser, base) {
+  const context = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 1440, height: 900 } });
+  const page = await setupPage(context);
+  await page.clock.install();
+  await page.goto(base + '/site/');
+  for (const [form, status, api] of [['#rdvForm', '#formStatus', 'contact'], ['#bookingForm', '#bookingStatus', 'booking']]) {
+    if (api === 'booking') {
+      await page.locator('#bookingForm label:has([value=tirage])').click();
+      await page.locator('.calendar__day:not(:disabled)').first().click();
+      await page.locator('.slot').first().click();
+    }
+    await fillPerson(page, form);
+    const requestId = await page.locator(`${form} [name=request_id]`).inputValue();
+    const endpoint = `**/api/${api}.php`;
+    let heldRoute;
+    let received;
+    const requestReceived = new Promise(resolve => { received = resolve; });
+    await page.route(endpoint, route => { heldRoute = route; received(); });
+    await page.locator(`${form} [type=submit]`).click();
+    await requestReceived;
+    await page.clock.runFor(30001);
+    await page.locator(`${status}.is-error`).waitFor();
+    check(await page.locator(`${form} [type=submit]`).isEnabled(), `${api}: bouton debloque apres 30 secondes`);
+    check(await page.locator(`${form} [name=email]`).inputValue() === 'camille@example.test', `${api}: saisies conservees apres expiration`);
+    check(await page.locator(`${form} [name=request_id]`).inputValue() === requestId, `${api}: identifiant conserve pour le nouvel essai`);
+    check((await page.locator(status).textContent()).includes('peut-être'), `${api}: resultat incertain explique`);
+    await heldRoute.abort().catch(() => {});
+    await page.unroute(endpoint);
+    const retried = page.waitForRequest(endpoint);
+    await page.locator(`${form} [type=submit]`).click();
+    check((await retried).postData().includes(requestId), `${api}: nouvel essai avec le meme identifiant`);
+    if (api === 'contact') {
+      await page.locator(`${status}.is-ok`).waitFor();
+      check(await page.locator(`${form} [name=request_id]`).inputValue() !== requestId, 'Contact: nouvel identifiant apres succes');
+    } else await page.locator('#bookingDone:visible').waitFor();
+  }
+  await context.close();
+  observations.push('Expiration des deux formulaires apres 30 secondes : deverrouillage, saisies et identifiant conserves, nouvel essai reussi');
+}
+
 (async () => {
   copySite(root, fixture);
   copySite(path.join(root, 'site'), path.join(fixture, 'site'));
@@ -310,7 +413,10 @@ async function networkScenarios(browser, base) {
       const engine = name === 'edge' ? 'chromium' : name;
       const browser = await playwright[engine].launch({ headless: true, ...(['chromium', 'edge'].includes(name) ? { channel: name === 'edge' ? 'msedge' : 'chrome' } : {}) });
       console.log(`Vérification ${name} ${browser.version()}…`);
-      try { await review(browser, base, name); } finally { await browser.close(); }
+      try {
+        if (process.env.REVIEW_PERFORMANCE_ONLY === '1') await performanceReview(browser, base);
+        else await review(browser, base, name);
+      } finally { await browser.close(); }
     }
   } catch (error) { failures.push(error.stack); }
   finally { child.kill(); log.end(); }

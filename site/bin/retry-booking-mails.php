@@ -16,7 +16,15 @@ foreach (glob(storage_path('booking-form-*.php')) ?: [] as $file) {
         if (empty($record['event']) || empty($record['emails'])) {
             return;
         }
-        deliver_booking_emails($name, $record);
-        echo $name . ' : ' . (count(array_filter($record['sent'] ?? [])) === 2 ? 'OK' : 'à reprendre') . PHP_EOL;
+        try {
+            deliver_booking_emails($name, $record);
+            $status = $record['status'] ?? 'active';
+            echo $name . ' : ' . ($status !== 'active' ? 'ignoré (' . $status . ')'
+                : (count(array_filter($record['sent'] ?? [])) === 2 ? 'OK' : 'à reprendre')) . PHP_EOL;
+        } catch (Throwable $e) {
+            // L'indisponibilité d'un rendez-vous ne doit pas empêcher les autres reprises.
+            error_log('Reprise ' . $name . ' : ' . $e->getMessage());
+            echo $name . ' : vérification/envoi à reprendre' . PHP_EOL;
+        }
     });
 }

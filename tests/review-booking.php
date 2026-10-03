@@ -24,7 +24,11 @@ function calendar_create_event(array $event): array
     storage_write('mock-event', $event);
     return $event;
 }
-function calendar_get_event(string $id): ?array { return storage_read('mock-event') ?: null; }
+function calendar_get_event(string $id): ?array
+{
+    if ($GLOBALS['mode'] === 'retry-unavailable') throw new GoogleError('Google temporairement indisponible');
+    return storage_read('mock-event') ?: null;
+}
 function calendar_update_event(string $id, array $fields): array { trace_call('update'); return $fields; }
 function calendar_delete_event(string $id): void { trace_call('delete'); }
 function google_can(string $scope): bool { return true; }
@@ -33,7 +37,7 @@ function gmail_send(string $mime): void
 {
     trace_call('mail');
     // RuntimeException évite aussi tout repli vers mail() dans le test d'échec.
-    if ($GLOBALS['mode'] === 'failure') throw new RuntimeException('Échec simulé');
+    if (in_array($GLOBALS['mode'], ['failure', 'contact-failure'], true)) throw new RuntimeException('Échec simulé');
     usleep(200000);
 }
 
@@ -66,7 +70,15 @@ if ($mode !== 'suite') {
         require $fixture . '/api/booking.php';
         exit;
     }
-    if ($mode === 'retry') {
+    if (in_array($mode, ['contact', 'contact-failure'], true)) {
+        $_POST = json_decode(file_get_contents($fixture . '/post.json'), true);
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_SERVER['HTTP_ACCEPT'] = 'application/json';
+        $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+        require $fixture . '/api/contact.php';
+        exit;
+    }
+    if (in_array($mode, ['retry', 'retry-unavailable'], true)) {
         require $fixture . '/bin/retry-booking-mails.php';
         exit;
     }
@@ -190,3 +202,57 @@ foreach ($workers as $worker) {
 $counts = array_count_values(calls($concurrent));
 verify(($counts['create'] ?? 0) === 1 && ($counts['mail'] ?? 0) === 2, 'Double envoi concurrent : un rendez-vous, deux e-mails au total');
 echo "$checks contrôles réussis : cache concurrent, invalidation, créneau pris, confirmation différée, repli synchrone, reprise sans doublon.\n";
+
+// Régressions de l'audit : suppression, déplacement et panne ne sont pas équivalents.
+foreach (['cancelled', 'changed', 'past', 'unavailable'] as $state) {
+    $dir = fixture();
+    run_worker('prepare', $dir);
+    run_worker('failure', $dir);
+    $before = calls($dir);
+    $event = record($dir)['event'];
+    if ($state === 'cancelled') $event = [];
+    if ($state === 'changed') $event['start']['dateTime'] = (new DateTimeImmutable($event['start']['dateTime']))->modify('+1 hour')->format(DATE_RFC3339);
+    if ($state === 'past') {
+        // Le dossier et Google sont d'accord sur le créneau, mais il est passé.
+        $event['start']['dateTime'] = (new DateTimeImmutable('-1 hour'))->format(DATE_RFC3339);
+        $event['end']['dateTime'] = (new DateTimeImmutable('-40 minutes'))->format(DATE_RFC3339);
+        $saved = record($dir);
+        $saved['event'] = $event;
+        file_put_contents(glob($dir . '/storage/booking-form-*.php')[0], "<?php exit; ?>\n" . json_encode($saved));
+    }
+    file_put_contents($dir . '/storage/mock-event.php', "<?php exit; ?>\n" . json_encode($event));
+    run_worker($state === 'unavailable' ? 'retry-unavailable' : 'retry', $dir);
+    verify(calls($dir) === $before, "$state : aucune confirmation périmée envoyée");
+    if ($state === 'unavailable') {
+        verify(!isset(record($dir)['status']), 'Panne Google : ne marque pas le rendez-vous annulé');
+        run_worker('retry', $dir);
+        verify(record($dir)['response']['email_sent'], 'Google rétabli : reprise possible');
+    } else {
+        verify(record($dir)['status'] === $state, "$state : état conservé");
+        $response = json_decode(run_worker('sync', $dir), true, flags: JSON_THROW_ON_ERROR);
+        verify(!$response['ok'], "$state : renvoyer le formulaire ne confirme pas l’ancien rendez-vous");
+        verify(calls($dir) === $before, "$state : ne recrée pas le rendez-vous");
+    }
+}
+
+// Réessai d'une demande après perte de réponse : ni double e-mail, ni message stocké.
+$contact = fixture();
+run_worker('prepare', $contact);
+$response = json_decode(run_worker('contact', $contact), true, flags: JSON_THROW_ON_ERROR);
+verify($response['ok'], 'Contact : demande envoyée');
+$before = calls($contact);
+$workers = [start_worker('contact', $contact), start_worker('contact', $contact)];
+foreach ($workers as $worker) verify(json_decode(finish_worker($worker), true)['ok'], 'Contact : réessai accepté');
+verify(calls($contact) === $before, 'Contact : aucun doublon après deux réessais simultanés');
+$receipt = file_get_contents($contact . '/storage/contact-receipts.php');
+verify(!str_contains($receipt, 'Camille') && !str_contains($receipt, 'example.test'), 'Contact : pas de coordonnées en clair dans la trace');
+$post = json_decode(file_get_contents($contact . '/post.json'), true);
+$post['prenom'] = 'Autre';
+file_put_contents($contact . '/post.json', json_encode($post));
+verify(!json_decode(run_worker('contact', $contact), true)['ok'], 'Contact : même identifiant avec contenu modifié refusé');
+verify(calls($contact) === $before, 'Contact modifié : pas de nouvel e-mail');
+$contact = fixture();
+run_worker('prepare', $contact);
+verify(!json_decode(run_worker('contact-failure', $contact), true)['ok'], 'Contact : erreur annoncée');
+verify(json_decode(run_worker('contact', $contact), true)['ok'], 'Contact : reprise après échec d’envoi');
+echo "$checks contrôles au total, avec confirmations périmées et réessais du contact.\n";

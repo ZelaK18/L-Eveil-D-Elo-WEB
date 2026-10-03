@@ -1,0 +1,169 @@
+SECOND AUDIT — L'ÉVEIL D'ELO — 3 OCTOBRE 2026
+
+PÉRIMÈTRE
+Nouvelle lecture de la version locale après les modifications TWINT, packs et
+bons cadeaux. Les modifications de travail existantes ont été conservées.
+Cet audit ne corrige pas le site. Aucun e-mail réel, paiement, rendez-vous réel,
+déploiement, révocation de secret ou changement de protection n'a été effectué.
+
+CHANGEMENTS PRÉCÉDENTS VÉRIFIÉS
+- TWINT avant la séance ; paiement intégral des packs avant la première séance.
+- Remboursement des packs au prorata, avec la réserve sur les séances dues.
+- Bons valables 10 ans ; PDF uniquement par e-mail sous 24 h après paiement.
+- Transmission du bon et utilisation du solde des bons en montant libre décrites.
+- Les textes et conditions des deux copies sont identiques.
+- La préproduction reste volontairement protégée. Ce n'est pas classé comme
+  défaut à corriger immédiatement. L'utilisateur a indiqué les secrets en ordre ;
+  aucune nouvelle vérification de leur validité n'a été entreprise.
+
+PROBLÈMES RESTANTS, PAR PRIORITÉ
+
+1. IMPORTANT — Confirmation périmée après suppression d'un rendez-vous.
+   Fichiers : site/bin/retry-booking-mails.php:16 et site/api/booking.php:70.
+   Reproduction dans une copie isolée avec Google et les e-mails simulés :
+   a) Réserver avec un échec d'envoi des confirmations.
+   b) Retirer le rendez-vous du faux agenda, ce qui simule sa suppression.
+   c) Exécuter le script de reprise des e-mails.
+   Résultat : deux confirmations sont envoyées malgré l'absence du rendez-vous.
+   Renvoyer ensuite le formulaire original produit encore ok=true et une
+   confirmation provenant du dossier local, sans consulter l'état de l'agenda.
+   Le code site/annuler.php supprime le rendez-vous Google sans marquer ce dossier
+   local comme annulé. Une confirmation en attente peut donc devenir obsolète.
+   Correction recommandée : invalider le dossier lors de l'annulation et vérifier
+   l'état actuel avant reprise ; distinguer rendez-vous supprimé, déplacé et
+   indisponibilité temporaire de Google. Ne pas recréer un rendez-vous annulé.
+   Preuve : C:\Users\Dylan\AppData\Local\Temp\elo-audit-cancel-9O7MSM\audit-results.json
+
+2. IMPORTANT — Formulaires immobilisés si la réponse réseau reste en attente.
+   Fichier : site/js/script.js:115 et :126-159.
+   Reproduction navigateur : intercepter l'envoi du formulaire de contact sans
+   lui répondre pendant 30 secondes. Le statut reste « Envoi en cours… », le
+   bouton et les saisies restent désactivés, aria-busy vaut encore true.
+   La requête POST n'a pas de délai d'abandon explicite. Le calendrier dispose
+   d'une protection de ce type, mais pas les envois de formulaires.
+   Correction recommandée : prévoir un délai et un état « résultat inconnu »
+   permettant une reprise sûre. Pour une réservation, conserver request_id ;
+   pour le contact, éviter les doubles envois après une réponse perdue.
+   Preuve : C:\Users\Dylan\AppData\Local\Temp\elo-site-review-J2EMQW\pending-form-audit.json
+
+3. CONTENU — Utilisation d'un bon cadeau pas expliquée dans la réservation.
+   Fichiers : site/textes/site-text.php:148-166, :188 et site/app/intake.php:38.
+   La vente du bon est décrite, mais le bénéficiaire n'a pas de consigne pour
+   réserver avec son bon. Les conditions de réservation demandent systématiquement
+   TWINT pour toute séance payante, sans exception pour un bon déjà payé.
+   Conséquence : risque de demande de paiement inutile ou de confusion.
+   Correction recommandée : expliquer comment transmettre la référence du bon
+   à Elodie et préciser que TWINT ne concerne que l'éventuel complément.
+   Un échange manuel suffit ; un système automatique de codes n'est pas requis.
+
+4. CONTENU — Remboursement d'une séance à l'unité encore incomplet.
+   Fichier : site/app/intake.php:36-39.
+   Le remboursement explicite concerne les packs/programmes dans la branche
+   coaching. Pour une séance de tirage, pendule ou coaching à l'unité payée à
+   l'avance, le texte ne précise pas clairement le remboursement en cas
+   d'annulation dans le délai, ni si Elodie annule sans report convenu.
+   Le délai de remboursement n'est pas annoncé non plus.
+   Correction recommandée : une règle commune aux séances à l'unité et aux packs,
+   avec le délai et le moyen de remboursement réellement retenus.
+   Il s'agit ici d'une lacune du parcours et du texte, pas d'une conclusion
+   juridique sur un litige particulier.
+
+5. COHÉRENCE — Copie des conditions annoncée, mais e-mail partiel.
+   Fichier : site/app/intake.php:42 et :161-177.
+   L'e-mail contient le paiement, les annulations et la fin des packs, mais
+   intake_client_mail_details omet notamment Confidentialité des échanges,
+   Données du formulaire et le texte exact des accords cochés.
+   La version complète est conservée dans le dossier du site.
+   Correction recommandée : envoyer la copie complète annoncée, ou présenter
+   explicitement cet e-mail comme un récapitulatif avec accès aux informations.
+
+6. INFORMATIONS À FINALISER — Adresse, numéro et consignes pratiques.
+   site/textes/mentions-legales.php:29 indique encore seulement
+   « 1690 Villaz-St-Pierre » ; site/app/config.php:11-12 contient
+   « 079 123 45 67 ». Le numéro n'a pas été vérifié par appel.
+   L'e-mail de coaching (site/textes/appointment-text.php:56) reste générique
+   (« visioconférence », informations de connexion à venir), alors que la
+   confidentialité décrit WhatsApp. Le préciser faciliterait la préparation.
+   Les coordonnées TWINT ne sont pas publiées : le texte prévoit qu'Elodie les
+   transmet manuellement. C'est cohérent, mais ce suivi doit être assuré.
+
+SUIVI INTERNE TOUJOURS NÉCESSAIRE
+La conservation d'un an des questionnaires reste appliquée manuellement.
+L'absence d'outil de purge ne démontre pas l'absence de suppression, mais il faut
+tenir compte des réponses présentes dans le dossier et dans les e-mails.
+L'envoi des bons et le suivi de leur solde sur dix ans sont également manuels.
+
+VÉRIFICATIONS DE CET AUDIT
+- node tests/review-browser.cjs : aucun échec sur les scénarios existants,
+  Chrome 154.0.8037.95, 17 largeurs et huit pages ; parcours simulés, erreurs,
+  double envoi, texte à 200 %, sans JavaScript et règles axe-core exécutées.
+- 89 contrôles PHP du même lanceur : réussis.
+- php -d extension_dir=php/ext tests/review-booking.php : 60 contrôles réussis.
+- Les deux tests supplémentaires ciblés ci-dessus ont mis en évidence des cas
+  non couverts par ces contrôles existants. Les réussites ne les invalident pas.
+- node tests/review-http.cjs : NON EXÉCUTABLE cette fois ; connexion refusée
+  sur 127.0.0.1:80. Les 25 succès du précédent audit ne sont pas de nouveaux succès.
+  Aucun démarrage de Laragon ou changement de sa configuration n'a été effectué.
+- git diff --check : aucune erreur d'espacement, avertissements LF/CRLF seulement.
+
+LIMITES ET MODIFICATIONS CONCURRENTES
+Les vérifications navigateur et les reproductions utilisent des copies isolées
+sans secrets réels et des appels Google/e-mail simulés. Production, paiement TWINT,
+délivrabilité des e-mails et autres navigateurs non vérifiés lors de cette passe.
+La copie navigateur a été créée au début de l'audit. Des modifications externes
+de .htaccess et des deux app/partials/head.php sont apparues ensuite (redirection
+vers www et attributs du favicon). Elles ont été lues et conservées, mais la
+redirection Apache n'a pas pu être validée par HTTP. Des reformulations des textes,
+conditions, e-mails et titres légaux sont également apparues en fin de revue.
+Les passages concernés par les constats ont été relus ; les six points restent
+présents. La syntaxe des fichiers PHP modifiés a été vérifiée à nouveau, et les
+textes et conditions restent synchronisés entre les deux copies. Ces dernières
+reformulations n'ont pas fait l'objet d'une nouvelle passe navigateur complète.
+
+RÉSULTATS LOCAUX
+C:\Users\Dylan\AppData\Local\Temp\elo-site-review-J2EMQW\results.json
+C:\Users\Dylan\AppData\Local\Temp\elo-site-review-J2EMQW\pending-form-audit.json
+C:\Users\Dylan\AppData\Local\Temp\elo-audit-cancel-9O7MSM\audit-results.json
+
+SUIVI DES CORRECTIONS — 3 OCTOBRE 2026
+Les constats ci-dessus décrivent l'état avant les corrections suivantes.
+
+1. Confirmations obsolètes : contrôle de l'événement Google avant une reprise
+   d'envoi ou la réutilisation d'une confirmation. Les rendez-vous supprimés,
+   déplacés ou passés sont écartés. L'annulation locale invalide aussi le dossier.
+   Une panne Google reste réessayable et n'est pas assimilée à une annulation.
+2. Formulaires : délai de 30 secondes avec déverrouillage, saisies conservées et
+   message expliquant que l'envoi peut avoir abouti. Requête et délai factorisés
+   pour les deux formulaires et l'agenda (15 secondes pour ce dernier).
+   Les réessais de contact réutilisent un identifiant et l'état des envois pour
+   éviter de renvoyer les e-mails déjà marqués comme envoyés. La confidentialité
+   décrit cette trace technique et son nettoyage différé après 48 heures.
+3. Bons cadeaux : utilisation par contact avec Elodie, référence du bon et
+   prestation souhaitée ; seul l'éventuel complément est à régler par TWINT.
+   Aucun générateur de PDF ni suivi automatique des soldes n'a été ajouté.
+4. Remboursements : les packs sont déjà couverts ; la règle explicite pour une
+   séance à l'unité payée d'avance et le délai de remboursement restent à définir.
+5. Conditions : la promesse d'une copie complète par e-mail est remplacée par
+   l'annonce d'un récapitulatif du rendez-vous, conforme à l'envoi existant.
+6. JavaScript : changement de prestation bloqué pendant une réservation en cours,
+   identifiants factorisés, anciennes réponses d'agenda ignorées après remise à zéro.
+
+VALIDATION APRÈS CORRECTIONS
+- 108 contrôles serveur réussis, dont annulation, déplacement, date passée,
+  panne Google puis reprise, réessais simultanés et dédoublonnage du contact.
+- 89 contrôles PHP réussis ; syntaxe des 20 fichiers PHP modifiés vérifiée.
+- Chrome 154 : huit pages, 17 largeurs, contrôles axe-core, navigation au clavier,
+  formulaires, conflits de créneau, doubles clics, texte agrandi et sans JavaScript.
+- Nouveaux scénarios navigateur : expiration après 30 secondes, conservation des
+  saisies et de l'identifiant, réessai réussi, prestation inchangée pendant l'envoi.
+- node --check site/js/script.js et git diff --check réussis.
+- Copies partagées des conditions et textes synchronisées entre racine et site/.
+- Résultats navigateur :
+  C:\Users\Dylan\AppData\Local\Temp\elo-site-review-7T2Uh1\results.json
+
+LIMITES DU SUIVI
+Google et les e-mails sont simulés dans les tests ; ni paiement TWINT ni livraison
+réelle d'e-mails testés. Le dédoublonnage repose sur l'état enregistré après envoi :
+une interruption entre l'envoi externe et son enregistrement reste ambiguë.
+Les coordonnées à finaliser et les opérations manuelles signalées plus haut
+restent à vérifier. La configuration Apache n'a pas été retestée par HTTP.

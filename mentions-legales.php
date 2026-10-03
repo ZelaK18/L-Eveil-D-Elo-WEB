@@ -12,7 +12,7 @@ $sections = match ($slug) {
     default => ['impressum' => 'mentions', 'confidentialite' => 'confidentialite'],
 };
 $page = count($sections) === 1 ? $legal[reset($sections)] : $legal;
-$title = (string) ($page['google_titre'] ?? (($page['titre'] ?? '') . ' - ' . $site['name']));
+$title = (string) ($page['google_titre'] ?? (($page['titre'] ?? '') . ', ' . $site['name']));
 $description = (string) ($page['google_description'] ?? $legal['google_description'] ?? '');
 $canonical = $slug === 'confidentialite' ? 'confidentialite' : 'mentions-legales';
 
@@ -20,7 +20,7 @@ $links = [
     '{email}'     => '<a href="mailto:' . e($site['email']) . '">' . e($site['email']) . '</a>',
     '{telephone}' => '<a href="tel:' . e($site['phone']) . '">' . e($site['phone_display']) . '</a>',
     '{pfpdt}'     => '<a href="https://www.edoeb.admin.ch" target="_blank" rel="noopener">www.edoeb.admin.ch</a>',
-    '{whatsapp}'  => '<a href="https://www.whatsapp.com/legal/privacy-policy-eea?lang=fr" target="_blank" rel="noopener">Politique de confidentialité de WhatsApp</a>',
+    '{google}'  => '<a href="https://policies.google.com/privacy?hl=fr" target="_blank" rel="noopener">Politique de confidentialité de Google</a>',
 ];
 // Retours à la ligne gardés, indentation du fichier de textes retirée.
 $paragraph = fn(string $text) => strtr(nl2br(format_text(trim(preg_replace('/\n[ \t]+/', "\n", $text) ?? $text))), $links);
