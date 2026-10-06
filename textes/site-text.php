@@ -229,7 +229,7 @@ return [
         'statut'            => "En cours de création",
         'titre_ligne_1'     => "Le site arrive",
         'titre_ligne_2'     => "bientôt.",
-        'description'      => "Tirage de cartes, pendule et coaching spirituel en Suisse romande. Un espace tout en douceur se prépare pour vous accompagner à distance.",
+        'description'      => "Un espace tout en douceur se prépare pour vous accompagner.",
         'contact'          => "En attendant, je reste à votre écoute sur Instagram.",
         'bouton_instagram' => "Suivre sur Instagram",
         'signature'        => "À très bientôt, Elodie",
