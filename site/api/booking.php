@@ -40,6 +40,7 @@ $event = [
     'description' => implode("\n", [
         "Réservé sur le site de {$site['name']}.",
         'Tarif : ' . price_label($service),
+        'Format : ' . $service['format'],
         "Téléphone : {$person['telephone']}",
         "E-mail : {$person['email']}",
         'Formulaire validé. Les réponses personnelles sont transmises séparément à Elodie par e-mail.',

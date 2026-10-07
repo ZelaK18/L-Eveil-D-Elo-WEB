@@ -16,7 +16,7 @@ return [
 
             {details}
 
-            Je vous contacterai à l’heure prévue, au numéro que vous m’avez indiqué. D’ici notre rendez-vous, vous pouvez prendre un moment pour réfléchir à la question ou à la thématique que vous souhaitez aborder lors de votre tirage.
+            Notre tirage se déroulera en visioconférence sur Google Meet. Je vous transmettrai le lien de connexion par e-mail avant notre rendez-vous. D’ici là, vous pouvez prendre un moment pour réfléchir à la question ou à la thématique que vous souhaitez aborder lors de votre tirage.
 
             Vous pouvez [annuler votre rendez-vous]({lien_annulation}) jusqu'à {delai_annulation} avant la séance.
             Pour le déplacer, ou à moins de {delai_annulation}, répondez simplement à cet e-mail ou envoyez-moi un message au {telephone_elodie}.

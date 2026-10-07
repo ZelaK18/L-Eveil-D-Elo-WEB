@@ -17,6 +17,7 @@ $description = (string) ($page['google_description'] ?? $legal['google_descripti
 $canonical = $slug === 'confidentialite' ? 'confidentialite' : 'mentions-legales';
 
 $links = [
+    '{hebergeur}' => '<a href="https://www.o2switch.fr/" target="_blank" rel="noopener">www.o2switch.fr</a>',
     '{email}'     => '<a href="mailto:' . e($site['email']) . '">' . e($site['email']) . '</a>',
     '{telephone}' => '<a href="tel:' . e($site['phone']) . '">' . e($site['phone_display']) . '</a>',
     '{pfpdt}'     => '<a href="https://www.edoeb.admin.ch" target="_blank" rel="noopener">www.edoeb.admin.ch</a>',

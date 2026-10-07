@@ -156,7 +156,7 @@ $schema = [
     <div class="hero__media reveal">
       <figure class="portrait">
         <?php if ($hasPortrait): ?>
-        <img src="<?= e(asset('images/portrait-elodie.webp')) ?>" alt="<?= e(site_text('accueil.description_photo')) ?>" class="portrait__img" width="880" height="880" fetchpriority="high">
+        <img src="<?= e(asset('images/portrait-elodie.webp')) ?>" alt="<?= e(site_text('accueil.description_photo')) ?>" class="portrait__img" width="880" height="1100" fetchpriority="high">
         <?php else: ?>
         <img src="<?= e(asset('images/logo-transparent-560.webp')) ?>" alt="<?= e($site['name']) ?>" class="portrait__img portrait__img--logo" width="560" height="560" fetchpriority="high">
         <?php endif ?>
@@ -231,7 +231,11 @@ $schema = [
       <article class="card lift presta reveal">
         <svg class="presta__icon" width="52" height="52" aria-hidden="true"><use href="#<?= e($service['icon']) ?>"/></svg>
         <h3><?= format_text($service['name']) ?></h3>
-        <p><?= format_text($service['text']) ?></p>
+        <div class="presta__description">
+          <?php foreach (preg_split('/\R\s*\R/u', $service['text']) as $paragraph): ?>
+          <p><?= format_text($paragraph) ?></p>
+          <?php endforeach ?>
+        </div>
         <ul class="presta__points">
           <?php foreach ($service['points'] as $point): ?>
           <li><?= format_text($point) ?></li>
@@ -474,7 +478,8 @@ $schema = [
 
           <label class="field">
             <span><?= t('rendez_vous.demande_message') ?></span>
-            <textarea name="message" id="demandeMessage" rows="5" maxlength="5000" placeholder="<?= e(site_text('rendez_vous.demande_message_exemple')) ?>"></textarea>
+            <textarea name="message" id="demandeMessage" rows="5" maxlength="5000" aria-describedby="demandePrivacy" placeholder="<?= e(site_text('rendez_vous.demande_message_exemple')) ?>"></textarea>
+            <p id="demandePrivacy" class="form__hint"><?= t('rendez_vous.demande_confidentialite') ?></p>
           </label>
 
           <?php $consent = 'rendez_vous.demande_accord'; require __DIR__ . '/app/partials/consent.php' ?>

@@ -17,7 +17,7 @@ return [
     'retour'             => "← Retour",
     'surtitre'           => "Informations légales",
     'titre'              => "Mentions légales & confidentialité",
-    'mise_a_jour'        => "Dernière mise à jour le 3 octobre 2026",
+    'mise_a_jour'        => "Dernière mise à jour le 7 octobre 2026",
     'retour_accueil'     => "Retour à l'accueil",
 
     'mentions' => [
@@ -27,19 +27,22 @@ return [
             "Éditrice du site" => [
                 "L'éveil d'Elo, Elodie Fauquex
                 1690 Villaz-St-Pierre
+                Suisse
                 E-mail, {email}
                 Téléphone, {telephone}",
             ],
-            "Forme juridique" => [
-                "Raison individuelle, non inscrite au registre du commerce.
-                Non assujettie à la TVA.",
+            "Exploitante" => [
+                "Les prestations de L'éveil d'Elo sont proposées en nom propre par Elodie Fauquex.",
+            ],
+            "Hébergement" => [
+                "Le site est hébergé par o2switch, en France. Informations et contact : {hebergeur}.",
             ],
             "Nature des prestations" => [
                 "Les prestations proposées (tirage de cartes, pendule, coaching spirituel, Reiki) relèvent du bien-être et du développement personnel. Elles ne constituent ni un diagnostic, ni un traitement médical, psychologique ou psychothérapeutique, et ne remplacent en aucun cas l'avis ou le suivi d'un professionnel de la santé.",
                 "Les éclairages apportés lors des séances n'ont pas de valeur prédictive, chacun reste libre et responsable de ses propres décisions.",
             ],
             "Propriété intellectuelle" => [
-                "L'ensemble des contenus de ce site, textes, logo, photographies et illustrations, est la propriété de L'éveil d'Elo, sauf mention contraire. Toute reproduction, même partielle, est interdite sans autorisation écrite préalable.",
+                "Les contenus de ce site sont protégés dans la mesure prévue par le droit applicable. Les droits sur les textes, le logo, les photographies, les illustrations et les autres éléments appartiennent à leurs titulaires respectifs. Leur utilisation nécessite l'autorisation du titulaire concerné, sous réserve des usages autorisés par la loi.",
             ],
             "Responsabilité" => [
                 "Les informations publiées sur ce site sont données à titre indicatif et peuvent être modifiées à tout moment. L'éveil d'Elo ne peut être tenue responsable du contenu des sites externes vers lesquels renvoient certains liens, comme Instagram.",
@@ -64,12 +67,13 @@ return [
             ],
             "Données traitées et finalités" => [
                 [
-                    "**Formulaire de demande**, nom, prénom, e-mail, téléphone, prestation souhaitée et message. Ces données servent uniquement à répondre à votre demande et à organiser un rendez-vous. Elles sont transmises par e-mail à Elodie, et une confirmation de réception vous est envoyée à l'adresse indiquée. Elles ne sont pas enregistrées sur le site lui-même.",
+                    "**Formulaire de demande**, nom, prénom, e-mail, téléphone, prestation souhaitée et message. Ces données servent à répondre à votre demande et à organiser un rendez-vous. Le contenu est transmis par e-mail à Elodie sans être conservé dans les fichiers du site ; une confirmation de réception vous est envoyée. Une trace technique de l'envoi est conservée comme expliqué ci-dessous.",
                     "**Réservation en ligne**, nom, prénom, e-mail, téléphone, date de naissance (vérification de la majorité), prestation, créneau et réponses au questionnaire propre à votre prestation. Ces informations servent à organiser et préparer votre séance. Vos coordonnées, la prestation et le créneau sont enregistrés dans Google Agenda. Les réponses au questionnaire ne sont pas inscrites dans l'agenda, elles sont transmises à Elodie par e-mail. Une confirmation avec un récapitulatif du rendez-vous vous est envoyée.",
                     "**Prévention des doubles envois**, un identifiant aléatoire, une empreinte du formulaire de demande, son horodatage et l'état d'envoi des e-mails permettent de reconnaître un réessai après une coupure. Cette trace ne contient pas le texte du message ni vos coordonnées en clair. Elle cesse d'être utilisée après 48 heures et est supprimée au prochain envoi valide d'un formulaire de demande ; sans nouvel envoi, elle peut rester enregistrée plus longtemps.",
                     "**Trace de votre accord**, le formulaire validé, votre identité déclarée, les accords cochés, la date et l'heure de validation et une copie des conditions et de cette politique sont conservés dans un dossier du site dont l'accès public est bloqué. Cette trace permet de retrouver votre demande et les conditions de la réservation. Elle ne constitue pas une vérification officielle d'identité ni une signature électronique qualifiée.",
                     "**Séances en visio**, les appels ont lieu sur Google Meet via un lien transmis avant le rendez-vous. Google traite votre nom affiché, votre image, votre voix et des données techniques, comme votre adresse IP et les informations de connexion. Les échanges sont chiffrés en transit entre votre appareil et Google.",
                     "**Bons cadeaux**, les coordonnées de la personne qui offre et le prénom de la personne qui reçoit servent uniquement à établir et envoyer le bon.",
+                    "**Paiement par TWINT**, le paiement est réalisé séparément du site, selon les instructions transmises par Elodie. Le site ne collecte pas vos identifiants bancaires. Elodie utilise les informations figurant sur le justificatif de paiement pour rapprocher le montant reçu de votre réservation ou de votre bon cadeau et tenir sa comptabilité. Les traitements réalisés dans l'application de paiement relèvent également des informations fournies par votre prestataire TWINT ou votre banque.",
                     "**E-mail, téléphone et Instagram**, les informations que vous transmettez servent uniquement à vous répondre.",
                     "**Protection contre les abus**, après l'envoi réussi d'un formulaire, une empreinte de votre adresse IP et la date et l'heure de l'envoi sont enregistrées pour limiter les envois automatisés. L'adresse IP elle-même n'est pas conservée dans ce dispositif. Les envois datant de plus de 24 heures ne sont plus pris en compte et leurs traces sont supprimées lors du prochain envoi réussi d'un formulaire. Elles peuvent donc rester enregistrées plus longtemps si aucun nouveau formulaire n'est envoyé.",
                     "**Sécurité du site**, des journaux techniques, comprenant notamment votre adresse IP, sont enregistrés pour la sécurité et le bon fonctionnement du site.",
@@ -80,13 +84,15 @@ return [
                 "Les formulaires sont transmis par e-mail à Elodie. Les e-mails ordinaires ne sont pas chiffrés de bout en bout. Limitez vos réponses à ce qui est utile, ne donnez pas de détails médicaux ni d'informations identifiant des tiers. Vous pouvez indiquer que vous préférez en parler pendant la séance.",
             ],
             "Destinataires" => [
-                "Vos données ne sont pas vendues. Les prestataires utilisés sont un prestataire d'hébergement en France, Google pour les e-mails, l'agenda et les appels vidéo sur Google Meet. Chacun traite les données liées au service concerné.",
+                "Vos données ne sont pas vendues. Le site et ses fichiers sont hébergés par o2switch en France. Google fournit Gmail, Google Agenda et Google Meet, utilisés avec le compte Google personnel de L'éveil d'Elo. Il ne s'agit pas d'un compte professionnel Google Workspace. Chacun traite les données liées au service concerné selon ses conditions.",
+                "La personne chargée de la maintenance peut accéder aux données du site dans la mesure nécessaire à ses interventions. Les établissements et prestataires de paiement interviennent pour les paiements TWINT. Instagram traite les messages que vous choisissez d'envoyer par ce service selon ses propres conditions.",
             ],
             "Cookies et mesure d'audience" => [
-                "Ce site n'utilise ni cookies, ni outil de mesure d'audience. Les polices de caractères sont hébergées directement sur ce site, leur affichage ne nécessite aucune connexion aux serveurs de Google.",
+                "Le code de ce site ne dépose pas de cookies et n'intègre pas d'outil de mesure d'audience, de publicité ou de suivi des visiteurs. Les polices de caractères sont hébergées directement sur ce site, leur affichage ne nécessite aucune connexion aux serveurs de Google.",
+                "Les liens vers Instagram et Google Meet ouvrent des services externes, soumis à leurs propres politiques et éventuels cookies. Aucun contenu Instagram ni appel Google Meet n'est chargé dans la page d'accueil.",
             ],
             "Transfert de données à l'étranger" => [
-                "Les données du site sont hébergées en France. Google peut traiter des données aux États-Unis. Ce transfert repose sur le Swiss-U.S. Data Privacy Framework, auquel Google a adhéré.",
+                "Les données du site sont hébergées en France. Google peut traiter des données aux États-Unis. Google indique adhérer au Swiss-U.S. Data Privacy Framework pour les transferts couverts par sa certification. Cette garantie concerne uniquement les entités et les traitements effectivement couverts, et ne s'étend pas automatiquement à tout prestataire ou à tout pays.",
                 "Les autres pays de traitement et les modalités de protection des données par Google sont décrits dans la {google}.",
             ],
             "Durée de conservation" => [

@@ -21,7 +21,7 @@ return [
         'tirage' => [
             'icon'    => 'ico-cards',
             'summary' => "Guidance par les cartes autour d'une question ou d'une thématique.",
-            'visio'   => false,
+            'visio'   => true,
         ],
         'pendule' => [
             'icon'    => 'ico-pendule',

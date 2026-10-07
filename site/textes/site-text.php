@@ -75,12 +75,12 @@ return [
         'cartes' => [
             'tirage' => [
                 'nom'        => "Tirage de cartes",
-                'texte'      => "À travers les cartes, je vous invite à poser un regard différent sur ce que vous traversez. Un moment pour mettre en lumière vos questionnements et laisser émerger de nouvelles pistes.",
-                'points'     => ["Une question ou une thématique", "Un récapitulatif écrit de votre tirage"],
+                'texte'      => "À travers les cartes, je vous invite à poser un regard différent sur ce que vous traversez.\n\nUn moment pour mettre en lumière vos questionnements et laisser émerger de nouvelles pistes.",
+                'points'     => ["Une question ou une thématique", "Un récapitulatif écrit ou oral de votre tirage"],
                 'duree'      => 20,
                 'afficher_duree' => false,
                 'prix'       => 20,
-                'format'     => "Par message",
+                'format'     => "En visio",
                 'disponible' => true,
             ],
             'pendule' => [
@@ -96,8 +96,8 @@ return [
             'coaching' => [
                 'nom'        => "Coaching spirituel",
                 'texte'      => "Parfois, on ressent simplement le besoin de faire une pause et d’y voir plus clair. Je vous accompagne dans ce moment, avec écoute et bienveillance, pour vous aider à retrouver vos propres repères.",
-                'points'     => ["Un temps d’échange et d’écoute", "Suivi personnalisé", "Des pistes pour avancer au quotidien"],
-                'format'     => "En visio sur Google Meet",
+                'points'     => ["Un temps d’échange et d’écoute", "Un suivi personnalisé", "Des pistes pour avancer au quotidien"],
+                'format'     => "En visio",
                 'disponible' => true,
                 'offres' => [
                     [
@@ -106,7 +106,7 @@ return [
                         'duree_reservation' => 30,
                         'finalite'          => "Pour faire connaissance, clarifier votre besoin et vérifier si mon accompagnement vous correspond (recommandé avant chaque début de coaching)",
                         'tarif'             => "Offert",
-                        'format'            => "En visio sur Google Meet",
+                        'format'            => "En visio",
                     ],
                     [
                         'nom'               => "Élan vers Soi",
@@ -114,7 +114,7 @@ return [
                         'duree_reservation' => 60,
                         'finalite'          => "Pour travailler sur une situation ou un questionnement précis, avec un exercice personnalisé et une action concrète à intégrer.",
                         'tarif'             => "40 CHF",
-                        'format'            => "En visio sur Google Meet",
+                        'format'            => "En visio",
                     ],
                     [
                         'nom'               => "Pack Clarté",
@@ -122,7 +122,7 @@ return [
                         'duree_reservation' => 60,
                         'finalite'          => "Pour approfondir une problématique et avancer sur plusieurs semaines, avec trois séances à utiliser sur 6 à 8 semaines, avec exercices entre les rencontres.",
                         'tarif'             => "120 CHF",
-                        'format'            => "En visio sur Google Meet",
+                        'format'            => "En visio",
                     ],
                     [
                         'nom'               => "Programme Revenir à Soi",
@@ -131,7 +131,7 @@ return [
                         'finalite'          => "Pour vivre un accompagnement plus profond sur 12 semaines, avec 6 séances de 60 min, exercices personnalisés, temps d’intégration et support bref entre les séances.",
                         'tarif'             => "220 CHF au lancement",
                         'tarif_habituel'    => "280 CHF",
-                        'format'            => "En visio sur Google Meet",
+                        'format'            => "En visio",
                     ],
                 ],
             ],
@@ -201,7 +201,8 @@ return [
         'demande_message_exemple'   => "Ce qui vous amène, une question…",
         // Écrit dans le message quand on clique sur « Commander un bon cadeau ».
         'demande_message_bon_cadeau' => "Bonjour, je souhaite commander un bon cadeau.",
-        'demande_accord'            => "J’accepte l’utilisation de mes informations pour me répondre",
+        'demande_accord'            => "J’accepte l’utilisation de mes informations pour me répondre, ainsi que leur transmission à Elodie par e-mail. Si je communique des données sensibles, j’accepte expressément leur traitement pour cette demande",
+        'demande_confidentialite'   => "Quelques mots suffisent. Évitez les détails médicaux, les informations sur vos convictions et les données identifiant des tiers. Vous pouvez garder ces échanges pour la séance. Les e-mails ne sont pas chiffrés de bout en bout.",
         'demande_bouton'            => "Envoyer ma demande",
     ],
 
@@ -300,7 +301,7 @@ return [
     // GOOGLE ET PARTAGE (onglet du navigateur, résultats de recherche, aperçu WhatsApp ou Facebook)
     'google' => [
         'titre'         => "Tirage de cartes en Suisse romande | L'éveil d'Elo", // Titre concis ; Google peut adapter son affichage.
-        'description'   => "Tirage de cartes en Suisse romande avec Elodie, à distance et par message. Découvrez aussi le pendule et le coaching spirituel en visio. Réservation en ligne.",
+        'description'   => "Tirage de cartes en visio sur Google Meet avec Elodie, en Suisse romande. Découvrez aussi le pendule par message et le coaching spirituel en visio. Réservation en ligne.",
         'titre_partage' => "L'éveil d'Elo · Tirage de cartes, pendule et coaching spirituel",
     ],
 

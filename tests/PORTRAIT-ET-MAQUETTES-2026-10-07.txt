@@ -1,0 +1,51 @@
+L'ÉVEIL D'ELO — PORTRAIT ET HUIT MISES EN PAGE
+
+Ouvrir site/maquettes.php via PHP (par exemple l'aperçu local démarré pendant
+la session : http://127.0.0.1:8097/site/maquettes.php).
+Variantes : ?v=1 à ?v=8. La page sans paramètre rassemble les huit aperçus.
+Les boutons « L'accueil » et « Les prestations » changent les aperçus de la galerie.
+
+Charte commune : toutes les couleurs viennent de site/css/theme.css ; titres en
+Cormorant Garamond, textes en Montserrat. Seule la mise en page varie.
+
+1. La signature : portrait en médaillon, cartes en duo, proche du site actuel.
+2. Le carnet : titre ample, petite photo en marge, coaching présenté en chapitre.
+3. L'atelier : logo et navigation latérale sur ordinateur, prestations en panneaux.
+4. La mosaïque : aplats et blocs asymétriques, coins arrondis.
+5. La parenthèse : accueil centré, petite photo en médaillon, catalogue à filets.
+6. La rencontre : portrait à gauche et prestations en accordéons natifs.
+7. Le chemin : introduction encadrée, raccourcis et prestations alternées.
+8. L'écrin : accueil partagé dans un cadre, prestations par onglets accessibles
+   au clavier. Sans JavaScript, les quatre prestations restent visibles.
+
+Textes, points, prix, quatre formules et bons cadeaux lus directement dans
+textes/site-text.php. Les maquettes restent séparées du site actuel. Leurs liens
+de réservation ouvrent le parcours existant ; elles ne dupliquent pas de formulaire.
+Pages marquées noindex/nofollow, sans ajout au sitemap. Ce n'est pas un contrôle
+d'accès : conserver la protection de préproduction si elles sont transférées.
+
+Comparaison visuelle du site energie-du-coeur.ch effectuée dans Chrome le
+7 octobre 2026. Aucun texte, image, code ou CSS de ce site repris dans les maquettes.
+Le rapprochement stylistique n'a pas été qualifié juridiquement de plagiat.
+
+Portrait
+- Original conservé : site/images/portrait-elodie-original.webp.
+- Portrait intégré : site/images/portrait-elodie.webp, 880 × 1100 px,
+  environ 43 ko, utilisée dans l'accueil et les huit propositions.
+- Outil intégré image_gen (pas de CLI ni d'appel API facturé par clé locale).
+- Export généré en PNG, puis encodage WebP par canvas sans autre retouche.
+- Retouche IA : proposition à apprécier pour la fidélité du visage. Une nouvelle
+  photographie prise de face reste préférable si l'identité semble altérée.
+
+Prompt exact utilisé
+Use case: identity-preserve. Edit target: the attached portrait of Elodie. Create a professional natural website portrait by straightening her tilted head and shoulders to an upright posture, level eyes, looking at camera. Preserve this exact woman's identity, facial features, face shape, skin tone, dark straight hair, nose ring, black high-neck top, natural expression and realistic skin texture. Remove the harsh stripe of direct sunlight and deep face shadow, replace with soft even window light and neutral natural colour balance. Simple warm off-white/light grey studio wall background without tile seams. Chest-up composition, vertical 4:5 framing with comfortable room above head and shoulders. Realistic photography, understated and approachable. Do not beautify, reshape face, change age, change clothing or add makeup, jewelry, logos or text. This is a faithful retouch of the same person, not a new person.
+
+Relancer l'aperçu depuis la racine, dans PowerShell
+& .\php\php.exe -d extension_dir=php/ext -S 127.0.0.1:8097 -t . tests/review-router.php
+
+Regénérer les aperçus et contrôler les maquettes (serveur local lancé)
+node tests/review-maquettes.cjs
+
+Régression du site existant, copie isolée, Google/e-mails simulés
+node tests/review-browser.cjs
+& .\php\php.exe -d extension_dir=php/ext tests/review-booking.php

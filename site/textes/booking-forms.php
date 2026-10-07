@@ -2,7 +2,7 @@
 // Formulaires issus des documents Word. Prix, durée et format restent ceux de site-text.php.
 // Modifier la version lors d'un changement de conditions ; leur empreinte est aussi vérifiée à l'envoi.
 return [
-    'version' => '2026-10-03.3',
+    'version' => '2026-10-07.1',
     'intro' => 'Quelques mots suffisent, gardez les détails personnels pour la séance. Les champs avec * sont obligatoires.',
     'confirmation_notice' => 'Vous pouvez encore corriger vos informations et votre créneau avant de confirmer. En cliquant sur « {bouton} », vous envoyez votre réservation au tarif affiché. Le contrat est conclu lorsque le site confirme votre réservation, après vérification de la disponibilité du créneau. Une confirmation vous est envoyée par e-mail. Aucun paiement n’est prélevé en ligne.',
     'terms_summary' => 'Les séances payantes se règlent par TWINT avant la séance, ou avant la première séance pour les packs et programmes. La séance découverte offerte reste gratuite. Prévenez au moins {delai} avant pour annuler ou reporter. Passé ce délai, une séance payante peut être due selon les conditions.',

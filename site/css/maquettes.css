@@ -1,0 +1,510 @@
+/* Huit mises en page, une seule charte : couleurs et polices de theme.css. */
+:root { --ink: var(--brun-texte); --paper: var(--beige-principal); --accent: var(--brun-principal); --wash: var(--blanc-chaud); --line: var(--trait); }
+body { background: var(--paper); color: var(--ink); }
+h1,h2,h3,h4,a,strong { color: var(--brun-principal); }
+a:hover { color: inherit; }
+h1 { font-size: clamp(3.2rem,6.1vw,6.4rem); line-height: .99; letter-spacing: -.045em; }
+h1 em { color: var(--brun-doux); margin-right: .12em; }
+h2 { font-size: clamp(2.7rem,4.5vw,4.5rem); letter-spacing: -.025em; }
+h3 { font-size: clamp(2rem,3vw,3rem); letter-spacing: -.02em; }
+p { font-size: .98rem; line-height: 1.85; }
+nav a, .text-link, .small-cta { min-height: 44px; display: inline-flex; align-items: center; }
+a:focus-visible, summary:focus-visible { outline: 3px solid currentColor; outline-offset: 5px; }
+.kicker { font-size: .68rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; line-height: 1.7; }
+.wordmark { font-family: var(--font-titre); font-size: 2rem; letter-spacing: -.03em; line-height: 1.05; }
+.wordmark span { display: block; margin-top: 9px; font: 400 .58rem var(--font-texte); letter-spacing: .13em; text-transform: uppercase; }
+.cta { display: inline-flex; align-items: center; justify-content: center; gap: 26px; min-height: 50px; padding: 15px 24px; background: var(--accent); color: var(--blanc-chaud); font-size: .8rem; font-weight: 500; }
+.cta:hover { color: var(--blanc-chaud); background: var(--brun-doux); }
+.text-link { gap: 20px; font-size: .8rem; text-decoration: underline; text-underline-offset: 6px; }
+.actions { display: flex; align-items: center; flex-wrap: wrap; gap: 18px 25px; margin-top: 30px; }
+.preview-bar { background: var(--brun-principal); color: var(--blanc-chaud); padding: 7px 25px; display: flex; justify-content: space-between; gap: 15px; align-items: center; font-size: .74rem; }
+.preview-bar a { color: inherit; }
+.preview-bar > a { padding-block: 10px; }
+.preview-bar nav { display: flex; gap: 4px; }
+.preview-bar nav a { justify-content: center; width: 38px; border: 1px solid transparent; }
+.preview-bar a[aria-current] { border-color: currentColor; border-radius: 50%; }
+.masthead { max-width: 1320px; margin: auto; padding: 30px 45px; display: flex; gap: 35px; align-items: center; justify-content: space-between; }
+.masthead nav { display: flex; gap: 27px; font-size: .72rem; }
+.small-cta { font-size: .72rem; border-bottom: 1px solid; gap: 20px; }
+.opening { max-width: 1320px; margin: auto; padding: 65px 70px 0; display: grid; grid-template-columns: 1.35fr 1fr; align-items: center; gap: 35px 65px; }
+.opening__copy { max-width: 710px; }
+.opening__copy h1 span { font-size: .85em; }
+.opening__intro { max-width: 500px; margin-top: 28px; }
+.opening__portrait { margin: 0; }
+.opening__portrait img { width: 100%; height: auto; max-height: 560px; object-fit: cover; object-position: center 25%; }
+.opening__portrait figcaption { display: flex; justify-content: space-between; gap: 12px; padding-top: 13px; font-size: .67rem; }
+.values { grid-column: 1/-1; display: flex; justify-content: space-between; gap: 20px; list-style: none; padding: 25px 0; margin: 20px 0 0; border-top: 1px solid var(--line); font-size: .68rem; letter-spacing: .13em; text-transform: uppercase; }
+.section { max-width: 1180px; margin: auto; padding: 95px 0; }
+.story { display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px; }
+.story__role { display: block; margin-top: 18px; font: 400 .72rem var(--font-texte); letter-spacing: .08em; }
+.story__body { max-width: 690px; }
+.signature { font: italic 1.8rem var(--font-titre); margin-top: 25px; }
+.section-heading { display: flex; justify-content: space-between; align-items: end; gap: 50px; margin-bottom: 50px; }
+.section-heading > p { max-width: 470px; }
+.service { display: grid; grid-template-columns: 45px .9fr 1.25fr .65fr; gap: 28px; padding: 42px 0; border-top: 1px solid var(--line); align-items: start; }
+.service__number { font-size: .7rem; padding-top: 10px; }
+.service__format { font-size: .66rem; display: block; margin-top: 15px; }
+.service__body p { font-size: .88rem; }
+.service__body ul { margin: 25px 0 0; padding-left: 18px; font-size: .82rem; line-height: 1.9; }
+.service__booking { display: flex; flex-direction: column; gap: 12px; align-items: start; }
+.price { font-family: var(--font-titre); font-size: 2rem; font-weight: 500; }
+.service--coaching .service__booking { grid-column: 3/-1; width: 100%; }
+.offers { width: 100%; }
+.offers details { border-bottom: 1px solid var(--line); }
+.offers summary { cursor: pointer; padding: 15px 0; font-size: .8rem; }
+.offers summary span:last-child { display: block; font-size: .7rem; margin-left: 15px; }
+.offers details > div { padding: 12px; background: var(--wash); }
+.offers details p { font-size: .85rem; }
+.gifting { display: grid; grid-template-columns: 1fr 1.25fr; gap: 100px; align-items: center; border-top: 1px solid var(--line); }
+.gifting p { font-size: .88rem; }
+.gift-paper { padding: 50px 30px; background: var(--wash); border: 1px solid var(--line); min-height: 350px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+.gift-paper strong { font: 500 4rem var(--font-titre); margin: 25px 0; }
+.gift-paper span { font-size: .72rem; }
+.gift-paper span:last-child { margin-top: 35px; }
+.gift-steps { padding-left: 20px; font-size: .85rem; }
+.gift-steps p { margin: 5px 0 15px; }
+.booking { text-align: center; background: var(--wash); padding: 70px; }
+.booking p { max-width: 700px; margin: 0 auto 25px; }
+.contact { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; }
+.contact__links { display: flex; flex-direction: column; align-items: start; }
+.contact__links p { font-size: .75rem; }
+.concept-footer { padding: 45px max(35px,calc((100% - 1180px)/2)); border-top: 1px solid var(--line); }
+.concept-footer p { max-width: 620px; font-size: .83rem; }
+.concept-footer .wordmark { font-size: 2rem; }
+.concept-footer .disclaimer, .concept-footer small { font-size: .7rem; }
+.concept-footer nav { display: flex; flex-wrap: wrap; gap: 25px; font-size: .72rem; margin: 20px 0; }
+/* 02 — ouverture de magazine, texte central et photographie dans la marge. */
+.concept--2 .masthead { border-bottom: 1px solid var(--line); }
+.concept--2 .opening { grid-template-columns: 1fr 235px; align-items: end; padding-top: 80px; }
+.concept--2 .opening__copy { max-width: none; }
+.concept--2 h1 { font-size: clamp(4rem,7.6vw,8.4rem); }
+.concept--2 .opening__portrait { margin-bottom: 20px; }
+.concept--2 .opening__portrait img { aspect-ratio: 3/4; }
+.concept--2 .opening__portrait figcaption { flex-direction: column; gap: 2px; }
+.concept--2 .opening__intro { margin-left: 14%; }
+.concept--2 .actions { margin-left: 14%; }
+.concept--2 .values { border-bottom: 1px solid var(--line); }
+.concept--2 .story { background: var(--wash); padding: 60px; margin-top: 80px; grid-template-columns: 1fr 1.8fr; }
+.concept--2 .service-list { display: grid; grid-template-columns: 1fr 1fr; gap: 55px; }
+.concept--2 .service { display: flex; flex-direction: column; gap: 20px; padding: 35px 0; }
+.concept--2 .service__number { font: italic 3rem var(--font-titre); }
+.concept--2 .service__booking { width: 100%; margin-top: auto; }
+.concept--2 .service--coaching { grid-column: 1; grid-row: 1/3; padding: 40px; background: var(--wash); border: none; }
+.concept--2 .service--reiki { grid-column: 1/-1; display: grid; grid-template-columns: 60px 1fr 1.4fr 1fr; border-bottom: 1px solid var(--line); }
+.concept--2 .gift-paper { border-radius: 50% 50% 0 0; aspect-ratio: 1; }
+/* 03 — navigation latérale et grand portrait, prestations en panneaux. */
+.concept--3 .concept__shell { display: grid; grid-template-columns: 210px minmax(0,1fr); }
+.concept--3 .masthead { margin: 0; padding: 45px 25px; display: flex; flex-direction: column; justify-content: start; align-items: start; border-right: 1px solid var(--line); grid-row: 1/3; }
+.concept--3 .masthead nav { flex-direction: column; gap: 10px; margin: 50px 0; }
+.concept--3 .wordmark { font-size: 2rem; }
+.concept--3 .opening { grid-template-columns: 1fr 1fr; padding: 40px; gap: 25px; }
+.concept--3 h1 { font-size: clamp(3rem,5vw,5rem); }
+.concept--3 .opening__portrait img { min-height: 560px; }
+.concept--3 .section { margin-inline: 40px; }
+.concept--3 .story { gap: 40px; border-top: 1px solid var(--line); }
+.concept--3 .service-list { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.concept--3 .service { display: flex; flex-direction: column; background: var(--wash); border: 1px solid var(--line); padding: 30px; }
+.concept--3 .service__booking { margin-top: auto; width: 100%; }
+.concept--3 .service--coaching { grid-column: 1/-1; display: grid; grid-template-columns: 35px 1fr 1.2fr; }
+.concept--3 .service--coaching .service__body { grid-column: 2; }
+.concept--3 .service--coaching .service__booking { grid-column: 3; grid-row: 1/3; }
+.concept--3 .gifting { gap: 40px; }
+.concept--3 .contact { gap: 40px; }
+.concept--3 .concept-footer { padding: 45px 40px; }
+/* 04 — aplats asymétriques et coins largement arrondis. */
+.concept--4 h1 { font-size: clamp(3rem,5.5vw,5.5rem); }
+.concept--4 h2 { font-size: clamp(2.3rem,3.6vw,3.5rem); }
+.concept--4 h3 { font-size: 2rem; }
+.concept--4 .opening { max-width: 1230px; padding: 20px 0 0; grid-template-columns: 1.6fr 1fr; gap: 18px; align-items: stretch; }
+.concept--4 .opening__copy { background: var(--wash); padding: 48px; border-radius: 35px 35px 100px 35px; }
+.concept--4 .opening__portrait { position: relative; }
+.concept--4 .opening__portrait img { height: 100%; max-height: none; border-radius: 100px 35px 35px 35px; }
+.concept--4 .opening__portrait figcaption { position: absolute; bottom: 20px; left: 20px; right: 20px; padding: 12px; background: var(--paper); border-radius: 16px; }
+.concept--4 .values { background: var(--beige-secondaire); border: none; border-radius: 24px; padding: 24px 45px; margin: 0; }
+.concept--4 .cta { border-radius: 50px; }
+.concept--4 .service-list { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+.concept--4 .service { display: flex; flex-direction: column; padding: 32px; background: var(--wash); border: none; border-radius: 30px; }
+.concept--4 .service__booking { width: 100%; margin-top: auto; }
+.concept--4 .service--coaching { grid-column: span 2; grid-row: 1; }
+.concept--4 .service--tirage { grid-column: 3; grid-row: 1; }
+.concept--4 .service--reiki { grid-column: span 2; }
+.concept--4 .booking { border-radius: 35px; }
+.concept--4 .gift-paper { border-radius: 30px; }
+/* 05 — composition typographique, petite photo, catalogue à filets. */
+.concept--5 .masthead { padding-block: 35px; border-bottom: 1px solid var(--line); }
+.concept--5 .opening { grid-template-columns: minmax(0,1fr) 180px; padding-top: 90px; align-items: start; }
+.concept--5 .opening__copy { max-width: none; }
+.concept--5 h1 { font-size: clamp(4rem,7.5vw,8rem); }
+.concept--5 .opening__portrait { margin-top: 35px; }
+.concept--5 .opening__portrait figcaption { display: block; }
+.concept--5 .opening__portrait figcaption span { display: block; margin-bottom: 6px; }
+.concept--5 .opening__intro { max-width: 580px; }
+.concept--5 .opening .cta { background: transparent; color: var(--ink); border-bottom: 1px solid var(--ink); padding-left: 0; }
+.concept--5 .opening .cta:hover { background: var(--wash); }
+.concept--5 .values { justify-content: start; gap: 65px; margin-top: 55px; }
+.concept--5 .story { border-bottom: 1px solid var(--line); padding-block: 75px; }
+.concept--5 .service { grid-template-columns: 40px 1fr 1.3fr .6fr; }
+.concept--5 .gift-paper { background: transparent; outline: 1px solid var(--line); outline-offset: -12px; }
+/* Galerie */
+.gallery__header { max-width: 1280px; margin: auto; padding: 35px 40px; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+.gallery__header > span { font-size: .7rem; }
+.gallery__main { max-width: 1280px; margin: auto; padding: 65px 40px; }
+.gallery h1 { max-width: 950px; }
+.gallery__intro { max-width: 720px; margin: 30px 0 60px; }
+.gallery__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px 35px; }
+.direction { background: var(--blanc-chaud); border: 1px solid var(--line); }
+.direction__preview { display: block; background: var(--beige-secondaire); overflow: hidden; }
+.direction__preview img { width: 100%; height: auto; }
+.direction__body { padding: 28px; }
+.direction h2 { font-size: 2.6rem; }
+.direction p { font-size: .88rem; }
+.direction .layout-note { font-size: .72rem; }
+.direction .kicker { font-size: .65rem; }
+.gallery__note { max-width: 850px; padding: 40px 0; margin-top: 45px; }
+.gallery__note h2 { font-size: 2.5rem; }
+@media (max-width: 1250px) {
+  .section { margin-inline: 45px; }
+  .concept--4 .opening { margin-inline: 35px; }
+  .masthead { gap: 25px; padding-inline: 35px; }
+  .masthead nav { gap: 18px; }
+  .opening { padding-inline: 45px; gap: 35px; }
+  .concept--3 .concept__shell { grid-template-columns: 175px minmax(0,1fr); }
+  .concept--3 .masthead { padding: 35px 18px; }
+  .concept--3 .opening { grid-template-columns: 1.2fr 1fr; }
+  .concept--3 .opening__portrait img { min-height: 470px; }
+}
+@media (max-width: 950px) {
+  .masthead { flex-wrap: wrap; padding: 25px; }
+  .masthead nav { order: 3; width: 100%; justify-content: space-between; }
+  .opening { padding: 35px 30px 0; gap: 25px; }
+  .section { margin-inline: 30px; padding-block: 65px; }
+  .service,.concept--5 .service { grid-template-columns: 30px 1fr 1.5fr; }
+  .service__booking { grid-column: 3; }
+  .story,.gifting,.contact { gap: 35px; }
+  .section-heading { align-items: start; flex-direction: column; gap: 15px; }
+  .concept--2 .opening { grid-template-columns: 1fr 180px; }
+  .concept--2 .story { padding: 35px; gap: 30px; }
+  .concept--2 .service-list { gap: 25px; }
+  .concept--2 .service--coaching { padding: 25px; }
+  .concept--2 .service--reiki { display: flex; }
+  .concept--3 .concept__shell { display: block; }
+  .concept--3 .masthead { flex-direction: row; align-items: center; flex-wrap: wrap; border-right: none; border-bottom: 1px solid var(--line); padding: 25px; }
+  .concept--3 .masthead nav { flex-direction: row; margin: 0; }
+  .concept--3 .small-cta { margin-left: auto; }
+  .concept--4 .opening__copy { padding: 30px; }
+  .concept--4 .service-list { grid-template-columns: 1fr 1fr; }
+  .concept--4 .service--coaching { grid-column: 1/-1; }
+  .concept--4 .service--tirage { grid-column: auto; grid-row: auto; }
+  .concept--4 .service--reiki { grid-column: 1/-1; }
+}
+@media (max-width: 640px) {
+  .preview-bar { padding: 7px 15px; flex-wrap: wrap; gap: 0 12px; }
+  .preview-bar > span { display: none; }
+  .preview-bar nav { gap: 0; }
+  .preview-bar nav a { width: 31px; }
+  .masthead,.concept--3 .masthead { padding: 24px 20px; gap: 18px; }
+  .wordmark { font-size: 1.8rem; }
+  .masthead nav { font-size: .67rem; gap: 6px 15px; flex-wrap: wrap; justify-content: start; }
+  .small-cta { font-size: .66rem; }
+  .opening,.concept--2 .opening,.concept--3 .opening,.concept--4 .opening,.concept--5 .opening { display: flex; flex-direction: column; padding: 30px 20px 0; gap: 30px; margin: 0; align-items: stretch; }
+  h1,.concept--2 h1,.concept--3 h1,.concept--4 h1,.concept--5 h1 { font-size: clamp(3rem,12vw,4.8rem); }
+  .opening__portrait { width: 100%; max-width: 360px; margin-inline: auto; }
+  .opening__portrait img { max-height: 410px; width: 100%; object-fit: cover; }
+  .values,.concept--5 .values { font-size: .6rem; letter-spacing: .06em; gap: 10px; margin: 0; flex-wrap: wrap; }
+  .section,.concept--3 .section { margin-inline: 20px; padding-block: 55px; }
+  .story,.gifting,.contact { grid-template-columns: 1fr; gap: 25px; }
+  .service,.concept--5 .service { grid-template-columns: 25px minmax(0,1fr); gap: 12px; }
+  .service__body,.service__booking,.service--coaching .service__booking { grid-column: 2; }
+  .service__booking { margin-top: 15px; }
+  .gifting { gap: 45px; }
+  .gift-paper { min-height: 280px; }
+  .gift-paper strong { font-size: 3rem; }
+  .booking { padding: 40px 22px; }
+  .concept-footer,.concept--3 .concept-footer { padding: 35px 20px; }
+  .concept--2 .opening__intro,.concept--2 .actions { margin-left: 0; }
+  .concept--2 .opening__portrait { max-width: 240px; margin: 0 auto; }
+  .concept--2 .opening__portrait figcaption { flex-direction: row; }
+  .concept--2 .story { grid-template-columns: 1fr; margin-top: 45px; padding: 30px; }
+  .concept--2 .service-list,.concept--3 .service-list,.concept--4 .service-list { display: flex; flex-direction: column; gap: 25px; }
+  .concept--2 .service--coaching,.concept--4 .service--coaching { order: -1; }
+  .concept--3 .opening__portrait img { min-height: 0; }
+  .concept--3 .service--coaching { display: flex; }
+  .concept--3 .service--coaching .service__booking { margin-top: 0; }
+  .concept--4 .opening__copy { padding: 30px 22px; border-radius: 25px 25px 65px 25px; }
+  .concept--4 .opening__portrait img { max-height: 440px; border-radius: 65px 25px 25px 25px; }
+  .concept--4 .values { padding: 22px; border-radius: 20px; }
+  .concept--5 .opening__portrait { max-width: 180px; margin: 0; }
+  .gallery__header { padding: 25px 20px; flex-direction: column; align-items: start; }
+  .gallery__main { padding: 35px 20px; }
+  .gallery h1 { font-size: 3.7rem; }
+  .gallery__grid { grid-template-columns: 1fr; gap: 25px; }
+  .direction__body { padding: 22px; }
+}
+
+/* Composants communs : logo, étoiles, cadres et boutons du même univers que le site. */
+[hidden] { display: none !important; }
+.skip-link { position: absolute; left: 20px; top: 0; z-index: 10; transform: translateY(-120%); padding: 15px; background: var(--wash); }
+.skip-link:focus { transform: none; }
+.wordmark { display: inline-flex; align-items: center; gap: 12px; white-space: nowrap; }
+.wordmark img { width: 58px; height: 65px; object-fit: contain; }
+.wordmark .wordmark__text { margin: 0; font: 400 1.85rem/1.1 var(--font-titre); letter-spacing: -.02em; text-transform: none; }
+.wordmark__text small { display: block; margin-top: 9px; font: 400 .55rem/1.5 var(--font-texte); letter-spacing: .13em; text-transform: uppercase; }
+.flourish { display: flex; align-items: center; gap: 13px; margin: 22px 0; color: var(--brun-secondaire); }
+.flourish::before,.flourish::after { content: ''; width: 40px; height: 1px; background: var(--beige-brun-clair); }
+h1 { font-size: clamp(3rem,5.2vw,5rem); line-height: 1.08; letter-spacing: -.025em; }
+h2 { font-size: clamp(2.3rem,3.8vw,3.4rem); letter-spacing: -.015em; }
+.cta { border-radius: var(--radius-pill); }
+.small-cta { border: 1px solid var(--beige-brun-clair); border-radius: var(--radius-pill); padding: 10px 18px; }
+.preview-bar a:focus-visible { outline-color: var(--blanc-chaud); }
+.masthead { padding-block: 24px; gap: 24px; }
+.masthead nav { gap: 24px; }
+.opening { padding-top: 40px; }
+.opening__portrait { position: relative; --photo-radius: 24px; }
+.opening__portrait::before { content: ''; position: absolute; inset: -12px; border: 1px solid var(--beige-brun-clair); border-radius: var(--photo-radius); pointer-events: none; }
+.opening__portrait img { border-radius: var(--photo-radius); }
+.opening__portrait figcaption { position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); align-items: center; justify-content: center; width: max-content; max-width: 100%; padding: 12px 20px; border: 1px solid var(--beige-secondaire); border-radius: 30px; background: var(--wash); box-shadow: var(--ombre-legere); }
+.opening__portrait figcaption span:first-child { font: 500 1.3rem var(--font-titre); }
+.values { text-transform: none; letter-spacing: .06em; }
+.values li { display: inline-flex; align-items: center; gap: 9px; }
+.values svg { flex: none; color: var(--brun-secondaire); }
+.service { scroll-margin-top: 25px; }
+.service__number { display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--brun-doux); font: 400 1.2rem var(--font-titre); }
+.service__number svg { color: var(--brun-principal); flex: none; }
+.service__body ul { list-style: none; padding: 20px 0 0; border-top: 1px solid var(--beige-secondaire); }
+.service__body li { position: relative; padding-left: 18px; margin: 7px 0; }
+.service__body li::before { content: ''; position: absolute; left: 0; top: .7em; width: 6px; height: 6px; border: 1px solid var(--brun-secondaire); border-radius: 50%; }
+.offers details > div { background: var(--paper); border: 1px solid var(--beige-secondaire); border-radius: 12px; margin-bottom: 15px; padding: 16px; }
+.gift-paper { position: relative; background: var(--wash); border-radius: 14px; box-shadow: var(--ombre-portee); }
+.gift-paper::before { content: ''; position: absolute; inset: 12px; border: 1px solid var(--beige-secondaire); border-radius: inherit; pointer-events: none; }
+.gift-paper img { object-fit: contain; margin-bottom: 12px; }
+.booking { border: 1px solid var(--beige-secondaire); border-radius: 24px; }
+.concept-footer { background: var(--wash); }
+.concept-footer .wordmark { margin-bottom: 25px; }
+/* 01 — signature : portrait en médaillon et cartes en duo. */
+.concept--1 .opening__portrait { --photo-radius: 48% 48% 45% 45%; max-width: 400px; margin-inline: auto; }
+.concept--1 .opening__portrait img { height: 460px; }
+.concept--1 .story { background: var(--wash); padding: 45px; border: 1px solid var(--beige-secondaire); border-radius: 18px; margin-top: 35px; }
+.concept--1 .section-heading { text-align: center; display: block; }
+.concept--1 .section-heading > p { margin: 20px auto 0; max-width: 700px; }
+.concept--1 .service-list { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: start; }
+.concept--1 .service { grid-template-columns: 48px minmax(0,1fr); gap: 18px 25px; padding: 35px; border: 1px solid var(--beige-secondaire); border-radius: var(--radius); background: var(--wash); box-shadow: var(--ombre-carte); }
+.concept--1 .service__number { grid-row: 1/4; }
+.concept--1 .service__body,.concept--1 .service__booking,.concept--1 .service--coaching .service__booking { grid-column: 2; }
+.concept--1 .service__booking { flex-direction: row; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+.concept--1 .service--reiki { background: transparent; border-style: dashed; box-shadow: none; }
+/* 02 — carnet : une photographie encadrée et un chapitre principal. */
+.concept--2 .opening { grid-template-columns: 1.6fr 1fr; gap: 35px 65px; padding-top: 50px; }
+.concept--2 h1 { font-size: clamp(3.2rem,6.3vw,6rem); }
+.concept--2 .opening__portrait { max-width: 310px; margin: 0 auto; --photo-radius: 6px; padding: 13px 13px 50px; background: var(--wash); box-shadow: var(--ombre-portee); }
+.concept--2 .opening__portrait::before { inset: 0; border-radius: 10px; }
+.concept--2 .opening__portrait img { height: 365px; }
+.concept--2 .opening__portrait figcaption { bottom: 12px; padding: 0; flex-direction: row; gap: 15px; background: transparent; border: 0; box-shadow: none; }
+.concept--2 .opening__portrait figcaption span:first-child { font-style: italic; }
+.concept--2 .opening__intro,.concept--2 .actions { margin-left: 45px; }
+.concept--2 .story { margin-top: 45px; border: 1px solid var(--beige-secondaire); border-radius: 18px; }
+.concept--2 .service__number { font-size: 1.4rem; flex-direction: row; }
+.concept--2 .service--coaching { border: 1px solid var(--beige-secondaire); border-radius: 70px 18px 18px 18px; align-self: start; }
+.concept--2 .service__booking { margin-top: 12px; }
+.concept--2 .gifting .gift-paper { border-radius: 14px; aspect-ratio: auto; transform: rotate(-2deg); }
+/* 03 — atelier : menu latéral avec l'emblème, panneaux de prestations. */
+.concept--3 .concept__shell { grid-template-columns: 240px minmax(0,1fr); }
+.concept--3 .masthead { background: var(--wash); padding-inline: 20px; align-items: stretch; }
+.concept--3 .masthead .wordmark { flex-direction: column; text-align: center; gap: 18px; }
+.concept--3 .masthead .wordmark img { width: 100px; height: 108px; }
+.concept--3 .masthead nav { padding: 25px 0; border-block: 1px solid var(--beige-secondaire); margin-block: 40px; }
+.concept--3 .masthead nav a { justify-content: center; }
+.concept--3 .small-cta { justify-content: center; }
+.concept--3 .opening__portrait { --photo-radius: 90px 18px 18px 18px; }
+.concept--3 .opening__portrait img { min-height: 470px; max-height: 510px; }
+.concept--3 .service { border-color: var(--beige-secondaire); border-radius: 18px; box-shadow: var(--ombre-carte); }
+/* 04 — mosaïque : souplesse des formes et formules en deux colonnes. */
+.concept--4 .opening__portrait::before { display: none; }
+.concept--4 .opening__portrait figcaption { left: 50%; right: auto; width: max-content; border-radius: 30px; }
+.concept--4 .service__number { flex-direction: row; justify-content: space-between; width: 100%; }
+.concept--4 .service--coaching .offers { display: grid; grid-template-columns: 1fr 1fr; gap: 0 25px; align-items: start; }
+/* 05 — parenthèse : accueil centré, portrait discret, prestations en lignes. */
+.concept--5 .opening { display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; padding-top: 30px; }
+.concept--5 .opening__portrait { order: -1; width: 135px; margin: 0 0 15px; --photo-radius: 50%; }
+.concept--5 .opening__portrait img { height: 150px; }
+.concept--5 .opening__portrait figcaption { bottom: -18px; padding: 4px 15px; }
+.concept--5 .opening__portrait figcaption span { margin: 0; }
+.concept--5 .opening__portrait figcaption span:last-child { display: none; }
+.concept--5 .opening__copy { max-width: 900px; }
+.concept--5 .opening__copy .flourish { display: none; }
+.concept--5 h1 { font-size: clamp(3.1rem,5.8vw,5.4rem); }
+.concept--5 .opening__intro { margin-inline: auto; max-width: 600px; }
+.concept--5 .actions,.concept--5 .values { justify-content: center; }
+.concept--5 .values { width: 100%; gap: 65px; margin-top: 10px; }
+.concept--5 .opening .cta { border: 1px solid var(--accent); padding: 15px 25px; background: var(--accent); color: var(--blanc-chaud); }
+.concept--5 .opening .cta:hover { background: var(--brun-doux); }
+.concept--5 .gift-paper { outline: none; box-shadow: none; }
+/* 06 — rencontre : portrait à gauche et prestations à déplier. */
+.concept--6 .opening { grid-template-columns: .85fr 1.15fr; gap: 40px 100px; }
+.concept--6 .opening__portrait { grid-column: 1; grid-row: 1; --photo-radius: 150px 24px 24px 24px; }
+.concept--6 .opening__copy { grid-column: 2; grid-row: 1; }
+.concept--6 .story { background: var(--wash); padding: 40px; margin-top: 25px; border: 1px solid var(--beige-secondaire); border-radius: 24px; }
+.concept--6 .offerings { display: grid; grid-template-columns: .7fr 1.3fr; gap: 65px; }
+.concept--6 .section-heading { display: block; }
+.concept--6 .section-heading > p { margin-top: 25px; }
+.concept--6 .service-list { display: block; }
+.concept--6 .service { display: block; padding: 0; border-top: 1px solid var(--beige-brun-clair); }
+.service-accordion > summary { display: grid; grid-template-columns: 25px 42px 1fr 22px; gap: 15px; align-items: center; padding: 26px 0; cursor: pointer; list-style: none; }
+.service-accordion > summary::-webkit-details-marker { display: none; }
+.service-accordion h3 { font-size: 2rem; margin: 0; }
+.service-accordion .service__number { grid-row: auto; }
+.accordion-plus { font: 400 1.7rem var(--font-titre); }
+.service-accordion[open] .accordion-plus { transform: rotate(45deg); }
+.accordion-content { padding: 10px 25px 25px; margin: 0 0 25px 40px; border: 1px solid var(--beige-secondaire); border-radius: 18px; background: var(--wash); }
+.accordion-content > .service__format { margin: 12px 0 20px; }
+.accordion-content .service__booking { margin-top: 25px; }
+/* 07 — chemin : accueil encadré et prestations en alternance. */
+.concept--7 .opening { width: calc(100% - 100px); max-width: 1180px; grid-template-columns: 1.7fr .7fr; gap: 30px 50px; padding: 50px 55px 0; margin-top: 35px; border: 1px solid var(--beige-brun-clair); border-radius: 90px 24px 24px 24px; background: var(--wash); }
+.concept--7 .opening__portrait { width: 100%; max-width: 230px; --photo-radius: 50%; }
+.concept--7 .opening__portrait img { height: 290px; }
+.concept--7 .opening__portrait figcaption { flex-direction: column; gap: 0; }
+.concept--7 h1 { font-size: clamp(3rem,5vw,4.7rem); }
+.journey-nav { width: calc(100% - 100px); max-width: 1180px; margin: 25px auto 0; display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+.journey-nav a { display: flex; align-items: center; gap: 12px; padding: 20px; background: var(--wash); border: 1px solid var(--beige-secondaire); border-radius: 16px; font-size: .73rem; }
+.journey-nav a svg { flex: none; }
+.journey-nav a span:last-child { margin-left: auto; }
+.concept--7 .service-list { display: flex; flex-direction: column; gap: 35px; }
+.concept--7 .service { grid-template-columns: 1fr 1.4fr; padding: 40px; gap: 15px 50px; width: calc(100% - 90px); border: 1px solid var(--beige-secondaire); background: var(--wash); }
+.concept--7 .service:nth-child(even) { margin-left: 90px; grid-template-columns: 1.4fr 1fr; border-radius: 24px 80px 24px 24px; }
+.concept--7 .service:nth-child(odd) { border-radius: 80px 24px 24px 24px; }
+.concept--7 .service__number { grid-column: 1; grid-row: 1; flex-direction: row; }
+.concept--7 .service__heading { grid-column: 1; grid-row: 2; }
+.concept--7 .service__body { grid-column: 2; grid-row: 1/3; }
+.concept--7 .service__booking { grid-column: 2; }
+.concept--7 .service:nth-child(even) .service__number,.concept--7 .service:nth-child(even) .service__heading { grid-column: 2; }
+.concept--7 .service:nth-child(even) .service__body,.concept--7 .service:nth-child(even) .service__booking { grid-column: 1; }
+/* 08 — écrin : accueil partagé dans un cadre, prestations par onglets. */
+.concept--8 .opening { width: calc(100% - 100px); max-width: 1180px; margin-top: 35px; grid-template-columns: .85fr 1.15fr; gap: 0; padding: 0; border: 1px solid var(--beige-brun-clair); border-radius: 26px; background: var(--wash); overflow: hidden; box-shadow: var(--ombre-carte); }
+.concept--8 .opening__portrait { grid-column: 1; grid-row: 1; margin: 0; height: 100%; --photo-radius: 0; }
+.concept--8 .opening__portrait img { height: 100%; min-height: 510px; max-height: none; }
+.concept--8 .opening__portrait::before { display: none; }
+.concept--8 .opening__portrait figcaption { bottom: 25px; }
+.concept--8 .opening__copy { grid-column: 2; grid-row: 1; padding: 45px; }
+.concept--8 h1 { font-size: clamp(3rem,4.8vw,4.6rem); }
+.concept--8 .values { padding: 23px 40px; margin: 0; }
+.concept--8 .section-heading { display: block; text-align: center; }
+.concept--8 .section-heading > p { margin: 20px auto 0; max-width: 700px; }
+.service-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 25px; }
+.service-tabs a { display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; border: 1px solid var(--beige-brun-clair); border-radius: 30px; font-size: .75rem; min-height: 48px; }
+.service-tabs a[aria-selected=true] { background: var(--brun-principal); color: var(--blanc-chaud); border-color: var(--brun-principal); }
+.service-tabs svg { flex: none; }
+.concept--8 .service { grid-template-columns: 80px 1fr 1.35fr; gap: 30px; padding: 50px; margin-bottom: 25px; border: 1px solid var(--beige-secondaire); border-radius: 24px; background: var(--wash); }
+.concept--8 .service__body { grid-column: 3; grid-row: 1/3; }
+.concept--8 .service__booking { grid-column: 2; align-content: start; }
+.concept--8 .service--coaching .service__booking { grid-column: 2/-1; }
+.concept--8 .service--coaching .offers { display: grid; grid-template-columns: 1fr 1fr; gap: 0 35px; align-items: start; }
+/* Galerie : comparer l'accueil ou les prestations sur les huit aperçus. */
+.gallery__main { padding-top: 35px; }
+.gallery__opening { text-align: center; max-width: 850px; margin: 0 auto 60px; }
+.gallery__opening .flourish { justify-content: center; }
+.gallery h1 { font-size: clamp(3rem,5.8vw,5.6rem); }
+.gallery__intro { max-width: 690px; margin: 25px auto; }
+.gallery__traits { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+.gallery__traits span { font-size: .67rem; padding: 8px 15px; border: 1px solid var(--beige-brun-clair); border-radius: 30px; }
+.gallery__tools { display: flex; justify-content: space-between; align-items: center; gap: 25px; padding: 20px 0; border-top: 1px solid var(--line); margin-bottom: 20px; }
+.gallery__tools p { font-size: .83rem; margin: 0; }
+.view-switch { display: inline-flex; padding: 4px; border: 1px solid var(--beige-brun-clair); border-radius: 30px; background: var(--wash); }
+.view-switch button { border: 0; border-radius: 24px; background: transparent; color: var(--brun-principal); padding: 10px 18px; font-size: .76rem; min-height: 44px; cursor: pointer; }
+.view-switch button[aria-pressed=true] { background: var(--brun-principal); color: var(--blanc-chaud); }
+.direction { border-color: var(--beige-secondaire); border-radius: 20px; overflow: hidden; box-shadow: var(--ombre-carte); }
+.direction__preview { border-bottom: 1px solid var(--beige-secondaire); }
+.direction .layout-note { border-top: 1px solid var(--beige-secondaire); padding-top: 15px; }
+.gallery__note { max-width: none; padding: 40px; border: 1px solid var(--beige-secondaire); border-radius: 20px; background: var(--wash); }
+@media (max-width: 1200px) {
+  .masthead { flex-wrap: wrap; }
+  .masthead nav { order: 3; width: 100%; justify-content: center; }
+  .concept--3 .concept__shell { grid-template-columns: 205px minmax(0,1fr); }
+  .concept--3 .masthead nav { order: 0; }
+  .concept--3 .wordmark .wordmark__text { font-size: 1.65rem; }
+  .concept--6 .opening { gap: 35px 55px; }
+  .concept--6 .offerings { gap: 35px; margin-inline: 45px; }
+}
+@media (max-width: 950px) {
+  .concept--3 .concept__shell { display: block; }
+  .concept--3 .masthead .wordmark { flex-direction: row; text-align: left; gap: 12px; }
+  .concept--3 .masthead .wordmark img { width: 58px; height: 65px; }
+  .concept--3 .masthead nav { order: 3; padding: 0; border: 0; margin: 0; }
+  .concept--6 .offerings { display: block; }
+  .concept--6 .section-heading > p { max-width: 600px; }
+  .concept--7 .opening,.concept--8 .opening,.journey-nav { width: calc(100% - 60px); }
+  .concept--7 .opening { padding: 35px 35px 0; gap: 25px; }
+  .concept--7 .opening__portrait img { height: 230px; }
+  .journey-nav { grid-template-columns: 1fr 1fr; }
+  .concept--7 .service { width: calc(100% - 40px); gap: 20px 30px; }
+  .concept--7 .service:nth-child(even) { margin-left: 40px; }
+  .concept--8 .opening__copy { padding: 30px; }
+  .concept--8 .service { grid-template-columns: 45px 1fr 1.2fr; padding: 30px; gap: 20px; }
+}
+@media (max-width: 680px) {
+  .preview-bar { flex-wrap: wrap; justify-content: center; gap: 0 15px; }
+  .preview-bar > span { display: inline; font-size: .67rem; }
+  .preview-bar nav { justify-content: center; width: 100%; }
+  .preview-bar nav a { width: 35px; }
+  .masthead,.concept--3 .masthead { padding: 20px; gap: 12px; }
+  .wordmark { gap: 8px; }
+  .wordmark .wordmark__text,.concept--3 .wordmark .wordmark__text { font-size: 1.55rem; }
+  .wordmark img,.concept--3 .masthead .wordmark img { width: 45px; height: 52px; }
+  .wordmark__text small { font-size: .46rem; }
+  .small-cta { font-size: .62rem; padding: 8px 11px; gap: 8px; }
+  .masthead nav { font-size: .65rem; gap: 6px 20px; }
+  .opening,.concept--2 .opening,.concept--3 .opening,.concept--4 .opening,.concept--5 .opening,.concept--6 .opening,.concept--7 .opening,.concept--8 .opening { width: calc(100% - 40px); display: flex; flex-direction: column; gap: 35px; padding: 20px 0 0; margin: 10px auto 0; align-items: stretch; }
+  h1,.concept--2 h1,.concept--3 h1,.concept--4 h1,.concept--5 h1,.concept--7 h1,.concept--8 h1 { font-size: clamp(2.7rem,10.8vw,4rem); }
+  .opening__portrait { margin-inline: auto; }
+  .opening__portrait img,.concept--1 .opening__portrait img,.concept--3 .opening__portrait img { height: 350px; min-height: 0; }
+  .opening__portrait figcaption { padding: 10px 16px; }
+  .values,.concept--5 .values { font-size: .61rem; gap: 12px; margin: 0; flex-wrap: wrap; justify-content: center; }
+  .values li { gap: 6px; }
+  .section { margin-inline: 20px; padding-block: 50px; }
+  .story,.gifting,.contact { grid-template-columns: 1fr; gap: 25px; }
+  .concept--1 .story,.concept--6 .story { padding: 28px; gap: 22px; }
+  .service-list,.concept--1 .service-list,.concept--2 .service-list,.concept--3 .service-list,.concept--4 .service-list { display: flex; flex-direction: column; gap: 20px; }
+  .concept--1 .service { grid-template-columns: 1fr; padding: 25px; }
+  .concept--1 .service__number { grid-row: auto; flex-direction: row; justify-content: space-between; }
+  .concept--1 .service__body,.concept--1 .service__booking,.concept--1 .service--coaching .service__booking { grid-column: 1; }
+  .concept--2 .opening__intro,.concept--2 .actions { margin-left: 0; }
+  .concept--2 .opening__portrait { width: 270px; max-width: 100%; margin-bottom: 10px; }
+  .concept--2 .opening__portrait img { height: 310px; }
+  .concept--2 .opening__portrait figcaption { padding: 0; }
+  .concept--2 .service--coaching { padding: 28px; border-radius: 45px 18px 18px 18px; }
+  .concept--4 .opening__portrait img { height: 400px; min-height: 0; }
+  .concept--4 .service--coaching .offers { display: block; }
+  .concept--5 .opening { gap: 20px; }
+  .concept--5 .opening__portrait { width: 120px; margin: 0 auto 20px; }
+  .concept--5 .opening__portrait img { height: 135px; }
+  .concept--5 .opening__portrait figcaption { padding: 4px 15px; }
+  .concept--5 .service { grid-template-columns: 1fr; }
+  .concept--5 .service__number { flex-direction: row; justify-content: space-between; }
+  .concept--5 .service__body,.concept--5 .service__booking,.concept--5 .service--coaching .service__booking { grid-column: 1; }
+  .concept--6 .opening__portrait { order: -1; width: 240px; max-width: 100%; margin-bottom: 20px; }
+  .concept--6 .opening__portrait img { height: 285px; }
+  .concept--6 .offerings { margin-inline: 20px; }
+  .service-accordion > summary { grid-template-columns: 18px 32px 1fr 18px; gap: 10px; }
+  .service-accordion > summary > svg { width: 32px; }
+  .service-accordion h3 { font-size: 1.65rem; }
+  .accordion-content { margin-left: 0; padding: 10px 20px 20px; }
+  .concept--7 .opening { padding: 30px 25px 0; border-radius: 55px 20px 20px 20px; }
+  .concept--7 .opening__portrait { max-width: 170px; margin-bottom: 20px; }
+  .concept--7 .opening__portrait img { height: 210px; }
+  .journey-nav { width: calc(100% - 40px); gap: 10px; }
+  .journey-nav a { padding: 14px; flex-direction: column; font-size: .69rem; text-align: center; gap: 8px; }
+  .journey-nav a span:last-child { margin: 0; }
+  .concept--7 .service,.concept--7 .service:nth-child(even) { width: 100%; margin-left: 0; display: flex; flex-direction: column; padding: 28px; border-radius: 40px 18px 18px 18px; }
+  .concept--8 .opening { padding: 0; gap: 0; }
+  .concept--8 .opening__portrait { order: -1; width: 100%; max-width: none; }
+  .concept--8 .opening__portrait img { height: 310px; min-height: 0; object-position: center 25%; }
+  .concept--8 .opening__copy { padding: 30px 22px; }
+  .concept--8 .values { padding: 20px; }
+  .service-tabs { gap: 8px; }
+  .service-tabs a { padding: 10px 14px; font-size: .67rem; }
+  .service-tabs svg { width: 22px; }
+  .concept--8 .service { display: flex; flex-direction: column; padding: 25px; }
+  .concept--8 .service--coaching .offers { display: block; }
+  .gallery__opening { margin-bottom: 35px; }
+  .gallery h1 { font-size: 3.3rem; }
+  .gallery__tools { flex-direction: column; align-items: start; gap: 18px; }
+  .gallery__note { padding: 25px; }
+}

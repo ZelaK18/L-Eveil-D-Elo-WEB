@@ -1,0 +1,146 @@
+L'ÉVEIL D'ELO — VÉRIFICATION SUISSE DU 7 OCTOBRE 2026
+
+Conclusion
+La revue des textes et du code a été effectuée. Elle ne permet pas d'affirmer
+une conformité complète : les points ouverts ci-dessous nécessitent des faits,
+des décisions de l'exploitante ou une validation professionnelle. Aucun service
+réel Google, TWINT ou d'hébergement n'a été modifié ni testé par un envoi réel.
+
+Informations confirmées par le propriétaire pendant cette revue
+- Exploitante : Elodie Fauquex, 1690 Villaz-St-Pierre, Suisse.
+- Instruction expresse : ne pas publier de rue ni de numéro pour le moment.
+- Hébergeur : o2switch, France.
+- Google : compte Gmail personnel contact.leveildelo@gmail.com ; aucune
+  souscription Google Workspace confirmée.
+- Activité annoncée inférieure à 2 500 CHF par année ; statut administratif
+  et fiscal non confirmé. Ce montant ne suffit pas à déterminer les obligations.
+
+Corrections effectuées
+- Hébergeur nommé et lié dans les mentions légales, destinataires précisés.
+- Pays ajouté aux coordonnées, rue et numéro non inventés.
+- Affirmations « raison individuelle non inscrite » et « non assujettie à la
+  TVA » remplacées par l'indication factuelle d'une activité exercée en nom propre.
+- Compte Gmail personnel distingué d'un contrat Google Workspace.
+- Présentation du Swiss-U.S. Data Privacy Framework limitée aux traitements et
+  entités couverts ; ce mécanisme n'est pas une garantie générale de conformité.
+- Paiements TWINT et justificatifs comptables décrits ; pas de paiement intégré
+  ni de collecte des identifiants bancaires par le code du site.
+- Formulaire de contact : information au niveau du message sur les données
+  sensibles, tiers et absence de chiffrement de bout en bout des e-mails ;
+  consentement explicite aux données sensibles volontairement communiquées.
+- Trace technique du contact distinguée du contenu du message, qui n'est pas
+  stocké dans les fichiers du site. Les dossiers de réservation le sont.
+- Affirmation générale de propriété de tous les contenus remplacée par une
+  mention respectant les droits des titulaires et les exceptions légales.
+- Textes communs et pages légales synchronisés entre racine et site/.
+- Date de mise à jour : 7 octobre 2026. Version des conditions : 2026-10-07.1.
+
+Points ouverts, par priorité
+
+1. Adresse de contact de la prestataire — à régler avant ouverture des réservations
+   Les mentions n'indiquent que le NPA et la localité. Le SECO demande une
+   identification et une adresse de contact claires et complètes pour l'offre
+   de prestations en ligne. Le parcours actuel conclut un contrat sur le site ;
+   il ne se limite pas à un échange individuel d'e-mails.
+   La volonté de ne pas publier le domicile a été respectée. Faire valider une
+   adresse professionnelle de correspondance adaptée plutôt que certifier
+   suffisante la seule localité. Aucune conformité « 100 % » affirmée.
+
+2. Seuil de 2 500 CHF — ne pas confondre cotisations, impôts et statut
+   Le mémento AVS 2.02, état au 1er janvier 2026, précise que pour une activité
+   indépendante ACCESSOIRE dont le revenu annuel ne dépasse pas 2 500 CHF,
+   les cotisations ne sont perçues qu'à la demande de la personne.
+   Cette règle n'est pas une exemption générale de déclarer les revenus aux
+   impôts et ne prouve pas à elle seule la qualification d'indépendante.
+   Le caractère accessoire et la situation AVS sont à clarifier avec la caisse
+   de compensation. Tenir un relevé des recettes/dépenses ; faire confirmer le
+   traitement fiscal par le Service cantonal des contributions de Fribourg.
+   L'inscription au registre du commerce et la TVA ont leurs propres règles.
+
+3. Google personnel, données sensibles et transferts — garanties à vérifier
+   Réservation : identité, date de naissance, réponses potentiellement sensibles,
+   accords et conditions sont conservés localement et transmis par e-mail.
+   L'agenda reçoit les coordonnées, le créneau et le nom de la prestation,
+   pas le questionnaire. Meet traite l'audio, la vidéo et les données techniques.
+   Le consentement ne dispense pas de minimiser et sécuriser ces traitements.
+   Vérifier les conditions du compte personnel, les rôles des destinataires,
+   les garanties contractuelles, sous-traitants et États destinataires effectifs.
+   Le renvoi actuel à la politique Google ne remplace pas cette vérification
+   ni l'identification des pays requise par le devoir d'information suisse.
+   Aucune affirmation que Gmail personnel serait automatiquement illégal, ni
+   qu'un abonnement Workspace suffirait à garantir la conformité.
+   Option à étudier : limiter les formulaires aux informations logistiques et
+   recueillir les éléments sensibles pendant la séance ; justifier aussi la
+   conservation de la date de naissance complète pour la majorité.
+   Vérifier les conditions d'o2switch et des paiements/échanges Instagram réels.
+
+4. Conservation et sécurité — opérations réelles non vérifiées
+   La politique prévoit une suppression manuelle : demandes sans suite sous
+   12 mois, questionnaires au maximum un an après la dernière séance, pièces
+   comptables selon la durée légale. Le code ne réalise pas cette purge métier.
+   Prévoir un contrôle périodique couvrant les dossiers booking-form, leurs
+   réponses et copies d'e-mails, Gmail (y compris corbeille), Agenda, appareils
+   et sauvegardes. Garder séparément les preuves strictement nécessaires.
+   Vérifier durées des journaux/sauvegardes o2switch et accès de maintenance.
+   Accès, rectification, suppression et éventuelles violations doivent pouvoir
+   être traités effectivement ; examiner le devoir d'annonce au PFPDT en cas
+   de risque élevé. L'absence d'automatisation n'établit pas une violation.
+   HTTPS et refus HTTP des dossiers internes sont prévus dans le code, mais
+   les règles Apache et l'hébergement de production n'ont pas été audités en réel.
+
+5. Coordonnées et conditions commerciales
+   Le numéro configuré reste 079 123 45 67 tant qu'un numéro réel n'est pas
+   confirmé. Ne pas ouvrir la prise de rendez-vous avec des coordonnées fictives.
+   Les packs prévoient le remboursement au prorata des séances non réalisées.
+   La règle explicite de remboursement d'une séance unitaire payée d'avance et
+   le délai de remboursement restent à confirmer par l'exploitante.
+   Vérifier les allégations de certification, tarifs de lancement et prix
+   habituels annoncés. Les tarifs et la disponibilité du Reiki n'ont pas été
+   changés. Les clauses restent soumises aux règles impératives applicables.
+   La présentation vise aussi une clientèle mondiale : une expansion ciblée à
+   l'étranger nécessite une revue des règles applicables dans les pays visés.
+
+Éléments satisfaisants observés dans le périmètre du code
+- Informations sur cadre non médical, majorité, tarif, paiement, annulation.
+- Possibilité de corriger les informations avant validation, explication de la
+  conclusion du contrat, récapitulatif et confirmation électronique prévus.
+- Questionnaire exclu de la description Google Agenda, contenu des messages
+  libre non renvoyé dans les accusés de contact à une adresse arbitraire.
+- Pas d'analytics, pixels publicitaires ou contenu social intégré repérés.
+  Polices locales ; pas de cookie ni stockage navigateur observé sur l'accueil.
+  Pas de bannière cookies ajoutée artificiellement. Réévaluer en cas de nouvel
+  outil tiers ou changement de configuration de l'hébergement.
+- Dossiers PHP protégés, anti-abus, échappement HTML, verrous et réessais.
+  Ces observations ne constituent pas un audit de sécurité exhaustif.
+
+Sources officielles consultées le 7 octobre 2026
+SECO — Commerce électronique (identité, contact, étapes, correction, confirmation)
+https://www.seco.admin.ch/fr/commerce-electronique
+PFPDT — Devoir d'informer (responsable, finalités, destinataires, États, garanties)
+https://www.edoeb.admin.ch/fr/devoir-dinformer
+PFPDT — Communication de données à l'étranger
+https://www.edoeb.admin.ch/fr/communication-de-donnees-a-letranger
+PFPDT — Connaître et faire valoir mes droits
+https://www.edoeb.admin.ch/fr/connaitre-et-faire-valoir-mes-droits
+PFPDT — Cookies, conseils pratiques
+https://www.edoeb.admin.ch/fr/cookies-conseils-pratiques
+AVS/AI — Mémento 2.02, cotisations des indépendants, état au 1er janvier 2026
+https://www.ahv-iv.ch/p/2.02.f
+Portail PME — Travailleur à temps partiel, indépendance à temps partiel
+https://www.kmu.admin.ch/fr/travailleur-a-temps-partiel-lindependance-a-temps-partiel
+Portail PME — Indépendance, mode d'emploi
+https://www.kmu.admin.ch/fr/independance-mode-demploi
+Google — Cadres pour le transfert de données (source du prestataire)
+https://policies.google.com/privacy/frameworks?hl=fr
+
+Validation technique
+- 89 contrôles PHP : questionnaires, majorité, accords, agenda, échappement.
+- 120 contrôles serveur : réservations, concurrents, reprises, contacts,
+  annulation/déplacement et tirage désormais en visio sans lieu « Par message ».
+- Chrome 154 : site existant sur 8 pages / 17 largeurs, contrôles axe-core,
+  formulaires simulés, erreurs réseau, saisies conservées, sans JS, texte à 200 %.
+- Galerie et cinq maquettes : 320, 390, 768, 1024, 1440 px, aucun débordement
+  horizontal détecté ; contrôles axe-core exécutés sans violation remontée,
+  images présentes et formules ouvrables. Pas une certification d'accessibilité.
+- Syntaxe PHP vérifiée et git diff --check sans erreur.
+- Google et e-mails simulés. Aucun rendez-vous, paiement, e-mail réel ou déploiement.

@@ -177,6 +177,10 @@ foreach (['sync', 'deferred', 'failure', 'taken'] as $scenario) {
         continue;
     }
     verify($response['ok'], "$scenario : réservation confirmée");
+    verify($response['visio'] === true, "$scenario : tirage confirmé en visio");
+    verify(str_contains(record($dir)['event']['description'], 'En visio sur Google Meet'), "$scenario : format visio précisé dans l’agenda");
+    verify(!isset(record($dir)['event']['location']), "$scenario : aucun lieu par message pour le tirage en visio");
+    verify(!str_contains(json_encode(record($dir)['emails'], JSON_UNESCAPED_UNICODE), 'Par message'), "$scenario : récapitulatif du tirage sans ancien format par message");
     verify($response['email_pending'] === ($scenario !== 'sync'), "$scenario : statut e-mail exact");
     verify(count(array_filter($log, fn($call) => $call === 'create')) === 1, "$scenario : un seul rendez-vous");
     if ($scenario !== 'sync') verify(array_search('finish', $log, true) < array_search('mail', $log, true), 'Réponse envoyée avant les e-mails');
